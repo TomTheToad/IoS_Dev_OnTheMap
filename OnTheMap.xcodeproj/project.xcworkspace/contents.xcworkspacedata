@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:P3_OnTheMap_CoreData.xcodeproj">
+      location = "self:/Users/TomTheToad/P3_OnTheMap_CoreData/P3_OnTheMap_CoreData/OnTheMap.xcodeproj">
    </FileRef>
 </Workspace>

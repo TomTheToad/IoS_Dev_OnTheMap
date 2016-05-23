@@ -21,13 +21,14 @@
 		C794CBD91CEFF61000347462 /* StudentInformation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C794CBD51CEFF61000347462 /* StudentInformation+CoreDataProperties.swift */; };
 		C794CBDA1CEFF61000347462 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C794CBD61CEFF61000347462 /* StudentInformation.swift */; };
 		C79946771CEF5DDF00961D95 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79946761CEF5DDF00961D95 /* DataHandler.swift */; };
+		C7CDBA841CF2802000E527D7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBA831CF2802000E527D7 /* CoreDataStack.swift */; };
 		C7F817EC1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F817EA1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift */; };
 		C7F817ED1CF2029D002A36C3 /* UdacityUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F817EB1CF2029D002A36C3 /* UdacityUserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C75E12BD1CED0F18002AA0F5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		C75FC6071CED051300893F45 /* P3_OnTheMap_CoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = P3_OnTheMap_CoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C75FC6071CED051300893F45 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C75FC60A1CED051300893F45 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C75FC60F1CED051400893F45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C75FC6121CED051400893F45 /* P3_OnTheMap_CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = P3_OnTheMap_CoreData.xcdatamodel; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 		C794CBD51CEFF61000347462 /* StudentInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StudentInformation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C794CBD61CEFF61000347462 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		C79946761CEF5DDF00961D95 /* DataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
+		C7CDBA831CF2802000E527D7 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C7F817EA1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UdacityUserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C7F817EB1CF2029D002A36C3 /* UdacityUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,7 +71,7 @@
 		C75FC5FE1CED051300893F45 = {
 			isa = PBXGroup;
 			children = (
-				C75FC6091CED051300893F45 /* P3_OnTheMap_CoreData */,
+				C75FC6091CED051300893F45 /* OnTheMap */,
 				C75FC6081CED051300893F45 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,12 +79,12 @@
 		C75FC6081CED051300893F45 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C75FC6071CED051300893F45 /* P3_OnTheMap_CoreData.app */,
+				C75FC6071CED051300893F45 /* OnTheMap.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C75FC6091CED051300893F45 /* P3_OnTheMap_CoreData */ = {
+		C75FC6091CED051300893F45 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
 				C7F817EF1CF20C57002A36C3 /* Model */,
@@ -91,7 +93,9 @@
 				C75FC60A1CED051300893F45 /* AppDelegate.swift */,
 				C75FC6191CED051400893F45 /* Info.plist */,
 				C75FC6111CED051400893F45 /* P3_OnTheMap_CoreData.xcdatamodeld */,
+				C7CDBA831CF2802000E527D7 /* CoreDataStack.swift */,
 			);
+			name = OnTheMap;
 			path = P3_OnTheMap_CoreData;
 			sourceTree = "<group>";
 		};
@@ -148,9 +152,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C75FC6061CED051300893F45 /* P3_OnTheMap_CoreData */ = {
+		C75FC6061CED051300893F45 /* OnTheMap */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C75FC61C1CED051400893F45 /* Build configuration list for PBXNativeTarget "P3_OnTheMap_CoreData" */;
+			buildConfigurationList = C75FC61C1CED051400893F45 /* Build configuration list for PBXNativeTarget "OnTheMap" */;
 			buildPhases = (
 				C75FC6031CED051300893F45 /* Sources */,
 				C75FC6041CED051300893F45 /* Frameworks */,
@@ -160,9 +164,9 @@
 			);
 			dependencies = (
 			);
-			name = P3_OnTheMap_CoreData;
+			name = OnTheMap;
 			productName = P3_OnTheMap_CoreData;
-			productReference = C75FC6071CED051300893F45 /* P3_OnTheMap_CoreData.app */;
+			productReference = C75FC6071CED051300893F45 /* OnTheMap.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -180,7 +184,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C75FC6021CED051300893F45 /* Build configuration list for PBXProject "P3_OnTheMap_CoreData" */;
+			buildConfigurationList = C75FC6021CED051300893F45 /* Build configuration list for PBXProject "OnTheMap" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -193,7 +197,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C75FC6061CED051300893F45 /* P3_OnTheMap_CoreData */,
+				C75FC6061CED051300893F45 /* OnTheMap */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +227,7 @@
 				C75FC62F1CED06A300893F45 /* ParseAPI.swift in Sources */,
 				C75FC60B1CED051300893F45 /* AppDelegate.swift in Sources */,
 				C79946771CEF5DDF00961D95 /* DataHandler.swift in Sources */,
+				C7CDBA841CF2802000E527D7 /* CoreDataStack.swift in Sources */,
 				C75FC6311CED06A300893F45 /* StudentInfo.swift in Sources */,
 				C794CBDA1CEFF61000347462 /* StudentInformation.swift in Sources */,
 				C7F817ED1CF2029D002A36C3 /* UdacityUserInfo.swift in Sources */,
@@ -344,7 +349,7 @@
 				INFOPLIST_FILE = P3_OnTheMap_CoreData/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tomthetoad.P3-OnTheMap-CoreData";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OnTheMap;
 			};
 			name = Debug;
 		};
@@ -355,14 +360,14 @@
 				INFOPLIST_FILE = P3_OnTheMap_CoreData/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tomthetoad.P3-OnTheMap-CoreData";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OnTheMap;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C75FC6021CED051300893F45 /* Build configuration list for PBXProject "P3_OnTheMap_CoreData" */ = {
+		C75FC6021CED051300893F45 /* Build configuration list for PBXProject "OnTheMap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C75FC61A1CED051400893F45 /* Debug */,
@@ -371,7 +376,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C75FC61C1CED051400893F45 /* Build configuration list for PBXNativeTarget "P3_OnTheMap_CoreData" */ = {
+		C75FC61C1CED051400893F45 /* Build configuration list for PBXNativeTarget "OnTheMap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C75FC61D1CED051400893F45 /* Debug */,
