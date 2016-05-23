@@ -14,7 +14,7 @@ import CoreData
 class CoreDataStack {
     
     /* Fields */
-    static let moduleName = "OnTheMap"
+    static let moduleName = "P3_OnTheMap_CoreData"
     
     // Managed Object Model
     lazy var managedObjectModel: NSManagedObjectModel = {

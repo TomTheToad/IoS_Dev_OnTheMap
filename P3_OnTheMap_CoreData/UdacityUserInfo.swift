@@ -1,8 +1,8 @@
 //
 //  UdacityUserInfo.swift
-//  P3_OnTheMap_CoreData
+//  OnTheMap
 //
-//  Created by VICTOR ASSELTA on 5/22/16.
+//  Created by VICTOR ASSELTA on 5/23/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
 

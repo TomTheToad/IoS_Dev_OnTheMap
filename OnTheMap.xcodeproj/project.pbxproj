@@ -21,9 +21,9 @@
 		C794CBD91CEFF61000347462 /* StudentInformation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C794CBD51CEFF61000347462 /* StudentInformation+CoreDataProperties.swift */; };
 		C794CBDA1CEFF61000347462 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C794CBD61CEFF61000347462 /* StudentInformation.swift */; };
 		C79946771CEF5DDF00961D95 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79946761CEF5DDF00961D95 /* DataHandler.swift */; };
+		C7BCB3D41CF35188007578B7 /* UdacityUserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BCB3D21CF35188007578B7 /* UdacityUserInfo+CoreDataProperties.swift */; };
+		C7BCB3D51CF35188007578B7 /* UdacityUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BCB3D31CF35188007578B7 /* UdacityUserInfo.swift */; };
 		C7CDBA841CF2802000E527D7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBA831CF2802000E527D7 /* CoreDataStack.swift */; };
-		C7F817EC1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F817EA1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift */; };
-		C7F817ED1CF2029D002A36C3 /* UdacityUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F817EB1CF2029D002A36C3 /* UdacityUserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,9 +43,9 @@
 		C794CBD51CEFF61000347462 /* StudentInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StudentInformation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C794CBD61CEFF61000347462 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		C79946761CEF5DDF00961D95 /* DataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
+		C7BCB3D21CF35188007578B7 /* UdacityUserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UdacityUserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C7BCB3D31CF35188007578B7 /* UdacityUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUserInfo.swift; sourceTree = "<group>"; };
 		C7CDBA831CF2802000E527D7 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		C7F817EA1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UdacityUserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		C7F817EB1CF2029D002A36C3 /* UdacityUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,9 +120,9 @@
 		C7F817EE1CF20915002A36C3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C75FC6241CED05CA00893F45 /* APIs */,
 				C79946761CEF5DDF00961D95 /* DataHandler.swift */,
 				C75E12BD1CED0F18002AA0F5 /* LoginViewController.swift */,
+				C75FC6241CED05CA00893F45 /* APIs */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -131,8 +131,8 @@
 			isa = PBXGroup;
 			children = (
 				C75E12BB1CED0E91002AA0F5 /* StudentInfo */,
-				C7F817EA1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift */,
-				C7F817EB1CF2029D002A36C3 /* UdacityUserInfo.swift */,
+				C7BCB3D21CF35188007578B7 /* UdacityUserInfo+CoreDataProperties.swift */,
+				C7BCB3D31CF35188007578B7 /* UdacityUserInfo.swift */,
 				C794CBD51CEFF61000347462 /* StudentInformation+CoreDataProperties.swift */,
 				C794CBD61CEFF61000347462 /* StudentInformation.swift */,
 			);
@@ -230,9 +230,9 @@
 				C7CDBA841CF2802000E527D7 /* CoreDataStack.swift in Sources */,
 				C75FC6311CED06A300893F45 /* StudentInfo.swift in Sources */,
 				C794CBDA1CEFF61000347462 /* StudentInformation.swift in Sources */,
-				C7F817ED1CF2029D002A36C3 /* UdacityUserInfo.swift in Sources */,
+				C7BCB3D51CF35188007578B7 /* UdacityUserInfo.swift in Sources */,
 				C794CBD91CEFF61000347462 /* StudentInformation+CoreDataProperties.swift in Sources */,
-				C7F817EC1CF2029D002A36C3 /* UdacityUserInfo+CoreDataProperties.swift in Sources */,
+				C7BCB3D41CF35188007578B7 /* UdacityUserInfo+CoreDataProperties.swift in Sources */,
 				C75E12BE1CED0F18002AA0F5 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
