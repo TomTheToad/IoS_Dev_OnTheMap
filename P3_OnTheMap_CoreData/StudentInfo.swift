@@ -20,7 +20,5 @@ struct StudentInfo {
     // Student location
     var latitude: String?
     var longitude: String?
-    
-    // var studentArray = [NSMutableDictionary]()
 
 }

@@ -15,72 +15,183 @@ class DataHandler {
     private var coreDataStack = CoreDataStack()
     private var managedObjectContext: NSManagedObjectContext
     
+    
     init () {
         managedObjectContext = coreDataStack.managedObjectContext
     }
     
+    
+    /* User Information Methods */
     func saveUserInfoData(userLogin: String, studentInfo: StudentInfo) {
         
-        if let existingUser = fetchUserInfoData(userLogin) as? UdacityUserInfo {
+        let userRecord = fetchUserInfoData(userLogin)
             
-            existingUser.firstName = studentInfo.firstName
-            existingUser.lastName = studentInfo.lastName
-            existingUser.latitude = studentInfo.latitude
-            existingUser.longitude = studentInfo.longitude
-            existingUser.mediaURL = studentInfo.mediaURL
-            existingUser.id = studentInfo.studentID
-            
-            print("Updating existing record")
-            
-        } else {
-        
-            guard let entity = NSEntityDescription.entityForName("UdacityUserInfo", inManagedObjectContext: managedObjectContext) else {
-                fatalError("Could not find UdacityUserInfo entity")
-            }
-            
-            let udacityUser = UdacityUserInfo(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
-
-            udacityUser.firstName = studentInfo.firstName
-            udacityUser.lastName = studentInfo.lastName
-            udacityUser.latitude = studentInfo.latitude
-            udacityUser.longitude = studentInfo.longitude
-            udacityUser.mediaURL = studentInfo.mediaURL
-            udacityUser.id = studentInfo.studentID
-            udacityUser.userLogin = userLogin
-            
-            print("Adding new record")
-            
-            }
+            userRecord.firstName = studentInfo.firstName
+            userRecord.lastName = studentInfo.lastName
+            userRecord.latitude = studentInfo.latitude
+            userRecord.longitude = studentInfo.longitude
+            userRecord.mediaURL = studentInfo.mediaURL
+            userRecord.id = studentInfo.studentID
 
         coreDataStack.saveMainContext()
         
     }
     
-    func fetchUserInfoData(userLogin: String? = nil) -> AnyObject {
+    
+    func fetchUserInfoData(userLogin: String) -> UdacityUserInfo {
         
-        var firstUserRecord = AnyObject?()
+        var userRecord = AnyObject?()
         
         let fetchRequest = NSFetchRequest(entityName: "UdacityUserInfo")
         
-        if let userLogin = userLogin {
-            let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
-            fetchRequest.predicate = predicate
-        }
+        let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
+        fetchRequest.predicate = predicate
         
         do {
-            if let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [UdacityUserInfo] {
-                firstUserRecord = results[0]
-//                for result in results {
-//                    if let login = result.userLogin {
-//                        print("Found login: \(login)")
-//                    }
-//                }
+            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [UdacityUserInfo]
+            
+            if let results = results {
+                print("count: \(results.count)")
+                if results.count > 0 {
+                    userRecord = results[0]
+                    
+                } else {
+                
+                guard let entity = NSEntityDescription.entityForName("UdacityUserInfo", inManagedObjectContext: managedObjectContext) else {
+                    fatalError("Could not find UdacityUserInfo entity")
+                }
+            
+                userRecord = UdacityUserInfo(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+                    
+                }
+            }
+            
+        } catch {
+            print("unable to retrieve student user information")
+        }
+        return userRecord as! UdacityUserInfo
+    }
+    
+
+    /* Student Location Methods */
+    func saveStudentLocations(studentInfoDict: [StudentInfo]) {
+        // todo: determine if more efficient to wipe all records or update existing ones
+        
+        for studentInfo in studentInfoDict {
+            
+            let studentLocation = fetchOneStudentLocation(studentInfo)
+            
+            studentLocation.firstName = studentInfo.firstName
+            studentLocation.lastName = studentInfo.lastName
+            studentLocation.latitude = studentInfo.latitude
+            studentLocation.longitude = studentInfo.longitude
+            studentLocation.mediaURL = studentInfo.mediaURL
+            studentLocation.studentID = studentInfo.studentID
+            
+        }
+        
+        coreDataStack.saveMainContext()
+    }
+    
+    
+    func fetchOneStudentLocation(student: StudentInfo) -> StudentLocation {
+        
+        var userRecord = AnyObject?()
+        
+        let studentID = student.studentID
+            
+        let fetchRequest = NSFetchRequest(entityName: "StudentLocation")
+        
+        let predicate = NSPredicate(format: "studentID == %@ ", studentID!)
+        fetchRequest.predicate = predicate
+            
+        do {
+            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [StudentLocation]
+            
+            if let results = results {
+                if results.count > 0 {
+                    userRecord = results[0]
+                    
+                } else {
+                    
+                    guard let entity = NSEntityDescription.entityForName("StudentLocation", inManagedObjectContext: managedObjectContext) else {
+                        fatalError("Could not find StudentLocation entity")
+                    }
+                    
+                    userRecord = StudentLocation(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+                    
+                }
+                
             }
         } catch {
             print("unable to retrieve student user information")
         }
-        print("First user record found: \(firstUserRecord!.userLogin)")
-        return firstUserRecord!
+        return userRecord as! StudentLocation
+        
+    }
+    
+    
+    // Fetch all student location records for table as a fetchedResultsController
+    func fetchAllSTudentLocationsResultsController() -> NSFetchedResultsController {
+        
+        let request = NSFetchRequest(entityName: "StudentLocation")
+        
+        let lastNameSort = NSSortDescriptor(key: "lastName", ascending: true)
+        
+        request.sortDescriptors = [lastNameSort]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Unable to fetch student location data")
+        }
+        
+        return fetchedResultsController
+    }
+    
+    
+    func fetchAllSTudentLocations() -> [StudentInfo] {
+        
+        var returnData = [StudentInfo]()
+        
+        let fetchRequest = NSFetchRequest(entityName: "StudentLocation")
+        
+        do {
+            
+            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [StudentLocation]
+            if let results = results {
+                returnData = convertStudentLocationArrayToStudentInfoArray(results)
+            } else {
+                print("Unable to convert returnedData to array of StudentLocation")
+            }
+        } catch {
+            print("unable to retrieve student user information")
+        }
+        
+        return returnData
+    }
+    
+    
+    func convertStudentLocationArrayToStudentInfoArray(studentLocationArray: [StudentLocation]) -> [StudentInfo] {
+        var returnData = [StudentInfo]()
+        
+        for studentLocation in studentLocationArray {
+            var studentInfo = StudentInfo()
+            
+            studentInfo.firstName = studentLocation.firstName
+            studentInfo.lastName = studentLocation.lastName
+            studentInfo.studentID = studentLocation.studentID
+            studentInfo.mediaURL = studentLocation.mediaURL
+            studentInfo.latitude = studentLocation.latitude
+            studentInfo.longitude = studentLocation.longitude
+            
+            returnData.append(studentInfo)
+        }
+        
+        return returnData
+        
     }
     
 }

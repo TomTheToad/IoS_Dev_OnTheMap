@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Automatic">
-    <entity name="StudentInformation" representedClassName=".StudentInformation" syncable="YES">
+    <entity name="StudentLocation" representedClassName=".StudentLocation" syncable="YES">
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mediaURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="studentID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="UdacityUserInfo" representedClassName=".UdacityUserInfo" syncable="YES">
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -18,7 +18,7 @@
         <attribute name="userLogin" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="StudentInformation" positionX="-54" positionY="36" width="128" height="135"/>
         <element name="UdacityUserInfo" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="StudentLocation" positionX="-63" positionY="36" width="128" height="135"/>
     </elements>
 </model>
