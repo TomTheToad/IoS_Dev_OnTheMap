@@ -25,6 +25,7 @@ class DataHandler {
     func saveUserInfoData(userLogin: String, studentInfo: StudentInfo) {
         
         let userRecord = fetchUserInfoData(userLogin)
+        print("userRecord received: \(userRecord.userLogin)")
             
             userRecord.firstName = studentInfo.firstName
             userRecord.lastName = studentInfo.lastName
@@ -46,12 +47,15 @@ class DataHandler {
         
         let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
         fetchRequest.predicate = predicate
+        // print("predicate: \(predicate)")
         
         do {
             let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [UdacityUserInfo]
             
             if let results = results {
                 print("count: \(results.count)")
+                print("results: \(results)")
+                
                 if results.count > 0 {
                     userRecord = results[0]
                     
@@ -69,6 +73,8 @@ class DataHandler {
         } catch {
             print("unable to retrieve student user information")
         }
+        print("userRecord keys: \(userRecord?.allKeys), userRecord values: \(userRecord?.allValues)")
+        
         return userRecord as! UdacityUserInfo
     }
     
