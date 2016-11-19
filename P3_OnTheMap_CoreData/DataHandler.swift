@@ -12,8 +12,8 @@ import CoreData
 class DataHandler {
     
     // Fields
-    private var coreDataStack = CoreDataStack()
-    private var managedObjectContext: NSManagedObjectContext
+    fileprivate var coreDataStack = CoreDataStack()
+    fileprivate var managedObjectContext: NSManagedObjectContext
     
     
     init () {
@@ -22,7 +22,7 @@ class DataHandler {
     
     
     /* User Information Methods */
-    func saveUserInfoData(userLogin: String, studentInfo: StudentInfo) {
+    func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) {
         
         let userRecord = fetchUserInfoData(userLogin)
         print("userRecord received: \(userRecord.userLogin)")
@@ -39,18 +39,22 @@ class DataHandler {
     }
     
     
-    func fetchUserInfoData(userLogin: String) -> UdacityUserInfo {
+    func fetchUserInfoData(_ userLogin: String) -> UdacityUserInfo {
         
-        var userRecord = AnyObject?()
+        // todo: syntax change for Swift3. May have to rework type
+        var userRecord = AnyObject?(self)
         
-        let fetchRequest = NSFetchRequest(entityName: "UdacityUserInfo")
+        // Updated to Swift3 syntax
+        //  let fetchRequest = NSFetchRequest(entityName: "UdacityUserInfo")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "UdacityUserInfo")
         
         let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
         fetchRequest.predicate = predicate
         // print("predicate: \(predicate)")
         
         do {
-            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [UdacityUserInfo]
+            let results = try managedObjectContext.fetch(fetchRequest) as? [UdacityUserInfo]
+            print("results: \(results)")
             
             if let results = results {
                 print("count: \(results.count)")
@@ -61,11 +65,11 @@ class DataHandler {
                     
                 } else {
                 
-                guard let entity = NSEntityDescription.entityForName("UdacityUserInfo", inManagedObjectContext: managedObjectContext) else {
+                guard let entity = NSEntityDescription.entity(forEntityName: "UdacityUserInfo", in: managedObjectContext) else {
                     fatalError("Could not find UdacityUserInfo entity")
                 }
             
-                userRecord = UdacityUserInfo(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+                userRecord = UdacityUserInfo(entity: entity, insertInto: managedObjectContext)
                     
                 }
             }
@@ -80,7 +84,7 @@ class DataHandler {
     
 
     /* Student Location Methods */
-    func saveStudentLocations(studentInfoDict: [StudentInfo]) {
+    func saveStudentLocations(_ studentInfoDict: [StudentInfo]) {
         // todo: determine if more efficient to wipe all records or update existing ones
         
         for studentInfo in studentInfoDict {
@@ -100,19 +104,21 @@ class DataHandler {
     }
     
     
-    func fetchOneStudentLocation(student: StudentInfo) -> StudentLocation {
+    func fetchOneStudentLocation(_ student: StudentInfo) -> StudentLocation {
         
-        var userRecord = AnyObject?()
+        var userRecord = AnyObject?(self)
         
         let studentID = student.studentID
-            
-        let fetchRequest = NSFetchRequest(entityName: "StudentLocation")
+        
+        // Updated to Swift3 syntax
+        // let fetchRequest = FetchRequest(entityName: "StudentLocation")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
         
         let predicate = NSPredicate(format: "studentID == %@ ", studentID!)
         fetchRequest.predicate = predicate
             
         do {
-            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [StudentLocation]
+            let results = try managedObjectContext.fetch(fetchRequest) as? [StudentLocation]
             
             if let results = results {
                 if results.count > 0 {
@@ -120,12 +126,11 @@ class DataHandler {
                     
                 } else {
                     
-                    guard let entity = NSEntityDescription.entityForName("StudentLocation", inManagedObjectContext: managedObjectContext) else {
+                    guard let entity = NSEntityDescription.entity(forEntityName: "StudentLocation", in: managedObjectContext) else {
                         fatalError("Could not find StudentLocation entity")
                     }
                     
-                    userRecord = StudentLocation(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
-                    
+                    userRecord = StudentLocation(entity: entity, insertInto: managedObjectContext) 
                 }
                 
             }
@@ -138,9 +143,10 @@ class DataHandler {
     
     
     // Fetch all student location records for table as a fetchedResultsController
-    func fetchAllSTudentLocationsResultsController() -> NSFetchedResultsController {
+    func fetchAllSTudentLocationsResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
         
-        let request = NSFetchRequest(entityName: "StudentLocation")
+        // let request = NSFetchRequest(entityName: "StudentLocation")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
         
         let lastNameSort = NSSortDescriptor(key: "lastName", ascending: true)
         
@@ -162,11 +168,12 @@ class DataHandler {
         
         var returnData = [StudentInfo]()
         
-        let fetchRequest = NSFetchRequest(entityName: "StudentLocation")
+        // let fetchRequest = NSFetchRequest(entityName: "StudentLocation")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
         
         do {
             
-            let results = try managedObjectContext.executeFetchRequest(fetchRequest) as? [StudentLocation]
+            let results = try managedObjectContext.fetch(fetchRequest) as? [StudentLocation]
             if let results = results {
                 returnData = convertStudentLocationArrayToStudentInfoArray(results)
             } else {
@@ -180,7 +187,7 @@ class DataHandler {
     }
     
     
-    func convertStudentLocationArrayToStudentInfoArray(studentLocationArray: [StudentLocation]) -> [StudentInfo] {
+    func convertStudentLocationArrayToStudentInfoArray(_ studentLocationArray: [StudentLocation]) -> [StudentInfo] {
         var returnData = [StudentInfo]()
         
         for studentLocation in studentLocationArray {

@@ -13,7 +13,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Fields
     let dataHandler = DataHandler()
-    var fetchedResultsController: NSFetchedResultsController!
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,27 +34,27 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Dispose of any resources that can be recreated.
     }
     
-    private func setStudentLocationResultsController() {
+    fileprivate func setStudentLocationResultsController() {
         fetchedResultsController = dataHandler.fetchAllSTudentLocationsResultsController()
     }
 
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        return fetchedResultsController!.sections?[section].numberOfObjects ?? 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("PinNameCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath)
         
-        let studentLocation = fetchedResultsController.objectAtIndexPath(indexPath) as! StudentLocation
+        let studentLocation = fetchedResultsController?.object(at: indexPath) as! StudentLocation
         
         if let firstName = studentLocation.firstName, let lastName = studentLocation.lastName {
             cell.textLabel!.text = "\(firstName) \(lastName)"

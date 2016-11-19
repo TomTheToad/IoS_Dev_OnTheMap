@@ -14,6 +14,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     // Fields
     var receivedUserLatitude: CLLocationDegrees?
     var receivedUserLongitude: CLLocationDegrees?
+    var receivedUserLocation: CLLocation?
     
     // IBOutlets
 
@@ -23,10 +24,18 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let center = CLLocationCoordinate2D(latitude: receivedUserLatitude!, longitude: receivedUserLongitude!)
+        guard let latitude = receivedUserLocation?.coordinate.latitude else {
+            fatalError("Missing latitude")
+        }
+        
+        guard let longitude = receivedUserLocation?.coordinate.longitude else {
+            fatalError("Missing longitude")
+        }
+        
+        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
         
-        let coordinate = CLLocationCoordinate2D(latitude: receivedUserLatitude!, longitude: receivedUserLongitude!)
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
@@ -37,7 +46,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
 
     }
 
-    @IBAction func submitButton(sender: AnyObject) {
+    @IBAction func submitButton(_ sender: AnyObject) {
         
 //        let parse = ParseAPI()
 //
@@ -45,6 +54,9 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
 //           parse.postStudentLocation(<#T##studentInfo: StudentInfo##StudentInfo#>, mapString: <#T##String#>)
 //            
 //        }
+        
+        
+        
     }
 
 }
