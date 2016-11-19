@@ -108,14 +108,17 @@ class DataHandler {
         
         var userRecord = AnyObject?(self)
         
-        let studentID = student.studentID
-        
         // Updated to Swift3 syntax
         // let fetchRequest = FetchRequest(entityName: "StudentLocation")
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
         
-        let predicate = NSPredicate(format: "studentID == %@ ", studentID!)
-        fetchRequest.predicate = predicate
+        
+        if let ID = student.studentID {
+            print("Student ID = \(ID)")
+            let predicate = NSPredicate(format: "studentID == %@ ", ID)
+            fetchRequest.predicate = predicate
+        }
+        
             
         do {
             let results = try managedObjectContext.fetch(fetchRequest) as? [StudentLocation]
