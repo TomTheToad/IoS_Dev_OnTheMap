@@ -12,7 +12,8 @@ import CoreData
 class DataHandler {
     
     // Fields
-    fileprivate var coreDataStack = CoreDataStack()
+    // fileprivate var coreDataStack = CoreDataStack()
+    var coreDataStack = AppDelegate().getCoreDataStack()
     fileprivate var managedObjectContext: NSManagedObjectContext
     
     
@@ -25,7 +26,6 @@ class DataHandler {
     func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) {
         
         let userRecord = fetchUserInfoData(userLogin)
-        print("userRecord received: \(userRecord.userLogin)")
             
             userRecord.firstName = studentInfo.firstName
             userRecord.lastName = studentInfo.lastName
@@ -35,6 +35,8 @@ class DataHandler {
             userRecord.id = studentInfo.studentID
 
         coreDataStack.saveMainContext()
+        
+        // fetchUserInfoData(userLogin)
         
     }
     

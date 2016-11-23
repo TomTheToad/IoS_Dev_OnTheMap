@@ -13,7 +13,14 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    // lazy var coreDataStack = CoreDataStack()
+    
+    // Core Data Source
+    var coreDataStack = CoreDataStack()
+    
+    // Core Data Stack Get Function
+    func getCoreDataStack() -> CoreDataStack {
+        return coreDataStack
+    }
 
 
     // Only use if found to be necessary. All core data access should go through DataHandler class which
