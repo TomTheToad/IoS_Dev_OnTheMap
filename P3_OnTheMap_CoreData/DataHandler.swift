@@ -32,12 +32,24 @@ class DataHandler {
             userRecord.latitude = studentInfo.latitude
             userRecord.longitude = studentInfo.longitude
             userRecord.mediaURL = studentInfo.mediaURL
-            userRecord.id = studentInfo.studentID
+            userRecord.studentID = studentInfo.studentID
 
         coreDataStack.saveMainContext()
+    }
+    
+    func fetchLastUserData() -> UdacityUserInfo {
         
-        // fetchUserInfoData(userLogin)
+        var userRecord: UdacityUserInfo?
         
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "UdacityUserInfo")
+        
+        do {
+            userRecord = try managedObjectContext.fetch(fetchRequest).last as? UdacityUserInfo
+        } catch {
+            fatalError("Unable to located user data")
+        }
+        
+        return userRecord!
     }
     
     

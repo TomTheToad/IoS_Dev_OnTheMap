@@ -15,7 +15,7 @@ import CoreData
 extension UdacityUserInfo {
 
     @NSManaged var firstName: String?
-    @NSManaged var id: String?
+    @NSManaged var studentID: String?
     @NSManaged var lastName: String?
     @NSManaged var latitude: String?
     @NSManaged var longitude: String?

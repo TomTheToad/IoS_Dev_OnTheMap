@@ -57,6 +57,9 @@ class CoreDataStack {
             } catch {
                 fatalError("Error saving main managed object context! \(error)")
             }
+        } else {
+            print("No Changes to save")
         }
+        print("Core Data changes saved")
     }
 }

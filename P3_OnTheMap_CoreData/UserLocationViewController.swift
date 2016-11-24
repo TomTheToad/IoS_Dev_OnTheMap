@@ -12,9 +12,8 @@ import MapKit
 class UserLocationViewController: UIViewController, MKMapViewDelegate {
     
     // Fields
-    var receivedUserLatitude: CLLocationDegrees?
-    var receivedUserLongitude: CLLocationDegrees?
     var receivedUserLocation: CLLocation?
+    var receivedUserLocationName: String?
     
     // IBOutlets
 
@@ -45,17 +44,31 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
         mapView.setRegion(region, animated: true)
 
     }
+    
+    func getUserData() -> UdacityUserInfo {
+        let dataHandler = DataHandler()
+        let userRecord = dataHandler.fetchLastUserData()
+        return userRecord
+    }
 
     @IBAction func submitButton(_ sender: AnyObject) {
         
-//        let parse = ParseAPI()
-//
-//        if let link = linkToShareTextView.text {
-//           parse.postStudentLocation(<#T##studentInfo: StudentInfo##StudentInfo#>, mapString: <#T##String#>)
-//            
-//        }
+        let userRecord = getUserData()
+        var studentInfo = StudentInfo()
         
+        studentInfo.firstName = userRecord.firstName
+        studentInfo.lastName = userRecord.lastName
+        studentInfo.studentID = userRecord.studentID
         
+        studentInfo.latitude = receivedUserLocation?.coordinate.latitude.description
+        studentInfo.longitude = receivedUserLocation?.coordinate.longitude.description
+        studentInfo.mediaURL = linkToShareTextView.text
+        
+        let mapLocation = receivedUserLocationName
+        
+        let parse = ParseAPI()
+
+        parse.postStudentLocation(studentInfo, mapString: mapLocation!)
         
     }
 
