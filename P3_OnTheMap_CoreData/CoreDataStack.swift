@@ -7,6 +7,7 @@
 //  Many thanks to Greg Heo for the excellent course.
 //
 //
+// todo: clean up code
 
 import Foundation
 import CoreData

@@ -5,6 +5,7 @@
 //  Created by VICTOR ASSELTA on 5/18/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
+// todo: clean up code
 
 import UIKit
 import CoreData

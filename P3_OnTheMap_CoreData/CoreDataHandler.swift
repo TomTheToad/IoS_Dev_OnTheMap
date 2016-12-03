@@ -5,11 +5,12 @@
 //  Created by VICTOR ASSELTA on 5/20/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
+// todo: clean up code
 
 import Foundation
 import CoreData
 
-class DataHandler {
+class CoreDataHandler {
     
     // Fields
     // fileprivate var coreDataStack = CoreDataStack()
@@ -21,7 +22,7 @@ class DataHandler {
         managedObjectContext = coreDataStack.managedObjectContext
     }
     
-    
+
     /* User Information Methods */
     func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) {
         

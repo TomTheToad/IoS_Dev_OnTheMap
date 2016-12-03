@@ -5,6 +5,10 @@
 //  Created by VICTOR ASSELTA on 5/26/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
+// todo: list
+// 1) clean up code
+// 2) reload/ update
+// 3) handle errors gracefully
 
 import UIKit
 import CoreData
@@ -12,41 +16,64 @@ import CoreData
 class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // Fields
-    let dataHandler = DataHandler()
+    let coreDataHandler = CoreDataHandler()
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
 
+    // IBOutlets
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Fetch resultsController with student location data
         // setStudentLocationResultsController()
-        fetchedResultsController = dataHandler.fetchAllSTudentLocationsResultsController()
+        fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     fileprivate func setStudentLocationResultsController() {
-        fetchedResultsController = dataHandler.fetchAllSTudentLocationsResultsController()
+        fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
+    }
+    
+    // update table data
+    func updateTableData() {
+        setStudentLocationResultsController()
+        tableView.reloadData()
     }
 
+    // rename method to correspond with similar mapView method.
+    @IBAction func reloadTableDataButton(_ sender: AnyObject) {
+        // todo: call an actual update, not just a Core Data query
+        let parseAPI = ParseAPI()
+        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
+        
+    }
+    
+    // Completion Handler
+    func updateCompletionHandler(_ isSuccess:Bool) -> Void {
+        DispatchQueue.main.async(execute: { ()-> Void in
+            if isSuccess == true {
+                self.updateTableData()
+            } else {
+                let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+                alert.addAction(action)
+            }
+        })
+    }
+    
     // MARK: - Table view data source
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return fetchedResultsController!.sections?[section].numberOfObjects ?? 0
     }
     
@@ -64,40 +91,6 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     /*
     // MARK: - Navigation

@@ -5,6 +5,7 @@
 //  Created by VICTOR ASSELTA on 5/29/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
+// todo: get user data in previous classes?
 
 import UIKit
 import MapKit
@@ -46,8 +47,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     }
     
     func getUserData() -> UdacityUserInfo {
-        let dataHandler = DataHandler()
-        let userRecord = dataHandler.fetchLastUserData()
+        let coreDataHandler = CoreDataHandler()
+        let userRecord = coreDataHandler.fetchLastUserData()
         return userRecord
     }
 
