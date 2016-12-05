@@ -119,6 +119,40 @@ class CoreDataHandler {
     }
     
     
+    func checkLocationExists(studentID: String) -> Bool {
+        
+        var userLocationFound: Bool?
+        
+        // Updated to Swift3 syntax
+        // let fetchRequest = FetchRequest(entityName: "StudentLocation")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
+
+        let predicate = NSPredicate(format: "studentID == %@ ", studentID)
+        fetchRequest.predicate = predicate
+        
+        
+        do {
+            let results = try managedObjectContext.fetch(fetchRequest).last as? StudentLocation
+            
+            if let result = results {
+                print("Alert: Previous student location for user found: \(result.studentID)")
+                userLocationFound = true
+                
+            } else {
+                userLocationFound = false
+            }
+            
+        } catch {
+            print("unable to retrieve student user information")
+            userLocationFound = false
+        }
+        
+        return userLocationFound!
+        
+    }
+    
+    
+    
     func fetchOneStudentLocation(_ student: StudentInfo) -> StudentLocation {
         
         var userRecord = AnyObject?(self)
