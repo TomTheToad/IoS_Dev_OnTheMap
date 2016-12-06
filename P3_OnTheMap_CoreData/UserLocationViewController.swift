@@ -15,6 +15,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     // Fields
     var receivedUserLocation: CLLocation?
     var receivedUserLocationName: String?
+    var receivedOverwritePreviousLocation: Bool?
+    var receivedParseID: String?
     
     // IBOutlets
 
@@ -23,6 +25,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("MESSAGE3: recievedUserLocation:\(receivedUserLocation?.description) recieveduserLocationName\(receivedUserLocationName)")
         
         guard let latitude = receivedUserLocation?.coordinate.latitude else {
             fatalError("Missing latitude")
@@ -68,9 +72,16 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
         let mapLocation = receivedUserLocationName
         
         let parse = ParseAPI()
-
-        parse.postStudentLocation(studentInfo, mapString: mapLocation!)
         
+        if let usePutMethod = receivedOverwritePreviousLocation {
+            if usePutMethod == true {
+                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID)
+            } else {
+                // parse.postStudentLocation(studentInfo, mapString: mapLocation!)
+                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: false)
+            }
+        }
+
     }
 
 }

@@ -20,5 +20,6 @@ extension StudentLocation {
     @NSManaged var latitude: String?
     @NSManaged var longitude: String?
     @NSManaged var mediaURL: String?
+    @NSManaged var parseID: String?
 
 }

@@ -16,6 +16,7 @@ struct StudentInfo {
     var firstName: String?
     var lastName: String?
     var mediaURL: String?
+    var parseID: String?
     
     // Student location
     var latitude: String?

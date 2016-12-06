@@ -29,6 +29,7 @@ class StudentInfoMethods {
             // mediaURL
             if let url = dict["mediaURL"] {
                 thisStudent.mediaURL = String(describing: url)
+                print("MediaURL: \(url)")
             }
             
             // latitude
@@ -45,6 +46,12 @@ class StudentInfoMethods {
             if let studentID = dict["uniqueKey"] {
                 thisStudent.studentID = String(describing: studentID)
                 print("Unique Key: \(studentID)")
+            }
+        
+            // objectID
+            if let parseID = dict["objectId"] {
+                thisStudent.parseID = String(describing: parseID)
+                print("ParseID: \(parseID)")
             }
 
         return thisStudent

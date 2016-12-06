@@ -30,8 +30,10 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     
     // Fields
     let locationManager = CLLocationManager()
-    var userLocation: CLLocation?
-    var userLocationName: String?
+    var overWritePreviousLocation: Bool?
+    var parseID: String?
+    var userLocation: CLLocation? // probably delete
+    var userLocationName: String? // probably delete
     
     
     // IBOutlets
@@ -43,17 +45,17 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
         returnToPreviousView()
     }
     
-
+    // todo: allow for both methods of location input
     @IBAction func FindOnTheMap(_ sender: AnyObject) {
         
         findInputedLocation(locationRequestTextField.text!)
         
-        let userLocationVC = storyboard?.instantiateViewController(withIdentifier: "UserLocation") as? UserLocationViewController
-        
-        userLocationVC?.receivedUserLocation = userLocation
-        userLocationVC?.receivedUserLocationName = userLocationName
-        
-        present(userLocationVC!, animated: false, completion: nil)
+//        let userLocationVC = storyboard?.instantiateViewController(withIdentifier: "UserLocation") as? UserLocationViewController
+//        
+//        userLocationVC?.receivedUserLocation = userLocation
+//        userLocationVC?.receivedUserLocationName = userLocationName
+//        
+//        present(userLocationVC!, animated: false, completion: nil)
         
     }
     
@@ -69,13 +71,6 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-    func displayUserLocation() {
-        
-       // LocationRequestField.text = userLocationToSend?.description
-        
-    }
-    
-    
     func checkForPreviousUserEntry() {
         let coreDataHandler = CoreDataHandler()
         
@@ -85,18 +80,28 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
             
             print("studentID: \(user.studentID!) found")
             
-            let isSuccess = coreDataHandler.checkLocationExists(studentID: studentID)
+            // this needs to return an objectID (aka parseID)
+            let resultTuple = coreDataHandler.checkLocationExists(studentID: studentID)
             
-            if isSuccess != false {
+            if resultTuple.0 != false {
                 print("Found user location data")
+            
+                if let ID = resultTuple.1 {
+                    parseID = ID
+                } else {
+                    print("Error: valid id not found; ID received: \(resultTuple.1)")
+                    overWritePreviousLocation = false
+                }
                 
                 alertPreviousRecord()
             } else {
                 print("No location for user \(studentID) in database.")
+                overWritePreviousLocation = false
             }
             
         } else {
             print("No current user found")
+            overWritePreviousLocation = false
         }
     }
     
@@ -105,7 +110,9 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
         let message = "It appears that you may already have submitted a location. Do you wish to replace the previous location?"
 
         let alert = UIAlertController(title: "Found", message: message, preferredStyle: .alert)
-        let actionContinue = UIAlertAction(title: "Continue", style: .destructive, handler: nil )
+        let actionContinue = UIAlertAction(title: "Continue", style: .destructive, handler: {
+            (action: UIAlertAction) in self.overWritePreviousLocation = true
+        })
         let actionCancel = UIAlertAction(title: "Cancel", style: .default, handler: {
             (action: UIAlertAction) in self.returnToPreviousView()
         })
@@ -144,21 +151,41 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     func findInputedLocation(_ location: String) {
         
         let geoCode = CLGeocoder()
+        var isSuccess = false
+        
         geoCode.geocodeAddressString(location, completionHandler: {
             (placemarks, error) -> Void in
             
-            var firstLocation: CLPlacemark?
+            // var firstLocation: CLPlacemark?
             
             if let placemarks = placemarks {
-                firstLocation = placemarks.first
-                
-                print("Latitude: \(firstLocation?.location?.coordinate.latitude), Longitude: \(firstLocation?.location?.coordinate.longitude)")
+                if let firstLocation = placemarks.first {
+                    self.userLocation = firstLocation.location
+                    self.userLocationName = firstLocation.locality
+                    self.locationRequestTextField.text = "\(firstLocation.locality)"
+                    
+                    isSuccess = true
+                    
+                    self.presentUserLocationVC(userLocation: firstLocation.location!, userLocationName: firstLocation.locality!)
+                }
                 
             } else {
                 // add alert here
                 print("Unable to locate entry")
             }
         })
+    }
+    
+    func presentUserLocationVC (userLocation: CLLocation, userLocationName: String) {
+        let userLocationVC = storyboard?.instantiateViewController(withIdentifier: "UserLocation") as? UserLocationViewController
+        
+        userLocationVC?.receivedUserLocation = userLocation
+        userLocationVC?.receivedUserLocationName = userLocationName
+        userLocationVC?.receivedOverwritePreviousLocation = overWritePreviousLocation!
+        userLocationVC?.receivedParseID = parseID!
+        
+        present(userLocationVC!, animated: false, completion: nil)
+        
     }
     
     

@@ -6,6 +6,7 @@
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mediaURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="parseID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="studentID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="UdacityUserInfo" representedClassName=".UdacityUserInfo" syncable="YES">
@@ -18,7 +19,7 @@
         <attribute name="userLogin" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="StudentLocation" positionX="-63" positionY="36" width="128" height="135"/>
+        <element name="StudentLocation" positionX="-63" positionY="36" width="128" height="150"/>
         <element name="UdacityUserInfo" positionX="-63" positionY="-18" width="128" height="150"/>
     </elements>
 </model>

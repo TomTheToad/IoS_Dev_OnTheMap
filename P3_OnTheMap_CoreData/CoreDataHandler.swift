@@ -112,6 +112,7 @@ class CoreDataHandler {
             studentLocation.longitude = studentInfo.longitude
             studentLocation.mediaURL = studentInfo.mediaURL
             studentLocation.studentID = studentInfo.studentID
+            studentLocation.parseID = studentInfo.parseID
             
         }
         
@@ -119,9 +120,10 @@ class CoreDataHandler {
     }
     
     
-    func checkLocationExists(studentID: String) -> Bool {
+    func checkLocationExists(studentID: String) -> (Bool, String?) {
         
-        var userLocationFound: Bool?
+        var isSuccess: Bool?
+        var userParseID: String?
         
         // Updated to Swift3 syntax
         // let fetchRequest = FetchRequest(entityName: "StudentLocation")
@@ -136,18 +138,19 @@ class CoreDataHandler {
             
             if let result = results {
                 print("Alert: Previous student location for user found: \(result.studentID)")
-                userLocationFound = true
+                isSuccess = true
+                userParseID = result.parseID
                 
             } else {
-                userLocationFound = false
+                isSuccess = false
             }
             
         } catch {
             print("unable to retrieve student user information")
-            userLocationFound = false
+            isSuccess = false
         }
         
-        return userLocationFound!
+        return (isSuccess!, userParseID)
         
     }
     
@@ -163,7 +166,6 @@ class CoreDataHandler {
         
         
         if let ID = student.studentID {
-            print("Student ID = \(ID)")
             let predicate = NSPredicate(format: "studentID == %@ ", ID)
             fetchRequest.predicate = predicate
         }
@@ -251,6 +253,7 @@ class CoreDataHandler {
             studentInfo.mediaURL = studentLocation.mediaURL
             studentInfo.latitude = studentLocation.latitude
             studentInfo.longitude = studentLocation.longitude
+            studentInfo.parseID = studentLocation.parseID
             
             returnData.append(studentInfo)
         }

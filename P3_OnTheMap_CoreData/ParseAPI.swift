@@ -189,5 +189,89 @@ class ParseAPI {
         task.resume()
         
     }
+    
+    // replace previous postStudentLocationMethod
+    // fix put method
+    func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "") {
+        
+        var isSucess: Bool?
+        
+        // Use Post or Put method?
+        var httpMethod: String?
+        var urlString: URL?
+        if updateExistingEntry == true {
+            httpMethod = "PUT"
+            if let ID = parseID {
+                urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation/\(ID)")
+            } else {
+                print("ERROR: Invalid objectID, switching to POST method")
+                httpMethod = "POST"
+                urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")
+            }
+        } else {
+            httpMethod = "POST"
+            urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")
+        }
+        
+        // uniqueKey
+        guard let uniqueKey = studentInfo.studentID else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        // firstName
+        guard let firstName = studentInfo.firstName else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        // lastName
+        guard let lastName = studentInfo.lastName else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        // mediaURL
+        guard let mediaURL = studentInfo.mediaURL else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        // latitude
+        guard let latitude = studentInfo.latitude else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        // longitude
+        guard let longitude = studentInfo.longitude else {
+            print("ERROR: Student ID missing")
+            return
+        }
+        
+        
+        print("Parse API received: uniqueKey:\(uniqueKey), firstName:\(firstName), lastName:\(lastName), mediaURL:\(mediaURL), latitude:\(latitude), longitude:\(longitude)")
+        
+        var request = URLRequest(url: urlString!)
+        request.httpMethod = httpMethod
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
+        
+        print("REQUEST URL: \(request.url)")
+        
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+            if error != nil { // Handle error…
+                isSucess = false
+                print("ERROR: could not post to parse")
+                return
+            } else {
+                print("MESSAGE: parse request successful")
+                isSucess = true
+            }
+            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
+        })
+        task.resume()
+        
+    }
+
 }
 
