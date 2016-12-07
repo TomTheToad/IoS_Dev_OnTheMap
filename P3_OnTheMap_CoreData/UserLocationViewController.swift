@@ -5,7 +5,7 @@
 //  Created by VICTOR ASSELTA on 5/29/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: get user data in previous classes?
+// todo: clean up
 
 import UIKit
 import MapKit
@@ -77,11 +77,15 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
             if usePutMethod == true {
                 parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID)
             } else {
-                // parse.postStudentLocation(studentInfo, mapString: mapLocation!)
                 parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: false)
             }
         }
-
+        
+        if let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController") {
+        present(tabBarController, animated: false, completion: nil)
+        } else {
+            fatalError("Fatal Map Error.")
+        }
     }
 
 }
