@@ -20,16 +20,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // Fields
     let coreDataHandler = CoreDataHandler()
     // var allStudentLocations: [StudentInfo]?
+
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.delegate = self
         
-        // get student location information
         let locations = getStudentLocations()
         
         // make map
@@ -94,7 +98,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func updateMap() {
         let locations = getStudentLocations()
         makeMap(locations)
-        loadView()
+        // loadView()
+        
+        // hot fix for reload with delegates
+        // attempt to remove all annotations then add back?
+        let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController")
+        present(tabBarController!, animated: false, completion: nil)
+        presentedViewController?.dismiss(animated: false, completion: nil)
     }
     
     
