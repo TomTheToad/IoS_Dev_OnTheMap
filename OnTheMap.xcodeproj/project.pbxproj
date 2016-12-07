@@ -48,7 +48,6 @@
 		C75FC62A1CED06A300893F45 /* StudentInfoMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInfoMethods.swift; sourceTree = "<group>"; };
 		C75FC62C1CED06A300893F45 /* UdacityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityAPI.swift; sourceTree = "<group>"; };
 		C767701F1CF3C4FA007965B9 /* URLResponseCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLResponseCheck.swift; sourceTree = "<group>"; };
-		C77962C91CFCA1D200517530 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C77962CC1CFCAA6100517530 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C7860CAB1CFA6A7C008F9514 /* InfoPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPostViewController.swift; sourceTree = "<group>"; };
 		C79946761CEF5DDF00961D95 /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
@@ -93,7 +92,6 @@
 		C75FC5FE1CED051300893F45 = {
 			isa = PBXGroup;
 			children = (
-				C77962C91CFCA1D200517530 /* CoreLocation.framework */,
 				C75FC6091CED051300893F45 /* OnTheMap */,
 				C75FC6081CED051300893F45 /* Products */,
 			);

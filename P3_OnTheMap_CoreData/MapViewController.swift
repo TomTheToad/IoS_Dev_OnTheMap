@@ -9,7 +9,6 @@
 // todo: list
 // 1) update map - handle reload
 // 2) handle errors
-// 3) check for previously submitted location when pin tapped? (only one data call)
 
 import UIKit
 import MapKit
