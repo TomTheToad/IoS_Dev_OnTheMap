@@ -116,7 +116,7 @@
                         <outlet property="emailTextField" destination="LgF-Fr-pBW" id="7mj-v7-v6k"/>
                         <outlet property="loginMessages" destination="Qqv-Nt-oVB" id="RmK-q7-H0t"/>
                         <outlet property="passwordTextField" destination="nZz-2R-XHb" id="o9t-Ed-pTD"/>
-                        <segue destination="B1L-Vm-Ba0" kind="show" identifier="completeLogin" id="voQ-Au-UXn"/>
+                        <segue destination="B1L-Vm-Ba0" kind="show" identifier="completeLogin" action="showDetailViewController:sender:" id="voQ-Au-UXn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBP-uj-DiP" sceneMemberID="firstResponder"/>
@@ -140,7 +140,11 @@
                             </mapView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dvi-po-ljK">
                                 <items>
-                                    <barButtonItem title="Logout" id="PoC-n6-DGO"/>
+                                    <barButtonItem title="Logout" id="PoC-n6-DGO">
+                                        <connections>
+                                            <action selector="logoutButtonAction:" destination="ZXU-2G-Uvl" id="Lkn-g2-AJo"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zAn-L8-wbG"/>
                                     <barButtonItem title="On The Map" id="FWk-sc-XvY"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="dNF-x2-mqz"/>
@@ -441,6 +445,6 @@
         <image name="udacityLogo" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ltu-c2-6oM"/>
+        <segue reference="NXK-Iv-7XW"/>
     </inferredMetricsTieBreakers>
 </document>

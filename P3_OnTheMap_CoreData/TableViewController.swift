@@ -26,12 +26,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Fetch resultsController with student location data
-        // setStudentLocationResultsController()
+        tableView.delegate = self
+        
         fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
     }
 

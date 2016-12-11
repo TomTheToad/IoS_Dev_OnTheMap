@@ -12,7 +12,7 @@
 import UIKit
 import SafariServices
 
-class LoginViewController: UIViewController, SFSafariViewControllerDelegate {
+class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UITextFieldDelegate {
     
     // Fields
     fileprivate let udacityAPI = UdacityAPI()
@@ -23,8 +23,12 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate {
     @IBOutlet weak var loginMessages: UILabel!
     
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        emailTextField.text?.removeAll()
+        passwordTextField.text?.removeAll()
+        loginMessages.text?.removeAll()
+    
+        passwordTextField.delegate = self
     }
     
     
@@ -41,7 +45,15 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate {
             return
         }
         
+        sendMessage("Sending Login", isError: false)
+        
         udacityAPI.doUdacityLogin(login, userPassword: password, completionHandler: udacityLoginCompletionHandler)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        passwordTextField.resignFirstResponder()
+        loginButtonAction(textField)
+        return true
     }
     
 

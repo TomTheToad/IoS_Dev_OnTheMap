@@ -26,8 +26,6 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("MESSAGE3: recievedUserLocation:\(receivedUserLocation?.description) recieveduserLocationName\(receivedUserLocationName)")
-        
         guard let latitude = receivedUserLocation?.coordinate.latitude else {
             fatalError("Missing latitude")
         }
@@ -50,12 +48,14 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
 
     }
     
+    
     func getUserData() -> UdacityUserInfo {
         let coreDataHandler = CoreDataHandler()
         let userRecord = coreDataHandler.fetchLastUserData()
         return userRecord
     }
 
+    
     @IBAction func submitButton(_ sender: AnyObject) {
         
         let userRecord = getUserData()

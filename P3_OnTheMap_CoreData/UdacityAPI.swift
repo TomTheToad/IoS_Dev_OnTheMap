@@ -79,7 +79,7 @@ class UdacityAPI: UIViewController {
                     } catch {
                         print("Unable to parse data \(parsedResult as AnyObject)")
                     }
-                    
+                     
                     let newData = parsedResult
                     
                     print("PARSED RESULT: \(parsedResult)")

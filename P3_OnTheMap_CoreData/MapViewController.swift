@@ -18,15 +18,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Fields
     let coreDataHandler = CoreDataHandler()
-    // var allStudentLocations: [StudentInfo]?
 
-    
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +34,33 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         makeMap(locations)
         
     }
+    
+    
+    // add results handler? alert message
+    @IBAction func logoutButtonAction(_ sender: AnyObject) {
+        let udacityAPI = UdacityAPI()
+        udacityAPI.doUdacityLogout()
+        
+        let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
+        
+        let alert = UIAlertController(title: "User Status", message: "Logout Successful", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "ok", style: .default, handler: { (action: UIAlertAction) in
+                self.present(loginViewController!, animated: false, completion: nil)
+            })
+            
+        alert.addAction(action)
+        
+        present(alert, animated: false)
+        
+        
+//        guard navigationController?.popToRootViewController(animated: false) != nil else {
+//            print("Message: No view controller to pop")
+//            dismiss(animated: false, completion: nil)
+//            return
+//        }
+    }
+    
     
     func makeMap(_ locations: [StudentInfo]) {
         
@@ -133,8 +155,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return allStudentLocations
     }
 
-    // MARK: - MKMapViewDelegate
     
+    // MARK: - MKMapViewDelegate
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"

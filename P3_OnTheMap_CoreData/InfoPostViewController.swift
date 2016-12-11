@@ -50,13 +50,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
         
         findInputedLocation(locationRequestTextField.text!)
         
-//        let userLocationVC = storyboard?.instantiateViewController(withIdentifier: "UserLocation") as? UserLocationViewController
-//        
-//        userLocationVC?.receivedUserLocation = userLocation
-//        userLocationVC?.receivedUserLocationName = userLocationName
-//        
-//        present(userLocationVC!, animated: false, completion: nil)
-        
+
     }
     
 

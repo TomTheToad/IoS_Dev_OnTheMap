@@ -5,6 +5,7 @@
 //  Created by VICTOR ASSELTA on 5/20/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
+// todo: add necessary table delegate links?
 // todo: clean up code
 
 import Foundation
@@ -37,6 +38,7 @@ class CoreDataHandler {
 
         coreDataStack.saveMainContext()
     }
+    
     
     func fetchLastUserData() -> UdacityUserInfo {
         
@@ -154,8 +156,7 @@ class CoreDataHandler {
         
     }
     
-    
-    
+     
     func fetchOneStudentLocation(_ student: StudentInfo) -> StudentLocation {
         
         var userRecord = AnyObject?(self)
