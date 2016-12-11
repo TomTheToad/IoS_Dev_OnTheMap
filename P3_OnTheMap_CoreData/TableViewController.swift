@@ -37,12 +37,14 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
     }
     
+    
     // update table data
     func updateTableData() {
         setStudentLocationResultsController()
         tableView.reloadData()
     }
 
+    
     // rename method to correspond with similar mapView method.
     @IBAction func reloadTableDataButton(_ sender: AnyObject) {
         // todo: call an actual update, not just a Core Data query
@@ -50,6 +52,24 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         parseAPI.updateSavedStudentInfo(updateCompletionHandler)
         
     }
+    
+    
+    @IBAction func logoutButtonFunction(_ sender: AnyObject) {
+        let udacityAPI = UdacityAPI()
+        udacityAPI.doUdacityLogout()
+        
+        let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
+        
+        let alert = UIAlertController(title: "User Status", message: "Logout Successful", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "ok", style: .default, handler: { (action: UIAlertAction) in
+            self.present(loginViewController!, animated: false, completion: nil)
+        })
+        
+        alert.addAction(action)
+        present(alert, animated: false)
+    }
+    
     
     // Completion Handler
     func updateCompletionHandler(_ isSuccess:Bool) -> Void {
@@ -64,15 +84,17 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
     }
     
+    
     // MARK: - Table view data source
-
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchedResultsController!.sections?[section].numberOfObjects ?? 0
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 

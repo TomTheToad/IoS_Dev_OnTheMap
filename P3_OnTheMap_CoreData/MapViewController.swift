@@ -50,15 +50,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             })
             
         alert.addAction(action)
-        
         present(alert, animated: false)
-        
-        
-//        guard navigationController?.popToRootViewController(animated: false) != nil else {
-//            print("Message: No view controller to pop")
-//            dismiss(animated: false, completion: nil)
-//            return
-//        }
     }
     
     
