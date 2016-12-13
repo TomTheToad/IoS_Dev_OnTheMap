@@ -96,29 +96,25 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+    // todo: add link to share
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath) as!TableViewCell
         
         let studentLocation = fetchedResultsController?.object(at: indexPath) as! StudentLocation
         
-        if let firstName = studentLocation.firstName, let lastName = studentLocation.lastName {
-            cell.textLabel!.text = "\(firstName) \(lastName)"
-            cell.imageView!.image = UIImage(named: "PinImage")
+        if let studentFirstName = studentLocation.firstName, let studentLastName = studentLocation.lastName {
+            cell.locationTitle.text = "\(studentFirstName) \(studentLastName)"
+        } else {
+            cell.locationTitle.text = "n/a"
+        }
+        
+        if let studentMediaURL = studentLocation.mediaURL {
+            cell.mediaURL = "\(studentMediaURL)"
+        } else {
+            cell.mediaURL = ""
         }
         
         return cell
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
