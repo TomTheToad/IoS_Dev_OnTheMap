@@ -5,8 +5,14 @@
 //  Created by VICTOR ASSELTA on 5/20/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: add necessary table delegate links?
 // todo: clean up code
+
+/* 
+ 
+ Custom class which handles interactions with core data for this specific application.
+ Uses custom coreDataStack singleton which provides a single managed object context.
+ 
+ */
 
 import Foundation
 import CoreData
@@ -14,7 +20,7 @@ import CoreData
 class CoreDataHandler {
     
     // Fields
-    // fileprivate var coreDataStack = CoreDataStack()
+    // Custom Core Data Stack and MOC
     var coreDataStack = AppDelegate().getCoreDataStack()
     fileprivate var managedObjectContext: NSManagedObjectContext
     
@@ -25,6 +31,8 @@ class CoreDataHandler {
     
 
     /* User Information Methods */
+    // Save users Information to Core Data
+    // Takes user's login and user information formatted as StudentInfo
     func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) {
         
         let userRecord = fetchUserInfoData(userLogin)
@@ -40,6 +48,8 @@ class CoreDataHandler {
     }
     
     
+    // Get last added user, current user, information
+    // Returns UdacityUserInfo
     func fetchLastUserData() -> UdacityUserInfo {
         
         var userRecord: UdacityUserInfo?
@@ -56,6 +66,10 @@ class CoreDataHandler {
     }
     
     
+    // Fetch a specific users information
+    // todo: delete this?
+    // takes userLogin as String
+    // Returns UdacityUserInfo
     func fetchUserInfoData(_ userLogin: String) -> UdacityUserInfo {
         
         // todo: syntax change for Swift3. May have to rework type
@@ -101,6 +115,8 @@ class CoreDataHandler {
     
 
     /* Student Location Methods */
+    // Saves an array of student location information
+    // takes an array of StudentInfo dictionaries
     func saveStudentLocations(_ studentInfoDict: [StudentInfo]) {
         // todo: determine if more efficient to wipe all records or update existing ones
         
@@ -122,6 +138,9 @@ class CoreDataHandler {
     }
     
     
+    // Check to see if a previous entry exists based on studentID
+    // takes studentID as String
+    // Returns a tuple of Bool (location found) and String (Given parse ID)
     func checkLocationExists(studentID: String) -> (Bool, String?) {
         
         var isSuccess: Bool?
@@ -156,7 +175,11 @@ class CoreDataHandler {
         
     }
     
-     
+    
+    // Fetch a single student's location
+    // todo: is this used?
+    // Takes StudentInfo
+    // Returns StudentLocation
     func fetchOneStudentLocation(_ student: StudentInfo) -> StudentLocation {
         
         var userRecord = AnyObject?(self)
@@ -198,6 +221,7 @@ class CoreDataHandler {
     
     
     // Fetch all student location records for table as a fetchedResultsController
+    // Returns NSFetchResultsController (still uses NS prefix) of student locations.
     func fetchAllSTudentLocationsResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
         
         // let request = NSFetchRequest(entityName: "StudentLocation")
@@ -219,6 +243,8 @@ class CoreDataHandler {
     }
     
     
+    // Fetch all student location
+    // Returns an array of StudentInfo
     func fetchAllSTudentLocations() -> [StudentInfo] {
         
         var returnData = [StudentInfo]()
@@ -242,6 +268,9 @@ class CoreDataHandler {
     }
     
     
+    // Helper function to convert student location to student information format
+    // Takes and array of StudentLcation
+    // Returns and array of StudentInfo
     func convertStudentLocationArrayToStudentInfoArray(_ studentLocationArray: [StudentLocation]) -> [StudentInfo] {
         var returnData = [StudentInfo]()
         

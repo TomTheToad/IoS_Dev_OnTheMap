@@ -5,7 +5,17 @@
 //  Created by VICTOR ASSELTA on 5/29/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: clean up
+// todo:
+//  1) clean up
+//  2) prepopulate mediaURL?
+//  3) comments
+//  4) give submit button a background
+
+/* 
+ Follow up to InfoPostView.
+ Locates User shows user's found / submitted location before submission.
+ Allows for input of user supplied media url.
+ */
 
 import UIKit
 import MapKit
@@ -19,10 +29,11 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     var receivedParseID: String?
     
     // IBOutlets
-
     @IBOutlet weak var linkToShareTextView: UITextField!
     @IBOutlet weak var mapView: MKMapView!
 
+    // Upon load show user location from given CLLocation
+    // todo: break up this method
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,7 +59,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
 
     }
     
-    
+    // Retrieve user data for submission purposes
+    // todo: Get from previous submission?
     func getUserData() -> UdacityUserInfo {
         let coreDataHandler = CoreDataHandler()
         let userRecord = coreDataHandler.fetchLastUserData()
@@ -56,6 +68,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     }
 
     
+    // submitButton action: post/ put location to parseAPI
+    // todo: Break this method up ... too long
     @IBAction func submitButton(_ sender: AnyObject) {
         
         let userRecord = getUserData()
@@ -82,7 +96,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
         }
         
         if let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController") {
-        present(tabBarController, animated: false, completion: nil)
+            present(tabBarController, animated: false, completion: nil)
         } else {
             fatalError("Fatal Map Error.")
         }

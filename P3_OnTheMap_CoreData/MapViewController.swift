@@ -7,13 +7,12 @@
 //
 
 // todo: list
-// 1) update map - handle reload
-// 2) handle errors
+// 1) handle errors
 
 /*
  
  Presents mapView with annotation supplied by ParseAPI.
- Directly dependent upon ParseAPI.swift.
+ Directly dependent upon CoreDataHandler & UdacityAPI
  
  */
 
@@ -43,6 +42,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // Logout Button action: do Udacity logout
+    // todo: Move to new class? Duplicated in TableViewController.
     // add results handler? alert message
     @IBAction func logoutButtonAction(_ sender: AnyObject) {
         let udacityAPI = UdacityAPI()
@@ -60,7 +61,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         present(alert, animated: false)
     }
     
-    
+    // Adds annotation to mapView
+    // Takes an array of StudentInfo
+    // break this up?
     func makeMap(_ locations: [StudentInfo]) {
         
         var annotations = [MKPointAnnotation]()
@@ -115,6 +118,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // Update button action: perform method series for annotation update.
     func updateMap() {
         let locations = getStudentLocations()
         makeMap(locations)
@@ -128,7 +132,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    // Completion Handler
+    // Reload student location data using parse
+    // todo: delete this function? Currently using CoreData information
+    // to allow for less network requests.
+    @IBAction func reloadMapButton(_ sender: AnyObject) {
+        let parseAPI = ParseAPI()
+        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
+    }
+
+    
+    // Completion Handler for parseAPI for reloadMapButton
     func updateCompletionHandler(_ isSuccess:Bool) -> Void {
         DispatchQueue.main.async(execute: { ()-> Void in
             if isSuccess == true {
@@ -141,21 +154,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         })
     }
     
-    
-    @IBAction func reloadMapButton(_ sender: AnyObject) {
-        let parseAPI = ParseAPI()
-        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
-    }
-
-    
+    // Retrieve student locations saved in CoreData
     func getStudentLocations() -> [StudentInfo] {
-        // let dataHandler = DataHandler()
         let allStudentLocations = coreDataHandler.fetchAllSTudentLocations()
         return allStudentLocations
     }
 
     
     // MARK: - MKMapViewDelegate
+    // Configure mapView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
@@ -176,6 +183,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // Allow mapView location bubble click through to give student mediaURL in safari.
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
