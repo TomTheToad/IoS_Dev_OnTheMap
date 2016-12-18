@@ -118,6 +118,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
+    // alternative to didSelectRow, seems to be working
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let app = UIApplication.shared
         
@@ -133,23 +134,5 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             print("No URL given")
         }
-    }
-    
-    // todo: figure out why this is not firing right away. Usually have to select another cell
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        let app = UIApplication.shared
-//        
-//        let cell = tableView.cellForRow(at: indexPath) as? TableViewCell
-//        
-//        if let urlString = cell?.mediaURL {
-//            print("MediaURL: \(urlString)")
-//            if let url = URL(string: urlString) {
-//                app.openURL(url)
-//            } else {
-//                print("Invalid URL")
-//            }
-//        } else {
-//            print("No URL given")
-//        }
     }
 }

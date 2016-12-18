@@ -145,7 +145,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     func findInputedLocation(_ location: String) {
         
         let geoCode = CLGeocoder()
-        var isSuccess = false
+        // var isSuccess = false
         
         geoCode.geocodeAddressString(location, completionHandler: {
             (placemarks, error) -> Void in
@@ -158,7 +158,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
                     self.userLocationName = firstLocation.locality
                     self.locationRequestTextField.text = "\(firstLocation.locality)"
                     
-                    isSuccess = true
+                    // isSuccess = true
                     
                     self.presentUserLocationVC(userLocation: firstLocation.location!, userLocationName: firstLocation.locality!)
                 }

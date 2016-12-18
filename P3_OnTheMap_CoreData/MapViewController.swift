@@ -10,6 +10,13 @@
 // 1) update map - handle reload
 // 2) handle errors
 
+/*
+ 
+ Presents mapView with annotation supplied by ParseAPI.
+ Directly dependent upon ParseAPI.swift.
+ 
+ */
+
 import UIKit
 import MapKit
 import CoreData

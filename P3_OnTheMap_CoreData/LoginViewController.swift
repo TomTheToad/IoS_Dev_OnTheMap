@@ -9,6 +9,13 @@
 // 1) handle errors gracefully
 // 2) Check for saved data if no data connection?
 
+/*
+ 
+ Initial view controller. Handles the user login process.
+ Directly dependent upon UdacityAPI.swift
+ 
+ */
+
 import UIKit
 import SafariServices
 
@@ -24,6 +31,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     
 
     override func viewWillAppear(_ animated: Bool) {
+        
+        // Clear text fields. Added for popping back to initial view from logout
         emailTextField.text?.removeAll()
         passwordTextField.text?.removeAll()
         loginMessages.text?.removeAll()
@@ -33,9 +42,9 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     
     
     // IBActions
+    // Login button action
     @IBAction func loginButtonAction(_ sender: AnyObject) {
         guard let login = emailTextField.text else {
-            // todo: add alert
             sendMessage("Please Enter A Valid Email", isError: true)
             return
         }
@@ -47,9 +56,11 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         
         sendMessage("Sending Login", isError: false)
         
+        // if success, perform Udacity login
         udacityAPI.doUdacityLogin(login, userPassword: password, completionHandler: udacityLoginCompletionHandler)
     }
     
+    // Enables enter key to launch loginButtonAction if within password field
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         passwordTextField.resignFirstResponder()
         loginButtonAction(textField)
@@ -67,7 +78,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     }
     
     
-    // required controller for safari delegate to dismiss safari controller
+    // Required controller for safari delegate to dismiss safari controller
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
@@ -75,7 +86,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     
     // Udacity completion handler
     // Displays Login status (complete or failed) 
-    // dependent upon Udacity authorization result
+    // Dependent upon Udacity authorization result
+    // Takes a loginCompletionHandler
     fileprivate func udacityLoginCompletionHandler(_ isSuccess: Bool)->Void {
         if isSuccess == true {
             let parse = ParseAPI()
@@ -123,6 +135,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     
     
     // User alerts
+    // Streamlined alert method
     fileprivate func sendAlert(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "ok", style: .default, handler: nil)
