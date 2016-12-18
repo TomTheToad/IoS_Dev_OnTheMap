@@ -5,7 +5,12 @@
 //  Created by VICTOR ASSELTA on 12/11/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: change from highlight cell to select cell
+
+/*
+
+Custom cell for TableView to allow for hidden mediaURL
+ 
+*/
 
 import UIKit
 

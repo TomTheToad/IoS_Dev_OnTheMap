@@ -6,6 +6,12 @@
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
 
+/*
+ 
+ Handles response checking
+ 
+*/
+
 import Foundation
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -34,6 +40,9 @@ class URLResponseCheck {
     var isSuccess = false
     var message = ""
     
+    // Checks response for status code and message
+    // Takes URLReponse
+    // Takes Completion Handler
     func checkReponse(_ response: URLResponse) -> (Bool, String) {
         
         let httpResponse = response as? HTTPURLResponse

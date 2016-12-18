@@ -6,6 +6,12 @@
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
 
+/* 
+
+Methods to support StudentInfoMethods.
+
+*/
+
 import Foundation
 
 class StudentInfoMethods {
@@ -59,7 +65,7 @@ class StudentInfoMethods {
     }
         
     
-    // Reconfigure
+    // Convert an array of NSDictionaries to an array of StudentInfo
     func buildStudentDictionary(_ dict: [NSDictionary]) -> [StudentInfo] {
         
         var studentArray = [StudentInfo]()
@@ -70,10 +76,6 @@ class StudentInfoMethods {
             
             studentArray.append(thisStudent)
         }
-        
-        // Convert and add the student user of this app from udacity login info
-//        let thisStudentUser = convertDictToStudentUserInfo(studentUser)
-//        studentArray.append(thisStudentUser)
 
         return studentArray
     }

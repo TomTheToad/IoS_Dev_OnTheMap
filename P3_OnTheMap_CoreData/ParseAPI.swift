@@ -9,6 +9,12 @@
 // 1) finish checkForExistingEntry function
 // 2) clean up code... handle errors?
 
+/* 
+
+ File to handle interaction with Udacity Parse API
+
+*/
+
 import UIKit
 
 class ParseAPI {
@@ -18,15 +24,14 @@ class ParseAPI {
     fileprivate var RESTApiKey = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
     
     // public methods
-    func checkForExistingEntry(studentID: String) -> Bool {
-       //: todo update entry
-        return true
-    }
     
+    // Retieve student location
+    // Takes completion handler
     func getStudentLocations(_ completionHandler: @escaping ([NSDictionary]) -> Void) {
         getParseData(completionHandler)
     }
     
+    // Send data to core data handler
     // todo: rename method
     func updateSavedStudentInfo(_ completionHanlder: @escaping (Bool) -> Void) {
         setParseData(completionHanlder)

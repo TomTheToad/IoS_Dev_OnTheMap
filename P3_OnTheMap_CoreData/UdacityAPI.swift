@@ -7,6 +7,12 @@
 //
 // todo: clean up code
 
+/*
+
+ File to handle the interaction with the Udacity API for this application
+ 
+*/
+
 import UIKit
 import CoreData
 
@@ -24,6 +30,7 @@ class UdacityAPI: UIViewController {
     
     
     /* Main Public Function Calls */
+    // Is this necessary?
     
     // Do Login
     func doUdacityLogin (_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool)->Void)) {
@@ -37,6 +44,10 @@ class UdacityAPI: UIViewController {
 
 
     // Private functions
+    // Retrieve session ID for given login information
+    // Takes argument userLogin as String
+    // Takes argument userPassword as String
+    // Takes completion handler
     fileprivate func getSessionID(_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool)->Void)) {
         
         // create NSUrl
@@ -106,6 +117,10 @@ class UdacityAPI: UIViewController {
     }
     
     
+    // Retrieve public user information from Udacity api with give account id
+    // Takes userLogin as String
+    // Takes account ID as String
+    // Takes Completion Handler
     fileprivate func getUserPublicInfo(_ userLogin: String, accountID: String, completionHandler: @escaping ((Bool)->Void)) {
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(accountID)")!)
         let session = URLSession.shared
@@ -173,9 +188,6 @@ class UdacityAPI: UIViewController {
                     coreDataHandler.saveUserInfoData(userLogin, studentInfo: userInfo)
                     // dataHandler.saveUserInfoData(userInfo)
                     
-                    // run second time to confirm save
-                    // dataHandler.saveUserInfoData2(userInfo)
-                    
                 } else {
                     print("Warning: Unable to save user data")
                 }
@@ -190,6 +202,7 @@ class UdacityAPI: UIViewController {
         task.resume()
     }
     
+    // Deletes shared cookie to allow for "logout"
     fileprivate func logOut() {
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "DELETE"
