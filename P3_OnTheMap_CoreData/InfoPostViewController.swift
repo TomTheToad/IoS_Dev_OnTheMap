@@ -7,12 +7,23 @@
 //
 // todo: check for previously inputed location, create alert (maybe in previous class)
 
+/* 
+ 
+ First of two views necessary to add / update user parse data.
+ Checks for previous submission, 
+    query user for overwrite permission if found,
+    finds location,
+    and passes on to UserLocationController.
+ 
+ */
+
 import UIKit
 import CoreLocation
 
 class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     
     
+    // Check for previous entry prior to starting process.
     override func viewWillAppear(_ animated: Bool) {
         checkForPreviousUserEntry()
     }
@@ -41,30 +52,31 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     
     
     // IBAction
+    // Cancel Button Action: return to previous view
     @IBAction func cancelButton(_ sender: AnyObject) {
         returnToPreviousView()
     }
     
-    // todo: allow for both methods of location input
+    // Find given user location
+    // todo: inefficeint as this finds the location previously found?
     @IBAction func FindOnTheMap(_ sender: AnyObject) {
-        
         findInputedLocation(locationRequestTextField.text!)
-        
-
     }
     
 
+    // AutoLocateArrow action
     @IBAction func autoLocateArrowButton(_ sender: AnyObject) {
-        
         guard let location = userLocation else {
             print("Unable to determine location.")
             return
         }
         
+        // Gets the name of the found location
         findNameOfLocation(location)
     }
     
     
+    // Checks for previous entry by current user, calls alert function if found.
     func checkForPreviousUserEntry() {
         let coreDataHandler = CoreDataHandler()
         
@@ -100,6 +112,8 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
+    // Presents an alert to the user if previous location is found.
+    // If overwrite continue with submission else roll back to previous view.
     func alertPreviousRecord() {
         let message = "It appears that you may already have submitted a location. Do you wish to replace the previous location?"
 
@@ -118,11 +132,15 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
+    // Returns to previous view in stack
     func returnToPreviousView() {
         presentingViewController?.dismiss(animated: false, completion: nil)
     }
     
     
+    // Uses revierse GeoCodeLcation to find name of a given location and sets placemark
+    // todo: break this method up?
+    // Takes a CLLocation
     func findNameOfLocation(_ location: CLLocation) {
         let geoCode = CLGeocoder()
         var isSuccess = false
@@ -142,6 +160,8 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
+    // Attempts to find a location inputed by user
+    // todo: add alert
     func findInputedLocation(_ location: String) {
         
         let geoCode = CLGeocoder()
@@ -164,8 +184,13 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
                 }
                 
             } else {
-                // add alert here
-                print("Unable to locate entry")
+                let msg = "Could not locate entry. Please try again"
+                let alert = UIAlertController(title: "Missing location", message: msg, preferredStyle: .alert)
+                let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                alert.addAction(alertAction)
+                
+                self.present(alert, animated: false)
+        
             }
         })
     }

@@ -10,6 +10,10 @@
 //  2) prepopulate mediaURL?
 //  3) comments
 //  4) give submit button a background
+//  5) Issue: not necessarily a bug but does not immediatly show user location
+//      maybe a little while before updated user info is added to Udacity parse api
+//      core data may not immediately show updated information.
+//      could manually add new user location to annotations
 
 /* 
  Follow up to InfoPostView.
@@ -29,6 +33,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
     var receivedParseID: String?
     
     // IBOutlets
+    // Add "http://" to linkToShareTextView with delegate?
     @IBOutlet weak var linkToShareTextView: UITextField!
     @IBOutlet weak var mapView: MKMapView!
 
