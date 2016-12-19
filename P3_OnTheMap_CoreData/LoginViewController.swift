@@ -34,6 +34,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         
         // Clear text fields. Added for popping back to initial view from logout
         emailTextField.text?.removeAll()
+        emailTextField.becomeFirstResponder()
         passwordTextField.text?.removeAll()
         loginMessages.text?.removeAll()
     
@@ -58,13 +59,6 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         
         // if success, perform Udacity login
         udacityAPI.doUdacityLogin(login, userPassword: password, completionHandler: udacityLoginCompletionHandler)
-    }
-    
-    // Enables enter key to launch loginButtonAction if within password field
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        passwordTextField.resignFirstResponder()
-        loginButtonAction(textField)
-        return true
     }
     
 
@@ -148,6 +142,15 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // Complete login by performing segue
     fileprivate func completeLogin() {
         performSegue(withIdentifier: "completeLogin", sender: self)
+    }
+    
+    
+    // MARK: - Location Text Field Delegate Methods
+    // Enables enter key to launch loginButtonAction if within password field
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        passwordTextField.resignFirstResponder()
+        loginButtonAction(textField)
+        return true
     }
 }
 

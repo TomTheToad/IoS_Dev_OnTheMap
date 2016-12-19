@@ -24,7 +24,7 @@
 import UIKit
 import MapKit
 
-class UserLocationViewController: UIViewController, MKMapViewDelegate {
+class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     
     // Fields
     var receivedUserLocation: CLLocation?
@@ -61,6 +61,12 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
         
         mapView.addAnnotation(annotation)
         mapView.setRegion(region, animated: true)
+        
+        // Set textField delegate to self for return functionality
+        linkToShareTextView.delegate = self
+        
+        // Set first responder
+        linkToShareTextView.becomeFirstResponder()
 
     }
     
@@ -105,6 +111,14 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate {
         } else {
             fatalError("Fatal Map Error.")
         }
+    }
+    
+    
+    // MARK: - Location Text Field Delegate Methods    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        linkToShareTextView.resignFirstResponder()
+        submitButton(textField)
+        return true
     }
 
 }

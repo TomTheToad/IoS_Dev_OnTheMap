@@ -336,13 +336,6 @@
                                     <constraint firstItem="iVo-Dm-E8l" firstAttribute="leading" secondItem="HHV-ya-QGS" secondAttribute="leading" constant="35" id="lkg-cg-aba"/>
                                 </constraints>
                             </stackView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter a Location" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UWi-6c-fcB">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="vlA-qa-ofe"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TVG-xh-yzt">
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Find on the Map"/>
@@ -350,37 +343,57 @@
                                     <action selector="FindOnTheMap:" destination="5Yt-fw-0Cx" eventType="touchUpInside" id="Ls4-tE-cqq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIT-FE-tAh">
-                                <color key="backgroundColor" red="0.0" green="0.85368603187919467" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="0w3-Or-sjV"/>
-                                    <constraint firstAttribute="height" constant="30" id="pEs-xN-LcK"/>
-                                </constraints>
-                                <state key="normal" image="LocationArrow1"/>
-                                <connections>
-                                    <action selector="autoLocateArrowButton:" destination="5Yt-fw-0Cx" eventType="touchUpInside" id="Ef3-9U-hDp"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gRf-3H-a6h">
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter a Location" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UWi-6c-fcB">
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="GfQ-4B-EYY"/>
+                                            <constraint firstAttribute="width" constant="279" id="o3M-zZ-iZH"/>
+                                            <constraint firstAttribute="height" constant="30" id="vlA-qa-ofe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhr-jb-m0h">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="42" id="3X3-Sk-tym"/>
+                                            <constraint firstAttribute="height" constant="31" id="V8m-LI-fge"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NEU-eW-CnC">
+                                        <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="D8M-7C-bKQ"/>
+                                            <constraint firstAttribute="width" constant="279" id="Enn-FT-Jjb"/>
+                                        </constraints>
+                                        <state key="normal" title="Use Auto Locate">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="autoLocateButton:" destination="5Yt-fw-0Cx" eventType="touchUpInside" id="3wv-xK-olp"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="leading" secondItem="Shg-0Z-kIe" secondAttribute="leading" id="15P-4g-C0g"/>
+                            <constraint firstItem="gRf-3H-a6h" firstAttribute="centerX" secondItem="c6n-Es-iUW" secondAttribute="centerX" id="2jM-UG-xn2"/>
                             <constraint firstAttribute="trailing" secondItem="EmT-BJ-uSQ" secondAttribute="trailing" id="4Si-fP-YCl"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="leading" secondItem="c6n-Es-iUW" secondAttribute="leading" id="5mz-BW-MOX"/>
-                            <constraint firstItem="UWi-6c-fcB" firstAttribute="leading" secondItem="c6n-Es-iUW" secondAttribute="leadingMargin" constant="32" id="7F3-vV-0xd"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="trailing" secondItem="Shg-0Z-kIe" secondAttribute="trailing" id="Bd6-80-m3f"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="UWi-6c-fcB" secondAttribute="trailing" constant="32" id="KFh-Vq-7ew"/>
                             <constraint firstItem="9nX-Xo-Euu" firstAttribute="top" secondItem="TVG-xh-yzt" secondAttribute="bottom" constant="140" id="MHv-qz-Gmk"/>
                             <constraint firstItem="Shg-0Z-kIe" firstAttribute="centerX" secondItem="TVG-xh-yzt" secondAttribute="centerX" id="NeE-8t-TjK"/>
                             <constraint firstItem="HHV-ya-QGS" firstAttribute="leading" secondItem="c6n-Es-iUW" secondAttribute="leadingMargin" constant="96" id="QJm-ZK-Mcd"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="centerX" secondItem="HHV-ya-QGS" secondAttribute="centerX" id="f5Z-1c-MMP"/>
-                            <constraint firstItem="UWi-6c-fcB" firstAttribute="centerX" secondItem="c6n-Es-iUW" secondAttribute="centerX" id="fUH-Hh-HTK"/>
                             <constraint firstItem="HHV-ya-QGS" firstAttribute="top" secondItem="EmT-BJ-uSQ" secondAttribute="bottom" constant="14" id="kfv-EV-snn"/>
                             <constraint firstItem="TVG-xh-yzt" firstAttribute="top" secondItem="Shg-0Z-kIe" secondAttribute="bottom" constant="19" id="lwL-rN-jv7"/>
-                            <constraint firstItem="qIT-FE-tAh" firstAttribute="top" secondItem="UWi-6c-fcB" secondAttribute="bottom" constant="15" id="rVr-e7-Kvy"/>
+                            <constraint firstItem="gRf-3H-a6h" firstAttribute="centerY" secondItem="c6n-Es-iUW" secondAttribute="centerY" id="pFX-NZ-URZ"/>
                             <constraint firstItem="Shg-0Z-kIe" firstAttribute="top" secondItem="HHV-ya-QGS" secondAttribute="bottom" constant="44" id="t09-0W-u1U"/>
-                            <constraint firstItem="qIT-FE-tAh" firstAttribute="centerX" secondItem="c6n-Es-iUW" secondAttribute="centerX" id="vgY-dx-yTw"/>
-                            <constraint firstItem="UWi-6c-fcB" firstAttribute="top" secondItem="HHV-ya-QGS" secondAttribute="bottom" constant="142" id="wyP-gx-swX"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="top" secondItem="Cgb-P2-s5m" secondAttribute="bottom" constant="8" id="zRW-g2-z5I"/>
                         </constraints>
                     </view>
@@ -417,6 +430,11 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="905-fX-JQZ">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="UsE-eb-m3Q"/>
+                                    <constraint firstAttribute="width" constant="108" id="vBI-Oi-bl5"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="submit"/>
                                 <connections>
@@ -452,7 +470,6 @@
     </scenes>
     <resources>
         <image name="ListIcon" width="32" height="32"/>
-        <image name="LocationArrow1" width="500" height="500"/>
         <image name="MapIcon" width="32" height="32"/>
         <image name="PinImage" width="32" height="32"/>
         <image name="udacityLogo" width="256" height="256"/>

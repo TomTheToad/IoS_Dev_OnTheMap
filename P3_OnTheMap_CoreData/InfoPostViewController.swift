@@ -20,7 +20,7 @@
 import UIKit
 import CoreLocation
 
-class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
+class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate {
     
     
     // Check for previous entry prior to starting process.
@@ -36,6 +36,12 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        
+        // Text Field delegate
+        locationRequestTextField.delegate = self
+        
+        // Set first repsonder
+        locationRequestTextField.becomeFirstResponder()
         
     }
     
@@ -58,14 +64,13 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // Find given user location
-    // todo: inefficeint as this finds the location previously found?
     @IBAction func FindOnTheMap(_ sender: AnyObject) {
         findInputedLocation(locationRequestTextField.text!)
     }
     
 
-    // AutoLocateArrow action
-    @IBAction func autoLocateArrowButton(_ sender: AnyObject) {
+    // AutoButton action
+    @IBAction func autoLocateButton(_ sender: AnyObject) {
         guard let location = userLocation else {
             print("Unable to determine location.")
             return
@@ -78,6 +83,9 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     
     // Checks for previous entry by current user, calls alert function if found.
     func checkForPreviousUserEntry() {
+        
+        print("MESSAGE: Checking for previous user entry")
+        
         let coreDataHandler = CoreDataHandler()
         
         let user = coreDataHandler.fetchLastUserData()
@@ -103,11 +111,15 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
             } else {
                 print("No location for user \(studentID) in database.")
                 overWritePreviousLocation = false
+                // Change to nil to avoid potential data trap, probably redundant but safe
+                parseID = nil
             }
             
         } else {
             print("No current user found")
             overWritePreviousLocation = false
+            // Change to nil to avoid potential data trap
+            parseID = nil
         }
     }
     
@@ -138,7 +150,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-    // Uses revierse GeoCodeLcation to find name of a given location and sets placemark
+    // Uses reverse GeoCodeLcation to find name of a given location and sets placemark
     // todo: break this method up?
     // Takes a CLLocation
     func findNameOfLocation(_ location: CLLocation) {
@@ -201,7 +213,10 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
         userLocationVC?.receivedUserLocation = userLocation
         userLocationVC?.receivedUserLocationName = userLocationName
         userLocationVC?.receivedOverwritePreviousLocation = overWritePreviousLocation!
-        userLocationVC?.receivedParseID = parseID!
+        
+        if let id = parseID {
+            userLocationVC?.receivedParseID = id
+        }
         
         present(userLocationVC!, animated: false, completion: nil)
         
@@ -220,6 +235,14 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Errors: " + error.localizedDescription)
+    }
+    
+    
+    // MARK: - Location Text Field Delegate Methods
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        locationRequestTextField.resignFirstResponder()
+        findInputedLocation(locationRequestTextField.text!)
+        return true
     }
 
 }

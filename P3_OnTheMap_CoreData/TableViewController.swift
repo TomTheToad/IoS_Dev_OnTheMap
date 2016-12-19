@@ -96,7 +96,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    // todo: add link to share
+    // todo: add link to share?
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath) as!TableViewCell
@@ -106,7 +106,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let studentFirstName = studentLocation.firstName, let studentLastName = studentLocation.lastName {
             cell.locationTitle.text = "\(studentFirstName) \(studentLastName)"
         } else {
-            cell.locationTitle.text = "n/a"
+            cell.locationTitle.text = "Udacity User (No name provided.)"
         }
         
         if let studentMediaURL = studentLocation.mediaURL {
@@ -117,6 +117,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return cell
     }
+    
     
     // alternative to didSelectRow, seems to be working
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
