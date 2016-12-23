@@ -122,15 +122,42 @@ class CoreDataHandler {
         
         for studentInfo in studentInfoDict {
             
-            let studentLocation = fetchOneStudentLocation(studentInfo)
+            if studentInfo.lastName != nil && studentInfo.latitude != nil && studentInfo.longitude != nil {
             
-            studentLocation.firstName = studentInfo.firstName
-            studentLocation.lastName = studentInfo.lastName
-            studentLocation.latitude = studentInfo.latitude
-            studentLocation.longitude = studentInfo.longitude
-            studentLocation.mediaURL = studentInfo.mediaURL
-            studentLocation.studentID = studentInfo.studentID
-            studentLocation.parseID = studentInfo.parseID
+                let studentLocation = fetchOneStudentLocation(studentInfo)
+                
+                if let firstName = studentInfo.firstName {
+                    studentLocation.firstName = firstName
+                }
+                
+                if let lastName = studentInfo.lastName {
+                    studentLocation.lastName = lastName
+                }
+                
+                if let latitude = studentInfo.latitude {
+                    studentLocation.latitude = latitude
+                } else {
+                    fatalError("latitude missing")
+                }
+                
+                if let longitude = studentInfo.longitude {
+                    studentLocation.longitude = longitude
+                } else {
+                    fatalError("longitude missing")
+                }
+                
+                if let mediaURL = studentInfo.mediaURL {
+                    studentLocation.mediaURL = mediaURL
+                }
+                
+                if let studentID = studentInfo.studentID {
+                    studentLocation.studentID = studentID
+                }
+                
+                if let parseID = studentInfo.parseID {
+                    studentLocation.parseID = parseID
+                }
+            }
             
         }
         
@@ -226,6 +253,8 @@ class CoreDataHandler {
         
         // let request = NSFetchRequest(entityName: "StudentLocation")
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
+        
+        request.predicate = NSPredicate(format: "lastName != nil AND firstName != nil")
         
         let lastNameSort = NSSortDescriptor(key: "lastName", ascending: true)
         

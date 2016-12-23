@@ -20,7 +20,7 @@ class TableViewCell: UITableViewCell {
     var mediaURL: String?
     
     //IBOutlets
-    @IBOutlet weak var locationImage: UIImageView!
+    // @IBOutlet weak var locationImage: UIImageView!
     @IBOutlet weak var locationTitle: UILabel!
     
 
@@ -28,5 +28,23 @@ class TableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    // alternative to didSelectRow, seems to be working
+//    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+//        let app = UIApplication.shared
+//        
+//        let cell = tableView.cellForRow(at: indexPath) as? TableViewCell
+//        
+//        if let urlString = cell?.mediaURL {
+//            print("MediaURL: \(urlString)")
+//            if let url = URL(string: urlString) {
+//                app.openURL(url)
+//            } else {
+//                print("Invalid URL")
+//            }
+//        } else {
+//            print("No URL given")
+//        }
+//    }
 }
 

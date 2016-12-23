@@ -101,16 +101,36 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath) as!TableViewCell
         
+        // cell.locationImage.image = UIImage(named: "PinImage")
+        
         let studentLocation = fetchedResultsController?.object(at: indexPath) as! StudentLocation
         
-        if let studentFirstName = studentLocation.firstName, let studentLastName = studentLocation.lastName {
-            cell.locationTitle.text = "\(studentFirstName) \(studentLastName)"
-        } else {
-            cell.locationTitle.text = "Udacity User (No name provided.)"
+        var title: String?
+        
+        if let studentFirstName = studentLocation.firstName {
+            title = "\(studentFirstName)"
         }
+        
+        if let studentLastName = studentLocation.lastName {
+            if title != nil {
+                title = title! + " \(studentLastName)"
+            } else {
+                title = " \(studentLastName)"
+            }
+        }
+
+        print("TITLE: \(title)")
+        
+        if title != nil {
+            cell.locationTitle.text = title!
+        } else {
+            cell.locationTitle.text = "Udacity User"
+        }
+        
         
         if let studentMediaURL = studentLocation.mediaURL {
             cell.mediaURL = "\(studentMediaURL)"
+            cell.accessoryType = .detailButton
         } else {
             cell.mediaURL = nil
         }

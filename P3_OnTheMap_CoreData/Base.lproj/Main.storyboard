@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7VM-jo-kST">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7VM-jo-kST">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -203,42 +203,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="but-cG-t7c">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="but-cG-t7c">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PinNameCell" id="exh-Pb-f94" customClass="TableViewCell" customModule="OnTheMap" customModuleProvider="target">
+                                    <tableViewCell autoresizesSubviews="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="PinNameCell" id="exh-Pb-f94" customClass="TableViewCell" customModule="OnTheMap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="exh-Pb-f94" id="TFn-MJ-9d8">
+                                        <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" tableViewCell="exh-Pb-f94" id="TFn-MJ-9d8">
                                             <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Fy-4h-sAm">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l7Q-tN-qaU">
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Eb-dn-8gB">
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="40" id="r84-jT-63i"/>
-                                                    </constraints>
-                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="5Eb-dn-8gB" firstAttribute="top" secondItem="1Fy-4h-sAm" secondAttribute="top" id="BjD-Y0-HOL"/>
-                                                <constraint firstItem="1Fy-4h-sAm" firstAttribute="trailing" secondItem="TFn-MJ-9d8" secondAttribute="trailingMargin" id="BzH-e3-EEs"/>
-                                                <constraint firstItem="1Fy-4h-sAm" firstAttribute="leading" secondItem="TFn-MJ-9d8" secondAttribute="leadingMargin" constant="31" id="VG4-ub-y3Y"/>
-                                                <constraint firstItem="5Eb-dn-8gB" firstAttribute="bottom" secondItem="1Fy-4h-sAm" secondAttribute="bottom" id="hvJ-vt-aty"/>
-                                                <constraint firstItem="5Eb-dn-8gB" firstAttribute="top" secondItem="TFn-MJ-9d8" secondAttribute="top" id="rnd-al-UEn"/>
-                                                <constraint firstAttribute="bottom" secondItem="5Eb-dn-8gB" secondAttribute="bottom" id="x6O-YY-jKR"/>
-                                                <constraint firstItem="5Eb-dn-8gB" firstAttribute="leading" secondItem="TFn-MJ-9d8" secondAttribute="leading" id="yXV-To-ife"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="leading" secondItem="TFn-MJ-9d8" secondAttribute="leadingMargin" id="Jwi-w1-IZF"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="top" secondItem="TFn-MJ-9d8" secondAttribute="topMargin" constant="4" id="M4l-zt-LcY"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="trailing" secondItem="TFn-MJ-9d8" secondAttribute="trailingMargin" id="X43-uW-ntM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="imageView" destination="5Eb-dn-8gB" id="SIy-yJ-vzL"/>
-                                            <outlet property="locationImage" destination="5Eb-dn-8gB" id="Nk0-se-Qj8"/>
-                                            <outlet property="locationTitle" destination="1Fy-4h-sAm" id="5Rt-gj-MSp"/>
-                                            <outlet property="textLabel" destination="1Fy-4h-sAm" id="b6L-tu-9WF"/>
+                                            <outlet property="locationTitle" destination="l7Q-tN-qaU" id="wGv-gc-oAN"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -469,12 +457,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ListIcon" width="32" height="32"/>
-        <image name="MapIcon" width="32" height="32"/>
-        <image name="PinImage" width="32" height="32"/>
+        <image name="ListIcon" width="22" height="22"/>
+        <image name="MapIcon" width="22" height="22"/>
+        <image name="PinImage" width="22" height="22"/>
         <image name="udacityLogo" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NXK-Iv-7XW"/>
+        <segue reference="ltu-c2-6oM"/>
     </inferredMetricsTieBreakers>
 </document>
