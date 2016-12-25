@@ -38,6 +38,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         passwordTextField.text?.removeAll()
         loginMessages.text?.removeAll()
     
+        // Add delegate for return functionality
         passwordTextField.delegate = self
     }
     
@@ -92,7 +93,6 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         } else {
             DispatchQueue.main.async(execute: { ()-> Void in
             self.sendMessage("Login Failed", isError: true)
-            print("unable to complete login process")
             })
         }
     }

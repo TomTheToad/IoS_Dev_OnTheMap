@@ -59,7 +59,7 @@ class CoreDataHandler {
         do {
             userRecord = try managedObjectContext.fetch(fetchRequest).last as? UdacityUserInfo
         } catch {
-            fatalError("Unable to located user data")
+            fatalError("Unable to locate user data")
         }
         
         return userRecord!
@@ -122,6 +122,7 @@ class CoreDataHandler {
         
         for studentInfo in studentInfoDict {
             
+            // Check important fields for nil
             if studentInfo.lastName != nil && studentInfo.latitude != nil && studentInfo.longitude != nil {
             
                 let studentLocation = fetchOneStudentLocation(studentInfo)
@@ -136,16 +137,12 @@ class CoreDataHandler {
                 
                 if let latitude = studentInfo.latitude {
                     studentLocation.latitude = latitude
-                } else {
-                    fatalError("latitude missing")
                 }
                 
                 if let longitude = studentInfo.longitude {
                     studentLocation.longitude = longitude
-                } else {
-                    fatalError("longitude missing")
                 }
-                
+                    
                 if let mediaURL = studentInfo.mediaURL {
                     studentLocation.mediaURL = mediaURL
                 }
@@ -185,7 +182,6 @@ class CoreDataHandler {
             let results = try managedObjectContext.fetch(fetchRequest).last as? StudentLocation
             
             if let result = results {
-                print("Alert: Previous student location for user found: \(result.studentID)")
                 isSuccess = true
                 userParseID = result.parseID
                 
@@ -204,7 +200,6 @@ class CoreDataHandler {
     
     
     // Fetch a single student's location
-    // todo: is this used?
     // Takes StudentInfo
     // Returns StudentLocation
     func fetchOneStudentLocation(_ student: StudentInfo) -> StudentLocation {
@@ -299,7 +294,7 @@ class CoreDataHandler {
     
     // Helper function to convert student location to student information format
     // Takes and array of StudentLcation
-    // Returns and array of StudentInfo
+    // Returns an array of StudentInfo
     func convertStudentLocationArrayToStudentInfoArray(_ studentLocationArray: [StudentLocation]) -> [StudentInfo] {
         var returnData = [StudentInfo]()
         
