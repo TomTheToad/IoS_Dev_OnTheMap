@@ -4,8 +4,6 @@
 //
 //  Created by VICTOR ASSELTA on 5/18/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
-//
-// todo: clean up code
 
 import UIKit
 import CoreData
@@ -22,24 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func getCoreDataStack() -> CoreDataStack {
         return coreDataStack
     }
-
-
-    // Only use if found to be necessary. All core data access should go through DataHandler class which
-    // instantiates CoreDataStack class.
-//    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-//        // Override point for customization after application launch.
-//        return true
-//        
-//        if let tab = window?.rootViewController as? UITabBarController {
-//            for child in tab.viewControllers ?? [] {
-//                if let child = child as? UINavigationController, top = child.topViewController {
-//                    if top.respondsToSelector("setDataHandler:") {
-//                        top.performSelector("setDataHandler:", withObject: DataHandler)
-//                    }
-//                }
-//            }
-//        }
-//    }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -83,29 +83,45 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // Displays Login status (complete or failed) 
     // Dependent upon Udacity authorization result
     // Takes a loginCompletionHandler
-    fileprivate func udacityLoginCompletionHandler(_ isSuccess: Bool)->Void {
+    fileprivate func udacityLoginCompletionHandler(isSuccess: Bool, isNetworkError: Bool)->Void {
+        // Condition success: login seems to be processed correctly and data is returned
         if isSuccess == true {
             let parse = ParseAPI()
             parse.updateSavedStudentInfo(loginCompletionHandler)
             DispatchQueue.main.async(execute: { ()-> Void in
                 self.sendMessage("Loading Data", isError: false)
             })
+        // Condition failure: either login incorrect of network error
         } else {
             DispatchQueue.main.async(execute: { ()-> Void in
-            self.sendMessage("Login Failed", isError: true)
+                // Network error most likely
+                if isNetworkError == true {
+                    self.sendMessage("Unable to contact server", isError: true)
+                    self.sendAlert("Network error. Internet connection required")
+                // User error most likely
+                } else {
+                    self.sendMessage("Login Failed", isError: true)
+                    self.sendAlert("Login Failed. Username/Password incorrect.")
+                }
             })
         }
     }
     
-    // Completion Handler
+    
+    // TODO: Updated wrong completion handler ^ FIX!
+    
+    
+    // Parse Completion Handler
+    // Allows for loading of map data prior to transitioning to the mapView.
     // Completes login and triggers segue to map else
     // Send failure message to UI
-    func loginCompletionHandler(_ isSuccess:Bool) -> Void {
+    func loginCompletionHandler(isSuccess:Bool) -> Void {
         DispatchQueue.main.async(execute: { ()-> Void in
             if isSuccess == true {
                 self.completeLogin()
             } else {
                 self.sendMessage("Failed to load map data", isError: true)
+                self.sendAlert("Network Error. Unable to contact server.")
             }
         })
     }
@@ -116,9 +132,10 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // Changes message color between red and green.
     fileprivate func sendMessage(_ message: String, isError: Bool) {
         
+        // todo: update to handle network vs login error
         if isError == true {
             loginMessages.textColor = UIColor.red
-            sendAlert("Invalid Username / Password")
+
         } else {
             loginMessages.textColor = UIColor.green
         }
@@ -129,11 +146,10 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     
     
     // User alerts
-    // Streamlined alert method
+    // Call alert Handler formatted for ok, nondestructive message
     fileprivate func sendAlert(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-        alert.addAction(action)
+        let alertHandler = AlertHandler()
+        let alert = alertHandler.alertOK(message: message)
         
         present(alert, animated: false, completion: nil)
     }

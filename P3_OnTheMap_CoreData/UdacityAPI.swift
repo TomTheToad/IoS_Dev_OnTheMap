@@ -33,7 +33,7 @@ class UdacityAPI: UIViewController {
     // Is this necessary?
     
     // Do Login
-    func doUdacityLogin (_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool)->Void)) {
+    func doUdacityLogin (_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool, Bool)->Void)) {
         getSessionID(userLogin, userPassword: userPassword, completionHandler: completionHandler)
     }
     
@@ -48,7 +48,8 @@ class UdacityAPI: UIViewController {
     // Takes argument userLogin as String
     // Takes argument userPassword as String
     // Takes completion handler
-    fileprivate func getSessionID(_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool)->Void)) {
+    // Completion Handler isSuccessful: Bool, isNetworkError: Bool
+    fileprivate func getSessionID(_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool, Bool)->Void)) {
         
         // create NSUrl
         let UdacitySessionAPIURL = URL(string: "https://www.udacity.com/api/session")
@@ -67,7 +68,8 @@ class UdacityAPI: UIViewController {
         let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
             
             if error != nil {
-                print(error)
+                // todo: handle this. Add alert and text update on LoginView
+                completionHandler(false, true)
                 return
             } else {
                 
@@ -75,8 +77,7 @@ class UdacityAPI: UIViewController {
                 print("isSuccess = \(statusCheck.0), message = \(statusCheck.1)")
                 
                 if statusCheck.0 == true {
-                
-                    // let newData = data?.subdata(in: NSMakeRange(5, data!.count))
+                    
                     
                     // Update to deal with new Swift3 Range type
                     let dataRange = 5...Int(data!.count)
@@ -108,7 +109,7 @@ class UdacityAPI: UIViewController {
                     self.getUserPublicInfo(userLogin, accountID: accountKey, completionHandler: completionHandler)
                 
                 } else {
-                    completionHandler(false)
+                    completionHandler(false, false)
                 }
             }
             
@@ -121,13 +122,15 @@ class UdacityAPI: UIViewController {
     // Takes userLogin as String
     // Takes account ID as String
     // Takes Completion Handler
-    fileprivate func getUserPublicInfo(_ userLogin: String, accountID: String, completionHandler: @escaping ((Bool)->Void)) {
+    // Completion Handler isSuccessful: Bool, isNetworkError: Bool
+    fileprivate func getUserPublicInfo(_ userLogin: String, accountID: String, completionHandler: @escaping ((Bool, Bool)->Void)) {
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(accountID)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request, completionHandler: {
             (data, response, error) in
             
             if error != nil { // Handle error...
+                completionHandler(false, true)
                 return
             }
             
@@ -192,10 +195,10 @@ class UdacityAPI: UIViewController {
                     print("Warning: Unable to save user data")
                 }
             
-                completionHandler(isSuccess)
+                completionHandler(isSuccess, false)
                 
             } else {
-                completionHandler(false)
+                completionHandler(false, false)
             }
             
         }) 

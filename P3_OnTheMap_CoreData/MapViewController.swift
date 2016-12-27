@@ -69,10 +69,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         var annotations = [MKPointAnnotation]()
         
-        print("LOCATIONS.COUNT = \(locations.count)")
-        for item in locations {
-            print("Location Last Name: \(item.lastName)")
-        }
+//        print("LOCATIONS.COUNT = \(locations.count)")
+//        for item in locations {
+//            print("Location Last Name: \(item.lastName)")
+//        }
         
         for dictionary in locations {
             if dictionary.latitude != nil && dictionary.longitude != nil {
