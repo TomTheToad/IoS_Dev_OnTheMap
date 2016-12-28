@@ -108,9 +108,6 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     }
     
     
-    // TODO: Updated wrong completion handler ^ FIX!
-    
-    
     // Parse Completion Handler
     // Allows for loading of map data prior to transitioning to the mapView.
     // Completes login and triggers segue to map else
@@ -148,8 +145,11 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // User alerts
     // Call alert Handler formatted for ok, nondestructive message
     fileprivate func sendAlert(_ message: String) {
-        let alertHandler = AlertHandler()
-        let alert = alertHandler.alertOK(message: message)
+        
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(alertAction)
         
         present(alert, animated: false, completion: nil)
     }

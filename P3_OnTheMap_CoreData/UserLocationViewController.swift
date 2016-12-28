@@ -83,6 +83,61 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     // todo: Break this method up ... too long
     @IBAction func submitButton(_ sender: AnyObject) {
         
+        let isLinkToShareEmtpy = checkForEmptyLink()
+        
+        if isLinkToShareEmtpy == true {
+            AlertLinkToShareEmpty()
+        } else {
+            let studentInfo = prepareInfoForParse()
+            postToParse(studentInfo: studentInfo)
+            
+            // add an alert if successful?
+            
+            presentMap()
+        }
+    }
+    
+    
+    // Check for empty linkToShare textfield
+    func checkForEmptyLink() -> Bool {
+        if linkToShareTextView.text == "" {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // Alert User linkToShare empty
+    func AlertLinkToShareEmpty() {
+        let message = "Web site link appears to be empty. Continue anyway?"
+        
+        let alert = UIAlertController(title: "Empty web link", message: message, preferredStyle: .alert)
+        
+        // add closures
+        let actionContinue = UIAlertAction(title: "Continue anyway", style: .destructive, handler: {
+            (action: UIAlertAction) in
+            
+            let studentInfo = self.prepareInfoForParse()
+            self.postToParse(studentInfo: studentInfo)
+            
+            // add an alert if successful?
+            
+            DispatchQueue.main.async(execute: { (void) in
+                self.presentMap()
+            })
+        })
+        
+        let actionCancel = UIAlertAction(title: "Enter a link", style: .default, handler: nil)
+        
+        alert.addAction(actionContinue)
+        alert.addAction(actionCancel)
+        
+        present(alert, animated: false, completion: nil)
+    }
+    
+    
+    // populate studentInfo
+    func prepareInfoForParse() -> StudentInfo {
         let userRecord = getUserData()
         var studentInfo = StudentInfo()
         
@@ -94,6 +149,13 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         studentInfo.longitude = receivedUserLocation?.coordinate.longitude.description
         studentInfo.mediaURL = linkToShareTextView.text
         
+       return studentInfo
+    }
+    
+    
+    // post to parse
+    // todo: return isSuccess
+    func postToParse(studentInfo: StudentInfo) {
         let mapLocation = receivedUserLocationName
         
         let parse = ParseAPI()
@@ -106,6 +168,10 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
             }
         }
         
+    }
+    
+    // present MapView when parse post is comeplete
+    func presentMap() {
         if let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController") {
             present(tabBarController, animated: false, completion: nil)
         } else {
