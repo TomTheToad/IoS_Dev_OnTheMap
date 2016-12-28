@@ -118,11 +118,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 title = " \(studentLastName)"
             }
         }
-
-        print("TITLE: \(title)")
         
-        if title != nil {
-            cell.locationTitle.text = title!
+        if let thisTitle = title {
+            cell.locationTitle.text = thisTitle
         } else {
             cell.locationTitle.text = "Udacity User"
         }
