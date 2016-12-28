@@ -90,10 +90,6 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         } else {
             let studentInfo = prepareInfoForParse()
             postToParse(studentInfo: studentInfo)
-            
-            // add an alert if successful?
-            
-            presentMap()
         }
     }
     
@@ -162,13 +158,33 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         
         if let usePutMethod = receivedOverwritePreviousLocation {
             if usePutMethod == true {
-                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID)
+                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID, errorHandler: parseErrorHandler)
             } else {
-                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: false)
+                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: false, errorHandler: parseErrorHandler)
             }
         }
-        
     }
+    
+    
+    // parse error handler
+    func parseErrorHandler(isSuccess: Bool) -> Void {
+        if isSuccess != true {
+            let message = "Unable to post information at this time. Please try again"
+            
+            let alert = UIAlertController(title: "Application Erorr", message: message, preferredStyle: .alert)
+            let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+            alert.addAction(action)
+            
+            present(alert, animated: false, completion: {
+                DispatchQueue.main.async(execute: { ()-> Void in
+                    self.presentMap()
+                })
+            })
+        } else {
+            presentMap()
+        }
+    }
+    
     
     // present MapView when parse post is comeplete
     func presentMap() {

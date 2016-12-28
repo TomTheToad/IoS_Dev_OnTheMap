@@ -136,7 +136,7 @@ class ParseAPI {
     // replace previous postStudentLocationMethod
     // todo: clean up
     // should this be two methods? post and put?
-    func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "") {
+    func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
         
         // Use Post or Put method?
         var httpMethod: String?
@@ -203,9 +203,11 @@ class ParseAPI {
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
             if error != nil { // Handle error…
                 print("ERROR: could not post to parse")
+                errorHandler(false)
                 return
             } else {
                 print("MESSAGE: parse request successful")
+                errorHandler(true)
             }
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
         })
