@@ -42,6 +42,12 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         passwordTextField.delegate = self
     }
     
+    override func viewDidLoad() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        
+    }
     
     // IBActions
     // Login button action
@@ -167,6 +173,25 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         passwordTextField.resignFirstResponder()
         loginButtonAction(textField)
         return true
+    }
+    
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+        
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
     }
 }
 

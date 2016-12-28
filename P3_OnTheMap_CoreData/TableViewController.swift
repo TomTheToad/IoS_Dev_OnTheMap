@@ -146,7 +146,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let urlString = cell?.mediaURL {
             print("MediaURL: \(urlString)")
             if let url = URL(string: urlString) {
-                app.openURL(url)
+                // app.openURL(url)
+                app.open(url, options: [:], completionHandler: nil)
             } else {
                 print("Invalid URL")
             }
