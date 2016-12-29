@@ -9,7 +9,9 @@
 
 /*
 
- File to handle the interaction with the Udacity API for this application
+ File to handle the interaction with the Udacity API for this application.
+ 
+ Update this file to use NSOperation.
  
 */
 
@@ -18,10 +20,12 @@ import CoreData
 
 class UdacityAPI: UIViewController {
     
+    
     // Fields
     fileprivate let udacityLoginURL = URL(string: "https://www.udacity.com/account/auth#!/signup")
     fileprivate let responseCheck = URLResponseCheck()
     fileprivate let LoginIsSuccess = false
+    
     
     // Getters
     func getUdacitySignUpURL() -> URL {
@@ -30,8 +34,6 @@ class UdacityAPI: UIViewController {
     
     
     /* Main Public Function Calls */
-    // Is this necessary?
-    
     // Do Login
     func doUdacityLogin (_ userLogin: String, userPassword: String, completionHandler: @escaping ((Bool, Bool)->Void)) {
         getSessionID(userLogin, userPassword: userPassword, completionHandler: completionHandler)
@@ -43,7 +45,7 @@ class UdacityAPI: UIViewController {
     }
 
 
-    // Private functions
+    /* Private functions */
     // Retrieve session ID for given login information
     // Takes argument userLogin as String
     // Takes argument userPassword as String
@@ -68,13 +70,11 @@ class UdacityAPI: UIViewController {
         let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
             
             if error != nil {
-                // todo: handle this. Add alert and text update on LoginView
                 completionHandler(false, true)
                 return
             } else {
                 
                 let statusCheck = self.responseCheck.checkReponse(response!)
-                print("isSuccess = \(statusCheck.0), message = \(statusCheck.1)")
                 
                 if statusCheck.0 == true {
                     
@@ -89,20 +89,17 @@ class UdacityAPI: UIViewController {
                         parsedResult = try JSONSerialization.jsonObject(with: dataTruncated!, options: .allowFragments ) as? NSDictionary
                         
                     } catch {
-                        print("Unable to parse data \(parsedResult as AnyObject)")
+                        print("WARNING: Unable to parse data \(parsedResult as AnyObject)")
                     }
                      
                     let newData = parsedResult
                     
-                    print("PARSED RESULT: \(parsedResult)")
-                    
                     guard let accountInfo = newData!["account"] as? NSDictionary else {
-                        print("Cannot find session key: \(newData)")
                         return
                     }
 
                     guard let accountKey = accountInfo["key"] as? String else {
-                        print("Unable to retrieve account key")
+                        print("WARNING: Unable to retrieve account key")
                         return
                     }
                     
@@ -135,7 +132,6 @@ class UdacityAPI: UIViewController {
             }
             
             let statusCheck = self.responseCheck.checkReponse(response!)
-            print("isSuccess = \(statusCheck.0), message = \(statusCheck.1)")
             
             if statusCheck.0 == true {
                 
@@ -150,49 +146,39 @@ class UdacityAPI: UIViewController {
                     parsedResult = try JSONSerialization.jsonObject(with: newData, options: .allowFragments) as? NSDictionary
                     isSuccess = true
                 } catch {
-                    print("unable to parse results")
+                    // print("unable to parse results")
                     isSuccess = false
                 }
                 
                 if let data = parsedResult {
                     
-                    // print("User Data: \(data)")
                     let userData = data["user"]! as? NSDictionary
                     
                     // let studentInfo = StudentInfoMethods()
                     var userInfo = StudentInfo()
                     
                     guard let userFirstName = userData?["first_name"]! as? String else {
-                        print("Could not located user first name.")
                         return
                     }
                     
                     guard let userLastName = userData?["last_name"]! as? String else {
-                        print("Could not located user first name.")
                         return
                     }
                     
                     guard let userKey = userData?["key"]! as? String else {
-                        print("Could not located user first name.")
                         return
                     }
                     
                     userInfo.firstName = userFirstName
-                    // print("userInfo.firstName: \(userInfo.firstName)")
                     userInfo.lastName = userLastName
-                    // print("userInfo.lastName: \(userInfo.lastName)")
                     userInfo.studentID = userKey
-                    // print("userInfo.key: \(userInfo.studentID)")
                     
-                    // Save to core data
-                    // todo: Change to save to plist or remove entirely
                     let coreDataHandler = CoreDataHandler()
                     
                     coreDataHandler.saveUserInfoData(userLogin, studentInfo: userInfo)
-                    // dataHandler.saveUserInfoData(userInfo)
                     
                 } else {
-                    print("Warning: Unable to save user data")
+                    print("WARNING: Unable to save user data")
                 }
             
                 completionHandler(isSuccess, false)
@@ -204,6 +190,7 @@ class UdacityAPI: UIViewController {
         }) 
         task.resume()
     }
+    
     
     // Deletes shared cookie to allow for "logout"
     fileprivate func logOut() {
@@ -221,17 +208,13 @@ class UdacityAPI: UIViewController {
 
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (data, response, error) in
-            if error != nil { // Handle error…
+            if error != nil {
+                // Will need to figure out what to do with this error?
+                // Ultimately the user is brought back to login
+                // regardless.
                 return
             }
-            
-            // Update to deal with new Swift3 Range type
-            let dataRange = 5...Int(data!.count)
-            
-            let newData = data!.subdata(in: Range(dataRange)) /* subset response data! */
-            print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue))
-        }
-        
+        } 
         task.resume()
     }
 }

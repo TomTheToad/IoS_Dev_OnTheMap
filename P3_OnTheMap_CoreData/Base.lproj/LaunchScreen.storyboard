@@ -32,7 +32,7 @@
                             <constraint firstItem="yjD-ex-g7G" firstAttribute="centerX" secondItem="04e-mi-60s" secondAttribute="centerX" id="84L-XY-J1c"/>
                             <constraint firstItem="04e-mi-60s" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="27" id="Ead-Lb-xnk"/>
                             <constraint firstItem="04e-mi-60s" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-6" id="H6v-XX-m9w"/>
-                            <constraint firstItem="yjD-ex-g7G" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="abi-26-TcU"/>
+                            <constraint firstItem="yjD-ex-g7G" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="48" id="abi-26-TcU"/>
                         </constraints>
                     </view>
                 </viewController>

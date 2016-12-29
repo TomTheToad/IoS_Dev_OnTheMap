@@ -5,20 +5,18 @@
 //  Created by VICTOR ASSELTA on 5/29/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo:
-//  1) clean up
-//  2) prepopulate mediaURL?
-//  3) comments
-//  4) give submit button a background
-//  5) Issue: not necessarily a bug but does not immediatly show user location
+//  Issue: not necessarily a bug but does not immediatly show user location
 //      maybe a little while before updated user info is added to Udacity parse api
 //      core data may not immediately show updated information.
-//      could manually add new user location to annotations
+//      Should add operation/ completion handler to update table after task complete
+//
 
 /* 
+ 
  Follow up to InfoPostView.
  Locates User shows user's found / submitted location before submission.
  Allows for input of user supplied media url.
+ 
  */
 
 import UIKit
@@ -26,11 +24,13 @@ import MapKit
 
 class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     
+    
     // Fields
     var receivedUserLocation: CLLocation?
     var receivedUserLocationName: String?
     var receivedOverwritePreviousLocation: Bool?
     var receivedParseID: String?
+    
     
     // IBOutlets
     // Add "http://" to linkToShareTextView with delegate?
@@ -43,8 +43,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         activityIndicator.stopAnimating()
     }
 
+    
     // Upon load show user location from given CLLocation
-    // todo: break up this method
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,8 +76,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
 
     }
     
+    
     // Retrieve user data for submission purposes
-    // todo: Get from previous submission?
     func getUserData() -> UdacityUserInfo {
         let coreDataHandler = CoreDataHandler()
         let userRecord = coreDataHandler.fetchLastUserData()
@@ -85,7 +85,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     }
 
     
-    // submitButton action: post/ put location to parseAPI
+    // SubmitButton action: post/ put location to parseAPI
     @IBAction func submitButton(_ sender: AnyObject) {
         
         let isLinkToShareEmtpy = checkForEmptyLink()
@@ -108,6 +108,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
             return false
         }
     }
+    
     
     // Alert User linkToShare empty
     func AlertLinkToShareEmpty() {
@@ -138,7 +139,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     }
     
     
-    // populate studentInfo
+    // Populate studentInfo
     func prepareInfoForParse() -> StudentInfo {
         let userRecord = getUserData()
         var studentInfo = StudentInfo()
@@ -156,7 +157,6 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     
     // post to parse
-    // todo: return isSuccess
     func postToParse(studentInfo: StudentInfo) {
         let mapLocation = receivedUserLocationName
         
@@ -172,7 +172,9 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     }
     
     
-    // parse error handler
+    // Parse error handler
+    // This purposely blocks transition to mapView to allow for
+    // time to present error alert.
     func parseErrorHandler(isSuccess: Bool) -> Void {
         activityIndicator.stopAnimating()
         if isSuccess != true {
@@ -193,7 +195,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     }
     
     
-    // present MapView when parse post is comeplete
+    // Present MapView
     func presentMap() {
         if let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController") {
             present(tabBarController, animated: false, completion: nil)

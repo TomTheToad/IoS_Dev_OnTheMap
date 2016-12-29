@@ -96,8 +96,8 @@
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="VGe-WW-fn0" firstAttribute="centerY" secondItem="Ttu-RI-2Z8" secondAttribute="centerY" id="6hT-kt-VN6"/>
-                                    <constraint firstItem="VGe-WW-fn0" firstAttribute="leading" secondItem="Ttu-RI-2Z8" secondAttribute="leading" constant="12" id="NDO-cl-bdp"/>
-                                    <constraint firstItem="VGe-WW-fn0" firstAttribute="trailing" secondItem="Ttu-RI-2Z8" secondAttribute="trailingMargin" id="zyp-sZ-sQ2"/>
+                                    <constraint firstAttribute="trailing" secondItem="VGe-WW-fn0" secondAttribute="trailing" constant="4" id="6yh-7u-Awx"/>
+                                    <constraint firstItem="VGe-WW-fn0" firstAttribute="leading" secondItem="Ttu-RI-2Z8" secondAttribute="leading" constant="4" id="HBj-nS-lgL"/>
                                 </constraints>
                             </view>
                         </subviews>

@@ -8,7 +8,7 @@
 
 /*
  
-Class for student information
+Basic struct for student information management.
 
 */
 

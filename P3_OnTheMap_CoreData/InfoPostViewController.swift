@@ -15,6 +15,10 @@
     finds location,
     and passes on to UserLocationController.
  
+ This version also includes an autolocate option.
+ 
+ This was originally a single view but was quickly overloaded.
+ 
  */
 
 import UIKit
@@ -27,6 +31,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     override func viewWillAppear(_ animated: Bool) {
         checkForPreviousUserEntry()
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +49,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         locationRequestTextField.becomeFirstResponder()
         
     }
+    
     
     // Fields
     let locationManager = CLLocationManager()
@@ -63,13 +69,14 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         returnToPreviousView()
     }
     
+    
     // Find given user location
     @IBAction func FindOnTheMap(_ sender: AnyObject) {
         findInputedLocation(locationRequestTextField.text!)
     }
     
 
-    // AutoButton action
+    // Auto locate button action
     @IBAction func autoLocateButton(_ sender: AnyObject) {
         guard let location = userLocation else {
             print("Unable to determine location.")
@@ -207,6 +214,8 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         })
     }
     
+    
+    // Prep for, and transition to UserLocationView
     func presentUserLocationVC (userLocation: CLLocation, userLocationName: String) {
         let userLocationVC = storyboard?.instantiateViewController(withIdentifier: "UserLocation") as? UserLocationViewController
         
@@ -225,9 +234,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     
     // MARK: - Location Delegate Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         let location = locations.last
-        
         userLocation = location
         
     }
@@ -239,6 +246,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     
     
     // MARK: - Location Text Field Delegate Methods
+    // Allows for return key to execute submit
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         locationRequestTextField.resignFirstResponder()
         findInputedLocation(locationRequestTextField.text!)

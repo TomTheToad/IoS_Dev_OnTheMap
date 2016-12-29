@@ -5,12 +5,14 @@
 //  Created by VICTOR ASSELTA on 5/20/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: clean up code
 
 /* 
  
  Custom class which handles interactions with core data for this specific application.
  Uses custom coreDataStack singleton which provides a single managed object context.
+ 
+ This class, or rather the saveMainContext method in CoreDataStack will need to be migrated
+ to a custom GCD queue or operation.
  
  */
 
@@ -67,7 +69,6 @@ class CoreDataHandler {
     
     
     // Fetch a specific users information
-    // todo: delete this?
     // takes userLogin as String
     // Returns UdacityUserInfo
     func fetchUserInfoData(_ userLogin: String) -> UdacityUserInfo {
@@ -81,15 +82,11 @@ class CoreDataHandler {
         
         let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
         fetchRequest.predicate = predicate
-        // print("predicate: \(predicate)")
         
         do {
             let results = try managedObjectContext.fetch(fetchRequest) as? [UdacityUserInfo]
-            print("results: \(results)")
             
             if let results = results {
-                print("count: \(results.count)")
-                print("results: \(results)")
                 
                 if results.count > 0 {
                     userRecord = results[0]
@@ -106,10 +103,8 @@ class CoreDataHandler {
             }
             
         } catch {
-            print("unable to retrieve student user information")
+            print("MESSAGE: Unable to retrieve student user information")
         }
-        print("userRecord keys: \(userRecord?.allKeys), userRecord values: \(userRecord?.allValues)")
-        
         return userRecord as! UdacityUserInfo
     }
     
@@ -190,7 +185,7 @@ class CoreDataHandler {
             }
             
         } catch {
-            print("unable to retrieve student user information")
+            print("MESSAGE: unable to retrieve student user information")
             isSuccess = false
         }
         
@@ -235,7 +230,7 @@ class CoreDataHandler {
                 
             }
         } catch {
-            print("unable to retrieve student user information")
+            print("MESSAGE: Unable to retrieve student user information")
         }
         return userRecord as! StudentLocation
         
@@ -282,10 +277,10 @@ class CoreDataHandler {
             if let results = results {
                 returnData = convertStudentLocationArrayToStudentInfoArray(results)
             } else {
-                print("Unable to convert returnedData to array of StudentLocation")
+                print("MESSAGE: Unable to convert returnedData to array of StudentLocation")
             }
         } catch {
-            print("unable to retrieve student user information")
+            print("MESSAGE: Unable to retrieve student user information")
         }
         
         return returnData

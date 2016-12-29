@@ -5,10 +5,12 @@
 //  Created by VICTOR ASSELTA on 5/26/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: list
-// 1) clean up code
-// 2) reload/ update
-// 3) handle errors gracefully
+
+/* 
+ 
+ Controller for tableView displaying udacity user names.
+
+*/
 
 import UIKit
 import CoreData
@@ -27,33 +29,33 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         
         tableView.delegate = self
-        
         fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
 
     }
 
     
+    // Results controller for table data update
     fileprivate func setStudentLocationResultsController() {
         fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
     }
     
     
-    // update table data
+    // small macro to update table data
     func updateTableData() {
         setStudentLocationResultsController()
         tableView.reloadData()
     }
 
     
-    // rename method to correspond with similar mapView method.
+    // reload table data
     @IBAction func reloadTableDataButton(_ sender: AnyObject) {
-        // todo: call an actual update, not just a Core Data query
         let parseAPI = ParseAPI()
         parseAPI.updateSavedStudentInfo(updateCompletionHandler)
         
     }
     
     
+    // Call udacity logout
     @IBAction func logoutButtonFunction(_ sender: AnyObject) {
         let udacityAPI = UdacityAPI()
         udacityAPI.doUdacityLogout()
@@ -71,7 +73,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    // Completion Handler
+    // Completion Handler to handle table updates
     func updateCompletionHandler(_ isSuccess:Bool) -> Void {
         DispatchQueue.main.async(execute: { ()-> Void in
             if isSuccess == true {
@@ -96,21 +98,23 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    // todo: add link to share?
+    // configure table view cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "PinNameCell", for: indexPath) as!TableViewCell
-        
-        // cell.locationImage.image = UIImage(named: "PinImage")
         
         let studentLocation = fetchedResultsController?.object(at: indexPath) as! StudentLocation
         
         var title: String?
         
+        // Checking student's first name is not nil
+        // Maybe add check for "" as some of these seem to make it into the database.
         if let studentFirstName = studentLocation.firstName {
             title = "\(studentFirstName)"
         }
         
+        // Checking student's last name is not nil and updating
+        // title accordingly.
         if let studentLastName = studentLocation.lastName {
             if title != nil {
                 title = title! + " \(studentLastName)"
@@ -119,6 +123,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
+        // Making sure title is not nil and change to
+        // Udacity User if it is.
         if let thisTitle = title {
             cell.locationTitle.text = thisTitle
         } else {
@@ -126,9 +132,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         
+        // Checking for non nil URL link.
         if let studentMediaURL = studentLocation.mediaURL {
             cell.mediaURL = "\(studentMediaURL)"
-            // cell.accessoryType = .detailButton
         } else {
             cell.mediaURL = nil
         }
@@ -137,22 +143,23 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    // alternative to didSelectRow, seems to be working
+    // Alternative to didSelectRow, seems to be working
+    // didSelectRow was creating an issue with unintended rows being selected
+    // during basic navigation.
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let app = UIApplication.shared
         
         let cell = tableView.cellForRow(at: indexPath) as? TableViewCell
         
         if let urlString = cell?.mediaURL {
-            print("MediaURL: \(urlString)")
             if let url = URL(string: urlString) {
                 // app.openURL(url)
                 app.open(url, options: [:], completionHandler: nil)
             } else {
-                print("Invalid URL")
+                // print("Invalid URL")
             }
         } else {
-            print("No URL given")
+            // print("No URL given")
         }
     }
 }

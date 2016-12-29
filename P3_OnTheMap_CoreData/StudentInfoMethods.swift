@@ -8,7 +8,7 @@
 
 /* 
 
-Methods to support StudentInfoMethods.
+Methods to support working with StudentInfo struct data.
 
 */
 

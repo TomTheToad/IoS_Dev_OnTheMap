@@ -12,6 +12,13 @@
 /* 
 
  File to handle interaction with Udacity Parse API
+ 
+ Update to use NSOperation
+ Update to better error handling. A number of these errors are
+    basically fatal or undermine the app entirely. Most of these
+    errors are detected in the corresponding VC, however there should
+    be alternatives to network connectivity issues given that this app
+    is currently using core data. This would work well with NSOPeration.
 
 */
 
@@ -19,24 +26,26 @@ import UIKit
 
 class ParseAPI {
     
+    
     // Fields
     fileprivate var parseAppID = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
     fileprivate var RESTApiKey = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
     
-    // public methods
     
+    /* public methods */
     // Retieve student location
     // Takes completion handler
     func getStudentLocations(_ completionHandler: @escaping ([NSDictionary]) -> Void) {
         getParseData(completionHandler)
     }
     
+    
     // Send data to core data handler
-    // todo: rename method
     func updateSavedStudentInfo(_ completionHanlder: @escaping (Bool) -> Void) {
         setParseData(completionHanlder)
     }
 
+    
     // private methods
     // Call to ParseAPI for udacity student locations and associated media.
     fileprivate func getParseData(_ completionHandler: @escaping ([NSDictionary]) -> Void) {
@@ -49,19 +58,19 @@ class ParseAPI {
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
             
-            if error != nil { // Handle error...
-                return
+            if error != nil {
+                fatalError("Critical Application data not found.")
             }
             
             var parsedData: NSDictionary?
             do {
                 parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
             } catch {
-                print("Unable to parse data \(data!)")
+                print("WARNING: Unable to parse data \(data!)")
             }
             
             guard let results = parsedData!["results"] as? [NSDictionary] else {
-                print("unable to parse results from: \(parsedData!)")
+                print("WARNING: Unable to parse results from: \(parsedData!)")
                 return
             }
             
@@ -72,7 +81,6 @@ class ParseAPI {
     
     
     // Check for existing student user submission
-    // todo: Check parse or check core data? (check core data first then check parse?)
     fileprivate func getStudentLocation(studentID: String) {
         
         // adapt
@@ -83,14 +91,12 @@ class ParseAPI {
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error
+            if error != nil {
                 return
             }
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
         }
         task.resume()
     }
-    
     
     
     // Get and Save student location from Udacity Parse Clone to Core Data
@@ -112,11 +118,11 @@ class ParseAPI {
             do {
                 parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
             } catch {
-                print("Unable to parse data \(data!)")
+                print("WARNING: Unable to parse data \(data!)")
             }
             
             guard let results = parsedData!["results"] as? [NSDictionary] else {
-                print("unable to parse results from \(parsedData)")
+                print("WARNING: Unable to parse results from \(parsedData)")
                 return
             }
             
@@ -134,8 +140,8 @@ class ParseAPI {
     
     
     // replace previous postStudentLocationMethod
-    // todo: clean up
-    // should this be two methods? post and put?
+    // Should this be two methods? post and put?
+    // Create a public method for this?
     func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
         
         // Use Post or Put method?
@@ -157,37 +163,28 @@ class ParseAPI {
         
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
-            print("ERROR: Student ID missing")
             return
         }
         // firstName
         guard let firstName = studentInfo.firstName else {
-            print("ERROR: Student ID missing")
             return
         }
         // lastName
         guard let lastName = studentInfo.lastName else {
-            print("ERROR: Student ID missing")
             return
         }
         // mediaURL
         guard let mediaURL = studentInfo.mediaURL else {
-            print("ERROR: Student ID missing")
             return
         }
         // latitude
         guard let latitude = studentInfo.latitude else {
-            print("ERROR: Student ID missing")
             return
         }
         // longitude
         guard let longitude = studentInfo.longitude else {
-            print("ERROR: Student ID missing")
             return
         }
-        
-        
-        print("Parse API received: uniqueKey:\(uniqueKey), firstName:\(firstName), lastName:\(lastName), mediaURL:\(mediaURL), latitude:\(latitude), longitude:\(longitude)")
         
         var request = URLRequest(url: urlString!)
         request.httpMethod = httpMethod
@@ -196,20 +193,17 @@ class ParseAPI {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
-        print("REQUEST URL: \(request.url)")
         
         let session = URLSession.shared
         
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil {
                 print("ERROR: could not post to parse")
                 errorHandler(false)
                 return
             } else {
-                print("MESSAGE: parse request successful")
                 errorHandler(true)
             }
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue))
         })
         task.resume()
         

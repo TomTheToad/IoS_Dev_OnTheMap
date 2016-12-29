@@ -14,6 +14,9 @@
  Presents mapView with annotation supplied by ParseAPI.
  Directly dependent upon CoreDataHandler & UdacityAPI
  
+ Possible updates: Move logout function to own class. Used in more than one place.
+ Add completion handler to logut function to warn the user if error exists.
+ 
  */
 
 import UIKit
@@ -22,9 +25,11 @@ import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
+    
     // Fields
     let coreDataHandler = CoreDataHandler()
 
+    
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -85,18 +90,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 // let first = dictionary.firstName
                 guard let first = dictionary.firstName else {
-                    print("Error: First Name not found in student data.")
+                    // print("Error: First Name not found in student data.")
                     return
                 }
                 // let last = dictionary.lastName
                 guard let last = dictionary.lastName else {
-                    print("Error: Last Name not found in student data.")
+                    // print("Error: Last Name not found in student data.")
                     return
                 }
                 
                 // let mediaURL = dictionary.mediaURL
                 guard let mediaURL = dictionary.mediaURL else {
-                    print("Error: mediaURL not found in student data.")
+                    // print("Error: mediaURL not found in student data.")
                     return
                 }
                 
@@ -126,7 +131,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         makeMap(locations)
         // loadView()
         
-        // hot fix for reload with delegates
+        // fix for reload with delegates
         // attempt to remove all annotations then add back?
         let tabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarController")
         present(tabBarController!, animated: false, completion: nil)
@@ -135,8 +140,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     // Reload student location data using parse
-    // todo: delete this function? Currently using CoreData information
-    // to allow for less network requests.
     @IBAction func reloadMapButton(_ sender: AnyObject) {
         
         activityIndicator.startAnimating()

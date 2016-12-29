@@ -5,14 +5,14 @@
 //  Created by VICTOR ASSELTA on 3/31/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: list
-// 1) handle errors gracefully
-// 2) Check for saved data if no data connection?
+
 
 /*
  
  Initial view controller. Handles the user login process.
  Directly dependent upon UdacityAPI.swift
+ 
+ Possible upgrade: Prompt user if no network connection found to use saved data.
  
  */
 
@@ -34,7 +34,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         
         // Clear text fields. Added for popping back to initial view from logout
         emailTextField.text?.removeAll()
-        emailTextField.becomeFirstResponder()
+        // emailTextField.becomeFirstResponder()
         passwordTextField.text?.removeAll()
         loginMessages.text?.removeAll()
         
@@ -46,12 +46,14 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         passwordTextField.delegate = self
     }
     
+    
     override func viewDidLoad() {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
         
     }
+    
     
     // IBActions
     // Login button action
@@ -157,6 +159,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // Call alert Handler formatted for ok, nondestructive message
     fileprivate func sendAlert(_ message: String) {
         
+        activityIndicator.stopAnimating()
+        
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         
@@ -180,7 +184,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         return true
     }
     
-    
+    // MARK: Keyboard notification for view shift.
+    // todo: find answer to user tab resulting in view not returning to start position.
     func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {

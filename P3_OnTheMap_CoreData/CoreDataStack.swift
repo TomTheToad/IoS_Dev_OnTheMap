@@ -7,15 +7,17 @@
 //  Many thanks to Greg Heo for the excellent course.
 //
 //
-// todo: clean up code
+
 
 import Foundation
 import CoreData
 
 class CoreDataStack {
     
-    /* Fields */
+    
+    // Fields
     static let moduleName = "P3_OnTheMap_CoreData"
+    
     
     // Managed Object Model
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -23,10 +25,12 @@ class CoreDataStack {
         return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
+    
     // Helper to access documents directory for app
     lazy var applicationDocumentDirectory: URL = {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
     }()
+    
     
     // Persistent Store Coordinator
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
@@ -50,7 +54,9 @@ class CoreDataStack {
         return managedObjectContext
     }()
     
+    
     /* Methods */
+    // todo: dispatch to custom synch queue?
     func saveMainContext() {
         if managedObjectContext.hasChanges {
             do {
