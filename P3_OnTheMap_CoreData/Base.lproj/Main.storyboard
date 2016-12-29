@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7VM-jo-kST">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7VM-jo-kST">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -86,7 +86,11 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="top" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="4hj-Ny-lVN"/>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="4hj-Ny-lVN" firstAttribute="top" secondItem="VGe-WW-fn0" secondAttribute="top" constant="532" id="whP-0a-Kmf"/>
+                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -107,6 +111,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="gw0-e5-SM2"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="4hj-Ny-lVN" id="Zxj-72-dn1"/>
                         <outlet property="emailTextField" destination="LgF-Fr-pBW" id="7mj-v7-v6k"/>
                         <outlet property="loginMessages" destination="Qqv-Nt-oVB" id="RmK-q7-H0t"/>
                         <outlet property="passwordTextField" destination="nZz-2R-XHb" id="o9t-Ed-pTD"/>
@@ -152,13 +157,18 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="NBP-lE-OJd">
+                                <color key="color" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="gkT-b0-WaD" firstAttribute="top" secondItem="Dvi-po-ljK" secondAttribute="bottom" id="AAA-ki-BrH"/>
+                            <constraint firstItem="NBP-lE-OJd" firstAttribute="centerY" secondItem="jlg-u6-Pr4" secondAttribute="centerY" id="B9w-Je-y4S"/>
                             <constraint firstAttribute="trailing" secondItem="gkT-b0-WaD" secondAttribute="trailing" id="HsY-qa-wRU"/>
                             <constraint firstItem="vnE-kM-X99" firstAttribute="top" secondItem="gkT-b0-WaD" secondAttribute="bottom" id="VWP-ky-pcB"/>
                             <constraint firstAttribute="trailing" secondItem="Dvi-po-ljK" secondAttribute="trailing" id="hFl-35-wf1"/>
+                            <constraint firstItem="NBP-lE-OJd" firstAttribute="centerX" secondItem="Dvi-po-ljK" secondAttribute="centerX" id="sBs-yy-LTm"/>
                             <constraint firstItem="gkT-b0-WaD" firstAttribute="leading" secondItem="jlg-u6-Pr4" secondAttribute="leading" id="toH-WX-D1p"/>
                             <constraint firstItem="Dvi-po-ljK" firstAttribute="top" secondItem="RTK-nC-3td" secondAttribute="bottom" id="wsI-YF-7Q6"/>
                             <constraint firstItem="Dvi-po-ljK" firstAttribute="leading" secondItem="jlg-u6-Pr4" secondAttribute="leading" id="xZr-9F-u0S"/>
@@ -166,6 +176,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="MapIcon" selectedImage="MapIcon" id="8Uv-rW-tY2"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="NBP-lE-OJd" id="1Fb-PQ-oZr"/>
                         <outlet property="mapView" destination="gkT-b0-WaD" id="07D-5N-7GM"/>
                     </connections>
                 </viewController>
@@ -210,7 +221,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" tableViewCell="exh-Pb-f94" id="TFn-MJ-9d8">
-                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <frame key="frameInset" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l7Q-tN-qaU">
@@ -218,11 +229,19 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PinImageForTable" translatesAutoresizingMaskIntoConstraints="NO" id="Dyi-Dy-Ajn">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="41" id="8Ik-4s-2aZ"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="leading" secondItem="TFn-MJ-9d8" secondAttribute="leadingMargin" id="Jwi-w1-IZF"/>
-                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="top" secondItem="TFn-MJ-9d8" secondAttribute="topMargin" constant="4" id="M4l-zt-LcY"/>
-                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="trailing" secondItem="TFn-MJ-9d8" secondAttribute="trailingMargin" id="X43-uW-ntM"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="top" secondItem="TFn-MJ-9d8" secondAttribute="topMargin" constant="4" id="3J9-rD-hoe"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="trailing" secondItem="TFn-MJ-9d8" secondAttribute="trailingMargin" id="Az9-Wn-8vN"/>
+                                                <constraint firstItem="Dyi-Dy-Ajn" firstAttribute="top" secondItem="TFn-MJ-9d8" secondAttribute="top" id="FtF-ZO-8Je"/>
+                                                <constraint firstItem="l7Q-tN-qaU" firstAttribute="leading" secondItem="Dyi-Dy-Ajn" secondAttribute="trailing" constant="8" symbolic="YES" id="Ml1-YQ-kwG"/>
+                                                <constraint firstItem="Dyi-Dy-Ajn" firstAttribute="leading" secondItem="TFn-MJ-9d8" secondAttribute="leading" id="Z2c-Jp-Omp"/>
+                                                <constraint firstAttribute="bottom" secondItem="Dyi-Dy-Ajn" secondAttribute="bottom" id="aNh-0e-Itr"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -245,7 +264,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="PFP-aH-rtR"/>
                                     <barButtonItem title="On The Map" id="jcd-JL-9Da"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="D1x-Ro-iqv"/>
-                                    <barButtonItem image="PinImage" id="LC7-bN-uq2" userLabel="DropPin">
+                                    <barButtonItem image="PinImage" style="plain" id="LC7-bN-uq2" userLabel="DropPin">
                                         <connections>
                                             <action selector="pinAction:" destination="V59-CH-kWo" id="Uhc-a2-Qe0"/>
                                             <segue destination="5Yt-fw-0Cx" kind="presentation" id="ltu-c2-6oM"/>
@@ -304,13 +323,6 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TVG-xh-yzt">
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Find on the Map"/>
-                                <connections>
-                                    <action selector="FindOnTheMap:" destination="5Yt-fw-0Cx" eventType="touchUpInside" id="Ls4-tE-cqq"/>
-                                </connections>
-                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gRf-3H-a6h">
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter a Location" borderStyle="roundedRect" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UWi-6c-fcB">
@@ -355,6 +367,25 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVG-xh-yzt">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="zPq-On-lKR"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Find on the Map">
+                                            <attributes>
+                                                <font key="NSFont" size="17" name=".AppleSystemUIFont"/>
+                                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <action selector="FindOnTheMap:" destination="5Yt-fw-0Cx" eventType="touchUpInside" id="Ls4-tE-cqq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -362,13 +393,14 @@
                             <constraint firstItem="1WZ-Gk-Nx4" firstAttribute="top" secondItem="EmT-BJ-uSQ" secondAttribute="bottom" id="1Sk-cj-0ex"/>
                             <constraint firstItem="gRf-3H-a6h" firstAttribute="centerX" secondItem="c6n-Es-iUW" secondAttribute="centerX" id="2jM-UG-xn2"/>
                             <constraint firstAttribute="trailing" secondItem="EmT-BJ-uSQ" secondAttribute="trailing" id="4Si-fP-YCl"/>
+                            <constraint firstItem="TVG-xh-yzt" firstAttribute="centerX" secondItem="gRf-3H-a6h" secondAttribute="centerX" id="4kw-Wg-9g1"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="leading" secondItem="c6n-Es-iUW" secondAttribute="leading" id="5mz-BW-MOX"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="trailing" secondItem="Shg-0Z-kIe" secondAttribute="trailing" id="Bd6-80-m3f"/>
-                            <constraint firstItem="9nX-Xo-Euu" firstAttribute="top" secondItem="TVG-xh-yzt" secondAttribute="bottom" constant="140" id="MHv-qz-Gmk"/>
-                            <constraint firstItem="Shg-0Z-kIe" firstAttribute="centerX" secondItem="TVG-xh-yzt" secondAttribute="centerX" id="NeE-8t-TjK"/>
+                            <constraint firstItem="TVG-xh-yzt" firstAttribute="centerX" secondItem="c6n-Es-iUW" secondAttribute="centerX" id="XMs-sM-mWo"/>
                             <constraint firstItem="Shg-0Z-kIe" firstAttribute="top" secondItem="1WZ-Gk-Nx4" secondAttribute="bottom" constant="19" id="YJ6-C0-4qX"/>
-                            <constraint firstItem="TVG-xh-yzt" firstAttribute="top" secondItem="Shg-0Z-kIe" secondAttribute="bottom" constant="19" id="lwL-rN-jv7"/>
+                            <constraint firstItem="TVG-xh-yzt" firstAttribute="top" secondItem="Shg-0Z-kIe" secondAttribute="bottom" constant="24" id="YN8-LR-Znl"/>
                             <constraint firstItem="gRf-3H-a6h" firstAttribute="centerY" secondItem="c6n-Es-iUW" secondAttribute="centerY" id="pFX-NZ-URZ"/>
+                            <constraint firstItem="9nX-Xo-Euu" firstAttribute="top" secondItem="TVG-xh-yzt" secondAttribute="bottom" constant="134" id="vMd-9G-eIy"/>
                             <constraint firstItem="1WZ-Gk-Nx4" firstAttribute="centerX" secondItem="EmT-BJ-uSQ" secondAttribute="centerX" id="yq0-2o-4Pj"/>
                             <constraint firstItem="EmT-BJ-uSQ" firstAttribute="top" secondItem="Cgb-P2-s5m" secondAttribute="bottom" constant="8" id="zRW-g2-z5I"/>
                         </constraints>
@@ -417,15 +449,20 @@
                                     <action selector="submitButton:" destination="93K-gs-AlT" eventType="touchUpInside" id="EJ8-9S-aAP"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="BxJ-Aw-dJl">
+                                <color key="color" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="BxJ-Aw-dJl" firstAttribute="centerX" secondItem="905-fX-JQZ" secondAttribute="centerX" id="2H6-Iz-pNO"/>
                             <constraint firstItem="6rW-YQ-Vsb" firstAttribute="trailing" secondItem="QL1-Id-Jn0" secondAttribute="trailing" id="7f3-yJ-K0f"/>
                             <constraint firstItem="wPe-zz-3V2" firstAttribute="top" secondItem="905-fX-JQZ" secondAttribute="bottom" constant="75" id="8Md-eT-zKK"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hxU-Dj-Aqm" secondAttribute="trailing" constant="31" id="Cp4-2g-BAQ"/>
                             <constraint firstItem="QL1-Id-Jn0" firstAttribute="centerX" secondItem="905-fX-JQZ" secondAttribute="centerX" id="NzA-OV-FSw"/>
                             <constraint firstItem="6rW-YQ-Vsb" firstAttribute="top" secondItem="7gW-3B-OTy" secondAttribute="top" id="Oz4-sl-S1G"/>
                             <constraint firstItem="hxU-Dj-Aqm" firstAttribute="top" secondItem="Znd-xg-2yi" secondAttribute="bottom" constant="78" id="UuI-qx-h8h"/>
+                            <constraint firstItem="BxJ-Aw-dJl" firstAttribute="top" secondItem="7gW-3B-OTy" secondAttribute="top" constant="281" id="ai3-aG-69p"/>
                             <constraint firstItem="QL1-Id-Jn0" firstAttribute="bottom" secondItem="wPe-zz-3V2" secondAttribute="top" id="bXi-l5-q2L"/>
                             <constraint firstAttribute="trailing" secondItem="6rW-YQ-Vsb" secondAttribute="trailing" id="eX1-84-1hP"/>
                             <constraint firstItem="hxU-Dj-Aqm" firstAttribute="leading" secondItem="7gW-3B-OTy" secondAttribute="leadingMargin" constant="38" id="p7e-IA-6bc"/>
@@ -435,6 +472,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="BxJ-Aw-dJl" id="hIb-JY-dTo"/>
                         <outlet property="linkToShareTextView" destination="hxU-Dj-Aqm" id="mud-SH-vVM"/>
                         <outlet property="mapView" destination="QL1-Id-Jn0" id="7VN-g3-3nX"/>
                     </connections>
@@ -448,6 +486,7 @@
         <image name="ListIcon" width="22" height="22"/>
         <image name="MapIcon" width="22" height="22"/>
         <image name="PinImage" width="22" height="22"/>
+        <image name="PinImageForTable" width="30" height="30"/>
         <image name="udacityLogo" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>

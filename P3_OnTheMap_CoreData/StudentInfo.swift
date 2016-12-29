@@ -5,7 +5,6 @@
 //  Created by VICTOR ASSELTA on 4/3/16.
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
-// todo: This might work better as a struct
 
 /*
  

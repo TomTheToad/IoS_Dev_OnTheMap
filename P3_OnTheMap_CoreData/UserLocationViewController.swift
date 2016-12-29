@@ -36,6 +36,12 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     // Add "http://" to linkToShareTextView with delegate?
     @IBOutlet weak var linkToShareTextView: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.stopAnimating()
+    }
 
     // Upon load show user location from given CLLocation
     // todo: break up this method
@@ -80,7 +86,6 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
 
     
     // submitButton action: post/ put location to parseAPI
-    // todo: Break this method up ... too long
     @IBAction func submitButton(_ sender: AnyObject) {
         
         let isLinkToShareEmtpy = checkForEmptyLink()
@@ -88,6 +93,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         if isLinkToShareEmtpy == true {
             AlertLinkToShareEmpty()
         } else {
+            activityIndicator.startAnimating()
             let studentInfo = prepareInfoForParse()
             postToParse(studentInfo: studentInfo)
         }
@@ -168,10 +174,11 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     // parse error handler
     func parseErrorHandler(isSuccess: Bool) -> Void {
+        activityIndicator.stopAnimating()
         if isSuccess != true {
             let message = "Unable to post information at this time. Please try again"
             
-            let alert = UIAlertController(title: "Application Erorr", message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: "Application Error", message: message, preferredStyle: .alert)
             let action = UIAlertAction(title: "ok", style: .default, handler: nil)
             alert.addAction(action)
             

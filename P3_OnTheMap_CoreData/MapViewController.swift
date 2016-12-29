@@ -27,6 +27,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.stopAnimating()
+    }
     
     
     override func viewDidLoad() {
@@ -132,6 +138,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // todo: delete this function? Currently using CoreData information
     // to allow for less network requests.
     @IBAction func reloadMapButton(_ sender: AnyObject) {
+        
+        activityIndicator.startAnimating()
+        
         let parseAPI = ParseAPI()
         parseAPI.updateSavedStudentInfo(updateCompletionHandler)
     }
@@ -140,6 +149,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // Completion Handler for parseAPI for reloadMapButton
     func updateCompletionHandler(_ isSuccess:Bool) -> Void {
         DispatchQueue.main.async(execute: { ()-> Void in
+            self.activityIndicator.stopAnimating()
             if isSuccess == true {
                 self.updateMap()
             } else {
@@ -168,7 +178,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            pinView!.pinTintColor = UIColor.blue
+            pinView!.pinTintColor = UIColor.orange
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
         else {

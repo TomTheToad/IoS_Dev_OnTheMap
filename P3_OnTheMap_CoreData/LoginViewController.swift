@@ -28,8 +28,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginMessages: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-
     override func viewWillAppear(_ animated: Bool) {
         
         // Clear text fields. Added for popping back to initial view from logout
@@ -37,6 +37,10 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         emailTextField.becomeFirstResponder()
         passwordTextField.text?.removeAll()
         loginMessages.text?.removeAll()
+        
+        // Activity animator
+        activityIndicator.stopAnimating()
+        activityIndicator.hidesWhenStopped = true
     
         // Add delegate for return functionality
         passwordTextField.delegate = self
@@ -63,6 +67,7 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
         }
         
         sendMessage("Sending Login", isError: false)
+        activityIndicator.startAnimating()
         
         // if success, perform Udacity login
         udacityAPI.doUdacityLogin(login, userPassword: password, completionHandler: udacityLoginCompletionHandler)

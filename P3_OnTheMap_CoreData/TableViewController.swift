@@ -128,7 +128,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if let studentMediaURL = studentLocation.mediaURL {
             cell.mediaURL = "\(studentMediaURL)"
-            cell.accessoryType = .detailButton
+            // cell.accessoryType = .detailButton
         } else {
             cell.mediaURL = nil
         }
