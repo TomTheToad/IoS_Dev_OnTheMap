@@ -27,11 +27,13 @@ struct StudentInfo {
     var latitude: String?
     var longitude: String?
     
+    // init method
+    // keep empty
     init() {
-        
+        // intentionally left blank
     }
     
-    //init method
+    //init overload method
     init(studentDictionary: [String: String] ) {
         
         // studentID
