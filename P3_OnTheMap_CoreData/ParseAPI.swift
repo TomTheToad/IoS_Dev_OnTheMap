@@ -52,6 +52,8 @@ class ParseAPI {
         var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("=-updatedAt", forHTTPHeaderField: "order")
+        request.addValue("100", forHTTPHeaderField: "limit")
         
         let config = URLSessionConfiguration.ephemeral
         let session = URLSession(configuration: config)
@@ -102,6 +104,8 @@ class ParseAPI {
     // Get and Save student location from Udacity Parse Clone to Core Data
     fileprivate func setParseData(_ completionHandler: @escaping ((Bool)->Void)) {
         var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        request.addValue("=-updatedAt", forHTTPHeaderField: "order")
+        request.addValue("100", forHTTPHeaderField: "limit")
         request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
         
@@ -125,6 +129,11 @@ class ParseAPI {
                 print("WARNING: Unable to parse results from \(parsedData)")
                 return
             }
+            
+            
+            print("### Begin Results ###")
+            print(results)
+            print("### End Results ###")
             
             let studentInfo = StudentInfoMethods()
             let studentInfoDict = studentInfo.buildStudentDictionary(results)
