@@ -44,6 +44,13 @@ class ParseAPI {
     func updateSavedStudentInfo(_ completionHanlder: @escaping (Bool) -> Void) {
         setParseData(completionHanlder)
     }
+    
+    // Post a student location to Udacity parse api
+    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (Bool)->Void) {
+        
+        // pass through to private function
+        sendStudentLocation(studentInfo, mapString: mapString, updateExistingEntry: updateExistingEntry, parseID: parseID, errorHandler: errorHandler)
+    }
 
     
     // private methods
@@ -151,7 +158,7 @@ class ParseAPI {
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
     // Create a public method for this?
-    func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
+    fileprivate func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
         
         // Use Post or Put method?
         var httpMethod: String?

@@ -164,9 +164,9 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         
         if let usePutMethod = receivedOverwritePreviousLocation {
             if usePutMethod == true {
-                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID, errorHandler: parseErrorHandler)
+                parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID, errorHandler: parseErrorHandler)
             } else {
-                parse.sendStudentLocation(studentInfo, mapString: mapLocation!, updateExistingEntry: false, errorHandler: parseErrorHandler)
+                parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false, errorHandler: parseErrorHandler)
             }
         }
     }

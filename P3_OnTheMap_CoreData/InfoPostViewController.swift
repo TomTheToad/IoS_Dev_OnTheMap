@@ -30,6 +30,8 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     // Check for previous entry prior to starting process.
     override func viewWillAppear(_ animated: Bool) {
         checkForPreviousUserEntry()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.stopAnimating()
     }
     
     
@@ -61,7 +63,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     
     // IBOutlets
     @IBOutlet weak var locationRequestTextField: UITextField!
-    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // IBAction
     // Cancel Button Action: return to previous view
@@ -72,6 +74,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     
     // Find given user location
     @IBAction func FindOnTheMap(_ sender: AnyObject) {
+        activityIndicator.startAnimating()
         findInputedLocation(locationRequestTextField.text!)
     }
     
@@ -79,6 +82,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     // Auto locate button action
     @IBAction func autoLocateButton(_ sender: AnyObject) {
         guard let location = userLocation else {
+            // todo: create an alert
             print("Unable to determine location.")
             return
         }
@@ -199,10 +203,12 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
                     
                     // isSuccess = true
                     
+                    self.activityIndicator.stopAnimating()
                     self.presentUserLocationVC(userLocation: firstLocation.location!, userLocationName: firstLocation.locality!)
                 }
                 
             } else {
+                self.activityIndicator.stopAnimating()
                 let msg = "Could not locate entry. Please try again"
                 let alert = UIAlertController(title: "Missing location", message: msg, preferredStyle: .alert)
                 let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
