@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C70420F51E2C08A900456D9F /* ParseAPI2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70420F41E2C08A900456D9F /* ParseAPI2.swift */; };
 		C707085D1CF603BC00FC6333 /* StudentLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C707085B1CF603BC00FC6333 /* StudentLocation+CoreDataProperties.swift */; };
 		C707085E1CF603BC00FC6333 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C707085C1CF603BC00FC6333 /* StudentLocation.swift */; };
 		C719923A1E1864350041B15C /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71992391E1864350041B15C /* ErrorHandler.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C70420F41E2C08A900456D9F /* ParseAPI2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseAPI2.swift; sourceTree = "<group>"; };
 		C707085B1CF603BC00FC6333 /* StudentLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StudentLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C707085C1CF603BC00FC6333 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 		C71992391E1864350041B15C /* ErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				C75FC62C1CED06A300893F45 /* UdacityAPI.swift */,
 				C75FC6271CED06A300893F45 /* ParseAPI.swift */,
+				C70420F41E2C08A900456D9F /* ParseAPI2.swift */,
 				C75FC6361CED06E000893F45 /* Helpers */,
 			);
 			name = APIs;
@@ -271,6 +274,7 @@
 				C75FC6131CED051400893F45 /* P3_OnTheMap_CoreData.xcdatamodeld in Sources */,
 				C7D614C41CFBCEAF00409DBA /* UserLocationViewController.swift in Sources */,
 				C76770201CF3C4FA007965B9 /* URLResponseCheck.swift in Sources */,
+				C70420F51E2C08A900456D9F /* ParseAPI2.swift in Sources */,
 				C75FC6321CED06A300893F45 /* StudentInfoMethods.swift in Sources */,
 				C75FC6341CED06A300893F45 /* UdacityAPI.swift in Sources */,
 				C75FC62F1CED06A300893F45 /* ParseAPI.swift in Sources */,
