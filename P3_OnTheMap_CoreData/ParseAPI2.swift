@@ -10,16 +10,32 @@ import Foundation
 
 class ParseAPI2 {
     
+    
     // Fields
     fileprivate var parseAppID = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
     fileprivate var RESTApiKey = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
     fileprivate var urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
     fileprivate let responseCheck = URLResponseCheck()
     
+    
     // Computed Field
     fileprivate var session: URLSession?
     
+    
+    // Intializer
+    init() {
+        
+        // Create session configuration file with custom timeout
+        let sessionConfig = URLSessionConfiguration.ephemeral
+        sessionConfig.timeoutIntervalForRequest = 20
+        
+        session = URLSession(configuration: sessionConfig)
+    }
+    
+    
     // Helper Methods
+    // Returns preformatted parse request
+    // Takes a studentID string if one exists for a post/ put request
     func ReturnParseRequest(studentID: String? = nil) -> URLRequest {
         
         var parseURL: URL
@@ -38,18 +54,29 @@ class ParseAPI2 {
         return request
     }
     
-    
-    init() {
+    // Parse return data from JSON
+    // Takes JSON data
+    // Returns [NSDictionary]
+    func ConvertJSONToStudentInfoDictionary(data: Data) throws -> [NSDictionary] {
         
-        // Create session configuration file with custom timeout
-        let sessionConfig = URLSessionConfiguration.ephemeral
-        sessionConfig.timeoutIntervalForRequest = 20
+        var parsedData: NSDictionary?
         
-        session = URLSession(configuration: sessionConfig)
+        do {
+            parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
+        } catch {
+            print("WARNING: Unable to parse data \(data)")
+        }
+        
+        guard let results = parsedData!["results"] as? [NSDictionary] else {
+            print("WARNING: Unable to parse results from \(parsedData)")
+        }
+        
+        return results
     }
     
     
     // Get Parse Data.
+    // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
     func GetParseData(_ completionHandler: @escaping (([StudentInfo])->Void)) throws {
         
@@ -57,13 +84,13 @@ class ParseAPI2 {
         var request = ReturnParseRequest()
         
         // Add method specific values
-        // ask api to order the data from most recently updated to oldest update
+        // order the data from most recently updated to oldest update
         request.addValue("=-updatedAt", forHTTPHeaderField: "order")
         // limit the request to the first 100 entries
         request.addValue("100", forHTTPHeaderField: "limit")
         
         // Create task to handle session
-        let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
+        guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
             
             // Check for data else return error if data = nil
             guard let data = data else {
@@ -71,30 +98,18 @@ class ParseAPI2 {
                 print(error)
             }
             
-            var parsedData: NSDictionary?
-            do {
-                parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
-            } catch {
-                print("WARNING: Unable to parse data \(data)")
+            guard let results = try? self.ConvertJSONToStudentInfoDictionary(data: data) else {
+                // error
             }
-            
-            guard let results = parsedData!["results"] as? [NSDictionary] else {
-                print("WARNING: Unable to parse results from \(parsedData)")
-                return
-            }
-            
-            
-            print("### Begin Results ###")
-            print(results)
-            print("### End Results ###")
             
             let studentInfo = StudentInfoMethods()
             let studentInfoDict = studentInfo.buildStudentDictionary(results)
             
+            completionHandler(studentInfoDict)
             
-            completionHandler(true)
-            
-        })
+        }) else {
+            // big error
+        }
         task.resume()
     }
     
