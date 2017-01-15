@@ -14,9 +14,10 @@ class ParseAPI2 {
     fileprivate var parseAppID = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
     fileprivate var RESTApiKey = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
     fileprivate var urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
+    fileprivate let responseCheck = URLResponseCheck()
     
     // Computed Field
-    fileprivate var sessionConfig = URLSessionConfiguration.ephemeral
+    fileprivate var session: URLSession?
     
     // Helper Methods
     func ReturnParseRequest(studentID: String? = nil) -> URLRequest {
@@ -40,8 +41,11 @@ class ParseAPI2 {
     
     init() {
         
-        // Set timeout for parse api request
+        // Create session configuration file with custom timeout
+        let sessionConfig = URLSessionConfiguration.ephemeral
         sessionConfig.timeoutIntervalForRequest = 20
+        
+        session = URLSession(configuration: sessionConfig)
     }
     
     
@@ -58,15 +62,12 @@ class ParseAPI2 {
         // limit the request to the first 100 entries
         request.addValue("100", forHTTPHeaderField: "limit")
         
-        
-        // Create a session configuration instance (emphemeral for privacy)
-        let session = URLSession(configuration: sessionConfig)
-        
         // Create task to handle session
-        let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
+        let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
             
             // Check for data else return error if data = nil
             guard let data = data else {
+                // todo: throw error?
                 print(error)
             }
             
