@@ -54,6 +54,15 @@ class ParseAPI2 {
         return request
     }
     
+    
+    // Enumeration for application/JSON specific errors
+    enum JSONErrors: Error {
+        case UnableToParseData
+        case UnableToParseResultsFromData
+        case UnknownError
+    }
+    
+    
     // Parse return data from JSON
     // Takes JSON data
     // Returns [NSDictionary]
@@ -65,20 +74,35 @@ class ParseAPI2 {
             parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
         } catch {
             print("WARNING: Unable to parse data \(data)")
+            throw JSONErrors.UnableToParseData
         }
         
         guard let results = parsedData!["results"] as? [NSDictionary] else {
-            print("WARNING: Unable to parse results from \(parsedData)")
+            throw JSONErrors.UnableToParseResultsFromData
         }
         
         return results
     }
     
     
+//    func asynchronousWork(completion: (inner: () throws -> NSDictionary) -> Void) -> Void {
+//        NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
+//            (response, data, error) -> Void in
+//            guard let data = data else { return }
+//            do {
+//                let result = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+//                    as! NSDictionary
+//                completion(inner: {return result})
+//            } catch let error {
+//                completion(inner: {throw error})
+//            }
+//        }
+//    }
+    
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
-    func GetParseData(_ completionHandler: @escaping (([StudentInfo])->Void)) throws {
+    func GetParseData(completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
         
         // Get a parse request
         var request = ReturnParseRequest()
@@ -94,36 +118,47 @@ class ParseAPI2 {
             
             // Check for data else return error if data = nil
             guard let data = data else {
-                // todo: throw error?
-                print(error)
+                return
             }
             
-            guard let results = try? self.ConvertJSONToStudentInfoDictionary(data: data) else {
-                // error
+            do{
+                let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
+                completionHandler({return results})
+            } catch let error {
+                completionHandler({throw error})
             }
             
-            let studentInfo = StudentInfoMethods()
-            let studentInfoDict = studentInfo.buildStudentDictionary(results)
-            
-            completionHandler(studentInfoDict)
+// todo: sent this to new class StudentInformationHandler
+//            let studentInfo = StudentInfoMethods()
+//            let studentInfoDict = studentInfo.buildStudentDictionary(results)
             
         }) else {
-            // big error
+            return
         }
         task.resume()
     }
     
     
     // Check for existing student user submission
-    fileprivate func getStudentLocation(studentID: String) {
+    func getStudentLocation(studentID: String, completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
         
         // adapt
-        let request = NSMutableURLRequest(url: ParseURL)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil {
+        let request = self.ReturnParseRequest(studentID: studentID)
+        guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
+            
+            guard let data = data else {
                 return
             }
+            
+            do{
+                let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
+                completionHandler({return results})
+            } catch let error {
+                completionHandler({throw error})
+            }
+        
+        }) else {
+            return
         }
         task.resume()
     }
