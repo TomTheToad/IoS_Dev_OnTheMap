@@ -1,5 +1,6 @@
 //
 //  ParseAP2I.swift
+//  version 2.0
 //  OnTheMap
 //
 //  Created by VICTOR ASSELTA on 1/15/17.
@@ -36,11 +37,11 @@ class ParseAPI2 {
     // Helper Methods
     // Returns preformatted parse request
     // Takes a studentID string if one exists for a post/ put request
-    func ReturnParseRequest(studentID: String? = nil) -> URLRequest {
+    func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
         
         var parseURL: URL
         
-        if let id = studentID {
+        if let id = parseID {
             parseURL = URL(string: urlString.appending(id))!
         } else {
             parseURL = URL(string: urlString)!
@@ -140,10 +141,10 @@ class ParseAPI2 {
     
     
     // Check for existing student user submission
-    func getStudentLocation(studentID: String, completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
+    func getOneStudentLocation(parseID: String, completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
         
         // adapt
-        let request = self.ReturnParseRequest(studentID: studentID)
+        let request = self.ReturnParseRequest(parseID: parseID)
         guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
             
             guard let data = data else {
@@ -168,24 +169,17 @@ class ParseAPI2 {
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
     // Create a public method for this?
-    fileprivate func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
+    fileprivate func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool,_ errorMessage: String)->Void ) {
         
         // Use Post or Put method?
         var httpMethod: String?
-        var urlString: URL?
-        if updateExistingEntry == true {
+        if updateExistingEntry != false, parseID != nil {
             httpMethod = "PUT"
-            if let ID = parseID {
-                urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation/\(ID)")
-            } else {
-                print("ERROR: Invalid objectID, switching to POST method")
-                httpMethod = "POST"
-                urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")
-            }
         } else {
             httpMethod = "POST"
-            urlString = URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")
         }
+        
+        var request = ReturnParseRequest(parseID: parseID)
         
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
@@ -212,25 +206,23 @@ class ParseAPI2 {
             return
         }
         
-        var request = URLRequest(url: urlString!)
         request.httpMethod = httpMethod
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
         
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+        guard let task = session?.dataTask(with: request, completionHandler: { data, response, error in
             if error != nil {
                 print("ERROR: could not post to parse")
-                errorHandler(false)
+                errorHandler(false, "Cound not post to parse")
                 return
             } else {
-                errorHandler(true)
+                errorHandler(true, "")
             }
-        })
+        }) else {
+            errorHandler(false, "Unknown Session Failure. Please try again later.")
+            return
+        }
         task.resume()
         
     }
