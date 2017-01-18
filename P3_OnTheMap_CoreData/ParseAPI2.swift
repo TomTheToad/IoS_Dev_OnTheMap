@@ -37,7 +37,7 @@ class ParseAPI2 {
     // Helper Methods
     // Returns preformatted parse request
     // Takes a studentID string if one exists for a post/ put request
-    func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
+    private func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
         
         var parseURL: URL
         
@@ -57,9 +57,10 @@ class ParseAPI2 {
     
     
     // Enumeration for application/JSON specific errors
-    enum JSONErrors: Error {
+    private enum ParseAPIError: Error {
         case UnableToParseData
         case UnableToParseResultsFromData
+        case InternalApplicationError_Session
         case UnknownError
     }
     
@@ -67,7 +68,7 @@ class ParseAPI2 {
     // Parse return data from JSON
     // Takes JSON data
     // Returns [NSDictionary]
-    func ConvertJSONToStudentInfoDictionary(data: Data) throws -> [NSDictionary] {
+    private func ConvertJSONToStudentInfoDictionary(data: Data) throws -> [NSDictionary] {
         
         var parsedData: NSDictionary?
         
@@ -75,11 +76,11 @@ class ParseAPI2 {
             parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
         } catch {
             print("WARNING: Unable to parse data \(data)")
-            throw JSONErrors.UnableToParseData
+            throw ParseAPIError.UnableToParseData
         }
         
         guard let results = parsedData!["results"] as? [NSDictionary] else {
-            throw JSONErrors.UnableToParseResultsFromData
+            throw ParseAPIError.UnableToParseResultsFromData
         }
         
         return results
@@ -103,7 +104,7 @@ class ParseAPI2 {
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
-    func GetParseData(completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
+    func GetParseData(completionHandler: @escaping (_ error: Error?, [NSDictionary]?) -> Void) {
         
         // Get a parse request
         var request = ReturnParseRequest()
@@ -119,21 +120,25 @@ class ParseAPI2 {
             
             // Check for data else return error if data = nil
             guard let data = data else {
+                completionHandler(error, nil)
                 return
             }
             
-            do{
+            do {
                 let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
-                completionHandler({return results})
-            } catch let error {
-                completionHandler({throw error})
+                completionHandler(nil, results)
+            } catch {
+                completionHandler((ParseAPIError.UnableToParseData), nil)
             }
+
+            
             
 // todo: sent this to new class StudentInformationHandler
 //            let studentInfo = StudentInfoMethods()
 //            let studentInfoDict = studentInfo.buildStudentDictionary(results)
-            
+
         }) else {
+            completionHandler((ParseAPIError.InternalApplicationError_Session), nil)
             return
         }
         task.resume()
