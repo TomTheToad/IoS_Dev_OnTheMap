@@ -31,9 +31,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
         
-        // ParseAPI2 testing below
+        // ParseAPI2 testing start
         let appData = AppDataManagementHandler()
         appData.getStudentLocations()
+        // ParseAPI2 testing finish
 
     }
 

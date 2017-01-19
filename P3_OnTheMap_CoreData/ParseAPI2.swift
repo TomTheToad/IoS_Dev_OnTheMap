@@ -34,7 +34,7 @@ class ParseAPI2 {
     }
     
     
-    // Helper Methods
+    /**** Helper Functions ****/
     // Returns preformatted parse request
     // Takes a studentID string if one exists for a post/ put request
     private func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
@@ -61,6 +61,7 @@ class ParseAPI2 {
         case UnableToParseData
         case UnableToParseResultsFromData
         case InternalApplicationError_Session
+        case UnableToPostToParse
         case UnknownError
     }
     
@@ -87,20 +88,7 @@ class ParseAPI2 {
     }
     
     
-//    func asynchronousWork(completion: (inner: () throws -> NSDictionary) -> Void) -> Void {
-//        NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
-//            (response, data, error) -> Void in
-//            guard let data = data else { return }
-//            do {
-//                let result = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-//                    as! NSDictionary
-//                completion(inner: {return result})
-//            } catch let error {
-//                completion(inner: {throw error})
-//            }
-//        }
-//    }
-    
+    /**** Main Functions ****/
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
@@ -130,12 +118,6 @@ class ParseAPI2 {
             } catch {
                 completionHandler((ParseAPIError.UnableToParseData), nil)
             }
-
-            
-            
-// todo: sent this to new class StudentInformationHandler
-//            let studentInfo = StudentInfoMethods()
-//            let studentInfoDict = studentInfo.buildStudentDictionary(results)
 
         }) else {
             completionHandler((ParseAPIError.InternalApplicationError_Session), nil)
@@ -174,7 +156,7 @@ class ParseAPI2 {
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
     // Create a public method for this?
-    fileprivate func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool,_ errorMessage: String)->Void ) {
+    fileprivate func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ error: Error)->Void ) {
         
         // Use Post or Put method?
         var httpMethod: String?
@@ -219,13 +201,13 @@ class ParseAPI2 {
         guard let task = session?.dataTask(with: request, completionHandler: { data, response, error in
             if error != nil {
                 print("ERROR: could not post to parse")
-                errorHandler(false, "Cound not post to parse")
+                errorHandler(ParseAPIError.UnableToPostToParse)
                 return
             } else {
-                errorHandler(true, "")
+                return
             }
         }) else {
-            errorHandler(false, "Unknown Session Failure. Please try again later.")
+            errorHandler(ParseAPIError.InternalApplicationError_Session)
             return
         }
         task.resume()

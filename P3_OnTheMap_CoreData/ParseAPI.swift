@@ -156,7 +156,6 @@ class ParseAPI {
     
     
     // replace previous postStudentLocationMethod
-    // Should this be two methods? post and put?
     // Create a public method for this?
     fileprivate func sendStudentLocation(_ studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ isSuccess: Bool)->Void ) {
         
