@@ -160,38 +160,42 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     func postToParse(studentInfo: StudentInfo) {
         let mapLocation = receivedUserLocationName
         
-        let parse = ParseAPI()
+        let parse = ParseAPI2()
         
         if let usePutMethod = receivedOverwritePreviousLocation {
             if usePutMethod == true {
-                parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID, errorHandler: parseErrorHandler)
+                do {
+                    try parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID)
+                } catch {
+                    sendAlert("Oops! Unkown Error. Please check your connection and try again.")
+                    }
+                    
+                }
             } else {
-                parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false, errorHandler: parseErrorHandler)
+                do {
+                    try parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false)
+                } catch {
+                    sendAlert("Oops! Unkown Error. Please check your connection and try again.")
+                }
             }
-        }
+        
+        activityIndicator.stopAnimating()
+        presentMap()
     }
     
     
-    // Parse error handler
-    // This purposely blocks transition to mapView to allow for
-    // time to present error alert.
-    func parseErrorHandler(isSuccess: Bool) -> Void {
+    // User alerts
+    // Call alert Handler formatted for ok, nondestructive message
+    fileprivate func sendAlert(_ message: String) {
+        
         activityIndicator.stopAnimating()
-        if isSuccess != true {
-            let message = "Unable to post information at this time. Please try again"
-            
-            let alert = UIAlertController(title: "Application Error", message: message, preferredStyle: .alert)
-            let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-            alert.addAction(action)
-            
-            present(alert, animated: false, completion: {
-                DispatchQueue.main.async(execute: { ()-> Void in
-                    self.presentMap()
-                })
-            })
-        } else {
-            presentMap()
-        }
+        
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(alertAction)
+        
+        present(alert, animated: false, completion: nil)
     }
     
     

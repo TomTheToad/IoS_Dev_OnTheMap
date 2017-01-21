@@ -165,7 +165,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Retrieve student locations saved in CoreData
     func getStudentLocations() -> [StudentInfo] {
-        let allStudentLocations = coreDataHandler.fetchAllSTudentLocations()
+        let allStudentLocations = coreDataHandler.fetchAllStudentLocations()
         return allStudentLocations
     }
 

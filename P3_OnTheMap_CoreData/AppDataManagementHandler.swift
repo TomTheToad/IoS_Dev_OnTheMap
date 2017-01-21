@@ -13,7 +13,15 @@ import Foundation
 class AppDataManagementHandler {
     
     // Fields
-    var parseAPI2 = ParseAPI2()
+    fileprivate var parseAPI2 = ParseAPI2()
+    fileprivate var coreDataHandler = CoreDataHandler()
+    fileprivate var studentInfoMethods = StudentInfoMethods()
+    
+    // Class error enum
+    enum ADMError: Error {
+        case parseError
+        case coreDataError
+    }
     
     // func Get all available student data
     // 1) Check Parse for updated data
@@ -22,46 +30,52 @@ class AppDataManagementHandler {
     // 4) Send Parse error and advise using saved data, send data
     // 5) Both Parse and CoreData failures, send errors, quit application?
     
-    // Call
-//    asynchronousWork { (inner: () throws -> NSDictionary) -> Void in
-//    do {
-//    let result = try inner()
-//    } catch let error {
-//    print(error)
-//    }
-//    }
+ 
     
-    // <#T##(() throws -> [NSDictionary]) -> Void#>)
-    
-    func getStudentLocations() {
+    /*** Parse Methods ***/
+    // todo: convert data
+    // todo: save to core data
+    // todo: logic to choose source
+    // todo: react to failure points
+    func getStudentLocations() throws -> [StudentInfo] {
+        var parseError: Error?
+        var studentDict: [StudentInfo]?
+        
         parseAPI2.GetParseData(completionHandler: { (error, dict) in
             guard let studentLocations = dict else {
                 if let error = error {
+                    parseError = error
                     print(error.localizedDescription)
                     return
                 }
                 return
             }
             print("Parse2API result = \(studentLocations)")
+            
+            // todo: create a seperate method
+            studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
+            
         })
+        if let error = parseError {
+            throw error
+        }
+        
+        guard let returnDictionary = studentDict else {
+            throw ADMError.parseError
+        }
+        
+        return returnDictionary
     }
     
-//    func getStudentLocationsCompletionHandler { (inner: () throws -> NSDictionary) -> Void
-//        do {
-//            let results = try internalCompletionHandler()
-//        } catch let error {
-//            print(error)
-//        }
-//        
-//    }
-//    }
-    
-    // func Get all available data for one student?
     
     // func Post Student Data
     
-    /* ParseAPI */
+    // func Put Student Data
     
-    /* CoreDataHandler */
+    
+    // func get user parseID?
+    
+    /*** CoreDataHandler Methods ***/
+
     
 }

@@ -29,11 +29,16 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         
         tableView.delegate = self
-        fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
+        fetchedResultsController = coreDataHandler.fetchAllStudentLocationsResultsController()
         
         // ParseAPI2 testing start
         let appData = AppDataManagementHandler()
-        appData.getStudentLocations()
+        let thisData = try? appData.getStudentLocations()
+        
+        if let data = thisData {
+            print("Data From Parse2: \(data)")
+        }
+        
         // ParseAPI2 testing finish
 
     }
@@ -41,7 +46,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Results controller for table data update
     fileprivate func setStudentLocationResultsController() {
-        fetchedResultsController = coreDataHandler.fetchAllSTudentLocationsResultsController()
+        fetchedResultsController = coreDataHandler.fetchAllStudentLocationsResultsController()
     }
     
     

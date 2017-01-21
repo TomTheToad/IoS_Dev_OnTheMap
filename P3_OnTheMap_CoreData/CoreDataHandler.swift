@@ -239,7 +239,7 @@ class CoreDataHandler {
     
     // Fetch all student location records for table as a fetchedResultsController
     // Returns NSFetchResultsController (still uses NS prefix) of student locations.
-    func fetchAllSTudentLocationsResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
+    func fetchAllStudentLocationsResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
         
         // let request = NSFetchRequest(entityName: "StudentLocation")
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
@@ -264,7 +264,7 @@ class CoreDataHandler {
     
     // Fetch all student location
     // Returns an array of StudentInfo
-    func fetchAllSTudentLocations() -> [StudentInfo] {
+    func fetchAllStudentLocations() -> [StudentInfo] {
         
         var returnData = [StudentInfo]()
         

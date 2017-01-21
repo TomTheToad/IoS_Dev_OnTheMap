@@ -33,62 +33,8 @@ class ParseAPI2 {
         session = URLSession(configuration: sessionConfig)
     }
     
-    
-    /**** Helper Functions ****/
-    // Returns preformatted parse request
-    // Takes a studentID string if one exists for a post/ put request
-    private func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
-        
-        var parseURL: URL
-        
-        if let id = parseID {
-            parseURL = URL(string: urlString.appending(id))!
-        } else {
-            parseURL = URL(string: urlString)!
-        }
-        
-        var request = URLRequest(url: parseURL)
-        
-        request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        
-        return request
-    }
-    
-    
-    // Enumeration for application/JSON specific errors
-    private enum ParseAPIError: Error {
-        case UnableToParseData
-        case UnableToParseResultsFromData
-        case InternalApplicationError_Session
-        case UnableToPostToParse
-        case UnknownError
-    }
-    
-    
-    // Parse return data from JSON
-    // Takes JSON data
-    // Returns [NSDictionary]
-    private func ConvertJSONToStudentInfoDictionary(data: Data) throws -> [NSDictionary] {
-        
-        var parsedData: NSDictionary?
-        
-        do {
-            parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
-        } catch {
-            print("WARNING: Unable to parse data \(data)")
-            throw ParseAPIError.UnableToParseData
-        }
-        
-        guard let results = parsedData!["results"] as? [NSDictionary] else {
-            throw ParseAPIError.UnableToParseResultsFromData
-        }
-        
-        return results
-    }
-    
-    
-    /**** Main Functions ****/
+
+    /*** Main Methods ***/
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
@@ -155,8 +101,7 @@ class ParseAPI2 {
     // post
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
-    // Create a public method for this?
-    fileprivate func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "", errorHandler: @escaping (_ error: Error)->Void ) {
+    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "") throws -> Void {
         
         // Use Post or Put method?
         var httpMethod: String?
@@ -166,52 +111,110 @@ class ParseAPI2 {
             httpMethod = "POST"
         }
         
-        var request = ReturnParseRequest(parseID: parseID)
-        
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
-            return
+            // uniqueKey missing
+            throw ParseAPIError.MissingUserData
         }
+        
         // firstName
         guard let firstName = studentInfo.firstName else {
-            return
+            throw ParseAPIError.MissingUserData
         }
+        
         // lastName
         guard let lastName = studentInfo.lastName else {
-            return
+            throw ParseAPIError.MissingUserData
         }
         // mediaURL
         guard let mediaURL = studentInfo.mediaURL else {
-            return
+            throw ParseAPIError.MissingUserData
         }
+        
         // latitude
         guard let latitude = studentInfo.latitude else {
-            return
+            throw ParseAPIError.MissingUserData
         }
         // longitude
         guard let longitude = studentInfo.longitude else {
-            return
+            throw ParseAPIError.MissingUserData
         }
         
+        var request = ReturnParseRequest(parseID: parseID)
         request.httpMethod = httpMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
         
-        guard let task = session?.dataTask(with: request, completionHandler: { data, response, error in
-            if error != nil {
-                print("ERROR: could not post to parse")
-                errorHandler(ParseAPIError.UnableToPostToParse)
-                return
-            } else {
-                return
-            }
-        }) else {
-            errorHandler(ParseAPIError.InternalApplicationError_Session)
-            return
+        guard let task = session?.dataTask(with: request) else {
+            throw ParseAPIError.InternalApplicationError_Session
         }
         task.resume()
         
+        while task.state != .completed {
+            // do nothing: block transition to next view controller
+            // so alert can be presented if necessary.
+        }
+        
+        if task.error != nil {
+            throw task.error!
+        }
+        
+    }
+    
+    
+    /*** Helper Methods ***/
+    // Returns preformatted parse request
+    // Takes a studentID string if one exists for a post/ put request
+    private func ReturnParseRequest(parseID: String? = nil) -> URLRequest {
+        
+        var parseURL: URL
+        
+        if let id = parseID {
+            parseURL = URL(string: urlString.appending(id))!
+        } else {
+            parseURL = URL(string: urlString)!
+        }
+        
+        var request = URLRequest(url: parseURL)
+        
+        request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
+        return request
+    }
+    
+    
+    // Enumeration for application/JSON specific errors
+    private enum ParseAPIError: Error {
+        case UnableToParseData
+        case UnableToParseResultsFromData
+        case MissingUserData
+        case InternalApplicationError_Session
+        case UnableToPostToParse
+        case UnknownError
+    }
+    
+    
+    // Parse return data from JSON
+    // Takes JSON data
+    // Returns [NSDictionary]
+    private func ConvertJSONToStudentInfoDictionary(data: Data) throws -> [NSDictionary] {
+        
+        var parsedData: NSDictionary?
+        
+        do {
+            parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
+        } catch {
+            print("WARNING: Unable to parse data \(data)")
+            throw ParseAPIError.UnableToParseData
+        }
+        
+        guard let results = parsedData!["results"] as? [NSDictionary] else {
+            throw ParseAPIError.UnableToParseResultsFromData
+        }
+        
+        return results
     }
     
 }
