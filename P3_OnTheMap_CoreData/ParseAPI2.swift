@@ -18,6 +18,10 @@ class ParseAPI2 {
     fileprivate var urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
     fileprivate let responseCheck = URLResponseCheck()
     
+    // Type Aliases
+    typealias ParseResult = ([NSDictionary]?, Error?) -> Void
+    typealias ParsePost = (Error?) -> Void
+    
     
     // Computed Field
     fileprivate var session: URLSession?
@@ -38,7 +42,7 @@ class ParseAPI2 {
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
-    func GetParseData(completionHandler: @escaping (_ error: Error?, [NSDictionary]?) -> Void) {
+    func GetParseData(completionHandler: @escaping ParseResult) {
         
         // Get a parse request
         var request = ReturnParseRequest()
@@ -53,20 +57,29 @@ class ParseAPI2 {
         guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
             
             // Check for data else return error if data = nil
+            // todo: add error check for more specific errors
             guard let data = data else {
-                completionHandler(error, nil)
+                OperationQueue.main.addOperation {
+                    completionHandler(nil, error)
+                }
                 return
             }
             
             do {
                 let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
-                completionHandler(nil, results)
+                    OperationQueue.main.addOperation {
+                        completionHandler(results, nil)
+                    }
             } catch {
-                completionHandler((ParseAPIError.UnableToParseData), nil)
+                OperationQueue.main.addOperation {
+                    completionHandler(nil, ParseAPIError.UnableToParseResultsFromData)
+                }
             }
 
         }) else {
-            completionHandler((ParseAPIError.InternalApplicationError_Session), nil)
+            OperationQueue.main.addOperation {
+                completionHandler(nil, ParseAPIError.InternalApplicationError_Session)
+            }
             return
         }
         task.resume()
@@ -74,21 +87,28 @@ class ParseAPI2 {
     
     
     // Check for existing student user submission
-    func getOneStudentLocation(parseID: String, completionHandler: @escaping (_ internalCompletionHandler: () throws -> [NSDictionary]) -> Void) -> Void {
+    func getOneStudentLocation(parseID: String, completionHandler: @escaping ParseResult) {
         
         // adapt
         let request = self.ReturnParseRequest(parseID: parseID)
         guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
             
             guard let data = data else {
+            OperationQueue.main.addOperation {
+                    completionHandler(nil, ParseAPIError.NoDataReturned)
+                }
                 return
             }
             
             do{
                 let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
-                completionHandler({return results})
-            } catch let error {
-                completionHandler({throw error})
+            OperationQueue.main.addOperation {
+                    completionHandler(results, nil)
+                }
+            } catch {
+                OperationQueue.main.addOperation {
+                    completionHandler(nil, ParseAPIError.UnableToParseResultsFromData)
+                }
             }
         
         }) else {
@@ -101,43 +121,48 @@ class ParseAPI2 {
     // post
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
-    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, parseID: String? = "") throws -> Void {
-        
-        // Use Post or Put method?
-        var httpMethod: String?
-        if updateExistingEntry != false, parseID != nil {
-            httpMethod = "PUT"
-        } else {
-            httpMethod = "POST"
-        }
+    // todo: update to use typealias?
+    // todo: include parseID, and mapString in studentinfo)
+    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, completionHandler: @escaping ParsePost) -> Void {
         
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
-            // uniqueKey missing
-            throw ParseAPIError.MissingUserData
+           return
         }
         
         // firstName
         guard let firstName = studentInfo.firstName else {
-            throw ParseAPIError.MissingUserData
+            return
         }
         
         // lastName
         guard let lastName = studentInfo.lastName else {
-            throw ParseAPIError.MissingUserData
+            return
         }
         // mediaURL
         guard let mediaURL = studentInfo.mediaURL else {
-            throw ParseAPIError.MissingUserData
+            return
         }
         
         // latitude
         guard let latitude = studentInfo.latitude else {
-            throw ParseAPIError.MissingUserData
+            return
         }
         // longitude
         guard let longitude = studentInfo.longitude else {
-            throw ParseAPIError.MissingUserData
+            return
+        }
+        
+        guard let parseID = studentInfo.parseID else {
+            return
+        }
+        
+        // Use Post or Put method?
+        var httpMethod: String?
+        if updateExistingEntry != false {
+            httpMethod = "PUT"
+        } else {
+            httpMethod = "POST"
         }
         
         var request = ReturnParseRequest(parseID: parseID)
@@ -145,22 +170,32 @@ class ParseAPI2 {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         
+        // todo: clean up body with components build
+        // let components = NSURLComponents()
         
         guard let task = session?.dataTask(with: request) else {
-            throw ParseAPIError.InternalApplicationError_Session
+            OperationQueue.main.addOperation {
+                completionHandler(ParseAPIError.InternalApplicationError_Session)
+            }
+            return
         }
-        
+        // task.priority = .
         task.resume()
         
+        // todo: replace with QOS or priority?
         while task.state != .completed {
             // do nothing: block transition to next view controller
             // so alert can be presented if necessary.
         }
         
         if task.error != nil {
-            throw task.error!
+            OperationQueue.main.addOperation {
+            completionHandler(task.error)
+            }
         }
-        
+        OperationQueue.main.addOperation {
+            completionHandler(nil)
+        }
     }
     
     
@@ -187,8 +222,9 @@ class ParseAPI2 {
     
     
     // Enumeration for application/JSON specific errors
-    private enum ParseAPIError: Error {
+    enum ParseAPIError: Error {
         case UnableToParseData
+        case NoDataReturned
         case UnableToParseResultsFromData
         case MissingUserData
         case InternalApplicationError_Session
@@ -217,5 +253,4 @@ class ParseAPI2 {
         
         return results
     }
-    
 }

@@ -42,7 +42,7 @@ class StudentLocationManager {
         var parseError: Error?
         var studentDict: [StudentInfo]?
         
-        parseAPI2.GetParseData(completionHandler: { (error, dict) in
+        parseAPI2.GetParseData(completionHandler: { (dict, error) in
             guard let studentLocations = dict else {
                 if let error = error {
                     parseError = error

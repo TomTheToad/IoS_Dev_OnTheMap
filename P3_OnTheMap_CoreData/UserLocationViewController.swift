@@ -151,6 +151,10 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         studentInfo.latitude = receivedUserLocation?.coordinate.latitude.description
         studentInfo.longitude = receivedUserLocation?.coordinate.longitude.description
         
+        if let parseID = receivedParseID {
+            studentInfo.parseID = parseID
+        }
+        
         if let mediaURL = URL(string: linkToShareTextView.text!) {
             studentInfo.mediaURL = mediaURL.absoluteString
         } else {
@@ -167,24 +171,27 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         
         let parse = ParseAPI2()
         
-        if let usePutMethod = receivedOverwritePreviousLocation {
-            if usePutMethod == true {
-                do {
-                    try parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, parseID: receivedParseID)
-                } catch {
-                    sendAlert("Oops! Unkown Error. Please check your connection and try again.")
-                    }
-                    
-                }
-            } else {
-                do {
-                    try parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false)
-                } catch {
-                    sendAlert("Oops! Unkown Error. Please check your connection and try again.")
-                }
-            }
+        guard let usePutMethod = receivedOverwritePreviousLocation else {
+            // no overwrite direction
+            return
+        }
         
+        if usePutMethod == true {
+            parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, completionHandler: parseCompletionHandler)
+        } else {
+            parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false, completionHandler: parseCompletionHandler)
+        }
+    }
+    
+    
+    func parseCompletionHandler(error: Error?) -> Void {
         activityIndicator.stopAnimating()
+        
+        if error != nil {
+            self.sendAlert("Oops, Something went wrong with your post. Please try again later")
+            print("ERROR sent by parse: \(error!)")
+        }
+        
         presentMap()
     }
     
