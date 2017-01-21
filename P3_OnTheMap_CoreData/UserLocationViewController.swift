@@ -150,7 +150,12 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         
         studentInfo.latitude = receivedUserLocation?.coordinate.latitude.description
         studentInfo.longitude = receivedUserLocation?.coordinate.longitude.description
-        studentInfo.mediaURL = linkToShareTextView.text
+        
+        if let mediaURL = URL(string: linkToShareTextView.text!) {
+            studentInfo.mediaURL = mediaURL.absoluteString
+        } else {
+            studentInfo.mediaURL = ""
+        }
         
        return studentInfo
     }

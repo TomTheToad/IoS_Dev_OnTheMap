@@ -1,5 +1,5 @@
 //
-//  StudentLocationHandler.swift
+//  StudentLocationManager.swift
 //  OnTheMap
 //
 //  Class to handle/ Coordinate data requests to ParseAPI and CoreDataHandler.
@@ -10,7 +10,8 @@
 
 import Foundation
 
-class AppDataManagementHandler {
+// todo: rename to more relevant name StudentLocationManager?
+class StudentLocationManager {
     
     // Fields
     fileprivate var parseAPI2 = ParseAPI2()
@@ -18,7 +19,7 @@ class AppDataManagementHandler {
     fileprivate var studentInfoMethods = StudentInfoMethods()
     
     // Class error enum
-    enum ADMError: Error {
+    enum SLMError: Error {
         case parseError
         case coreDataError
     }
@@ -61,19 +62,13 @@ class AppDataManagementHandler {
         }
         
         guard let returnDictionary = studentDict else {
-            throw ADMError.parseError
+            throw SLMError.parseError
         }
         
         return returnDictionary
     }
     
-    
-    // func Post Student Data
-    
-    // func Put Student Data
-    
-    
-    // func get user parseID?
+
     
     /*** CoreDataHandler Methods ***/
 

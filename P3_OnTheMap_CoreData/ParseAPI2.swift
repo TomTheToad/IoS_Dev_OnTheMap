@@ -149,6 +149,7 @@ class ParseAPI2 {
         guard let task = session?.dataTask(with: request) else {
             throw ParseAPIError.InternalApplicationError_Session
         }
+        
         task.resume()
         
         while task.state != .completed {

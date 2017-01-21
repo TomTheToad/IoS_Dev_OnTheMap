@@ -32,7 +32,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         fetchedResultsController = coreDataHandler.fetchAllStudentLocationsResultsController()
         
         // ParseAPI2 testing start
-        let appData = AppDataManagementHandler()
+        let appData = StudentLocationManager()
         let thisData = try? appData.getStudentLocations()
         
         if let data = thisData {
