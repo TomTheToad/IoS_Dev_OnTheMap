@@ -1,5 +1,5 @@
 //
-//  StudentLocationManager.swift
+//  StudentLocationDataManager.swift
 //  OnTheMap
 //
 //  Class to handle/ Coordinate data requests to ParseAPI and CoreDataHandler.
@@ -11,7 +11,7 @@
 import Foundation
 
 // todo: rename to more relevant name StudentLocationManager?
-class StudentLocationManager {
+class StudentLocationDataManager {
     
     // Fields
     fileprivate var parseAPI2 = ParseAPI2()
@@ -19,7 +19,7 @@ class StudentLocationManager {
     fileprivate var studentInfoMethods = StudentInfoMethods()
     
     // Class error enum
-    enum SLMError: Error {
+    enum SLDMError: Error {
         case parseError
         case coreDataError
     }
@@ -62,7 +62,7 @@ class StudentLocationManager {
         }
         
         guard let returnDictionary = studentDict else {
-            throw SLMError.parseError
+            throw SLDMError.parseError
         }
         
         return returnDictionary
@@ -71,6 +71,7 @@ class StudentLocationManager {
 
     
     /*** CoreDataHandler Methods ***/
+
 
     
 }
