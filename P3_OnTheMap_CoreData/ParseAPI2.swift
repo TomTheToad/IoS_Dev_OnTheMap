@@ -72,13 +72,13 @@ class ParseAPI2 {
                     }
             } catch {
                 OperationQueue.main.addOperation {
-                    completionHandler(nil, ParseAPIError.UnableToParseResultsFromData)
+                    completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseResultsFromData)
                 }
             }
 
         }) else {
             OperationQueue.main.addOperation {
-                completionHandler(nil, ParseAPIError.InternalApplicationError_Session)
+                completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.InternalApplicationError_Session)
             }
             return
         }
@@ -95,7 +95,7 @@ class ParseAPI2 {
             
             guard let data = data else {
             OperationQueue.main.addOperation {
-                    completionHandler(nil, ParseAPIError.NoDataReturned)
+                    completionHandler(nil, error)
                 }
                 return
             }
@@ -107,7 +107,7 @@ class ParseAPI2 {
                 }
             } catch {
                 OperationQueue.main.addOperation {
-                    completionHandler(nil, ParseAPIError.UnableToParseResultsFromData)
+                    completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseResultsFromData)
                 }
             }
         
@@ -175,7 +175,7 @@ class ParseAPI2 {
         
         guard let task = session?.dataTask(with: request) else {
             OperationQueue.main.addOperation {
-                completionHandler(ParseAPIError.InternalApplicationError_Session)
+                completionHandler(OnTheMapCustomErrors.ParseAPI2Errors.InternalApplicationError_Session)
             }
             return
         }
@@ -221,18 +221,6 @@ class ParseAPI2 {
     }
     
     
-    // Enumeration for application/JSON specific errors
-    enum ParseAPIError: Error {
-        case UnableToParseData
-        case NoDataReturned
-        case UnableToParseResultsFromData
-        case MissingUserData
-        case InternalApplicationError_Session
-        case UnableToPostToParse
-        case UnknownError
-    }
-    
-    
     // Parse return data from JSON
     // Takes JSON data
     // Returns [NSDictionary]
@@ -244,11 +232,11 @@ class ParseAPI2 {
             parsedData = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? NSDictionary
         } catch {
             print("WARNING: Unable to parse data \(data)")
-            throw ParseAPIError.UnableToParseData
+            throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseData
         }
         
         guard let results = parsedData!["results"] as? [NSDictionary] else {
-            throw ParseAPIError.UnableToParseResultsFromData
+            throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseResultsFromData
         }
         
         return results

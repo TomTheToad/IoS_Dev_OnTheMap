@@ -9,14 +9,21 @@
 //
 
 import Foundation
+import CoreData
 
 // todo: rename to more relevant name StudentLocationManager?
 class StudentLocationDataManager {
     
     // Fields
     fileprivate var parseAPI2 = ParseAPI2()
-    fileprivate var coreDataHandler = CoreDataHandler()
+    fileprivate var coreDataHandler = CoreDataHandler2()
     fileprivate var studentInfoMethods = StudentInfoMethods()
+    
+    fileprivate var parseError: Error?
+    fileprivate var coreDataError: Error?
+    
+    fileprivate var returnStudentLocations: [StudentInfo]?
+    fileprivate var returnStudentLocationResultsController: NSFetchedResultsController<NSFetchRequestResult>?
     
     // Class error enum
     enum SLDMError: Error {
@@ -31,13 +38,9 @@ class StudentLocationDataManager {
     // 4) Send Parse error and advise using saved data, send data
     // 5) Both Parse and CoreData failures, send errors, quit application?
     
- 
+ /* Solution 1: get everything, sort, send.  */
     
     /*** Parse Methods ***/
-    // todo: convert data
-    // todo: save to core data
-    // todo: logic to choose source
-    // todo: react to failure points
     func getStudentLocations() throws -> [StudentInfo] {
         var parseError: Error?
         var studentDict: [StudentInfo]?
@@ -47,7 +50,7 @@ class StudentLocationDataManager {
                 if let error = error {
                     parseError = error
                     print(error.localizedDescription)
-                    return
+
                 }
                 return
             }
@@ -71,7 +74,12 @@ class StudentLocationDataManager {
 
     
     /*** CoreDataHandler Methods ***/
+    func getLocationFromCoreData() -> [StudentInfo] {
+        return coreDataHandler.fetchAllStudentLocations()
+    }
 
-
+    func getLocationsFromCoreDataResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
+        return coreDataHandler.fetchAllStudentLocationsResultsController()
+    }
     
 }

@@ -57,12 +57,13 @@ class CoreDataStack {
     
     /* Methods */
     // todo: dispatch to custom synch queue?
-    func saveMainContext() {
+    func saveMainContext() throws {
         if managedObjectContext.hasChanges {
             do {
                 try managedObjectContext.save()
             } catch {
-                fatalError("Error saving main managed object context! \(error)")
+                // error
+                throw OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToMainObjectContext
             }
         } else {
             print("No Changes to save")
