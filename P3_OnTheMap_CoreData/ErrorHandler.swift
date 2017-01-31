@@ -8,6 +8,8 @@
 
 /* Error handling class for api completion handlers */
 
+// todo: delete this?
+
 import Foundation
 
 class ErrorHandler {

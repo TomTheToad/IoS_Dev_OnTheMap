@@ -33,7 +33,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // ParseAPI2 testing start
         let appData = StudentLocationDataManager()
-        let thisData = try? appData.getStudentLocations()
+        let thisData = try? appData.getParseStudentLocations()
         
         if let data = thisData {
             print("Data From Parse2: \(data)")
