@@ -21,7 +21,7 @@ class StudentLocationDataManager {
 
     
     /*** Public Methods ***/
-    func getStudentLocations() -> ([StudentInfo], Error?) {
+    func getStudentLocations() -> ([StudentInfo]?, Error?) {
         var returnResults: [StudentInfo]?
         var thisError: Error?
         
@@ -34,7 +34,7 @@ class StudentLocationDataManager {
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
         }
         
-        return (returnResults!, thisError)
+        return (returnResults, thisError)
     }
     
     

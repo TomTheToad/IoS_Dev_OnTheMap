@@ -28,6 +28,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Fields
     let coreDataHandler = CoreDataHandler()
+    let studentLocationDataManager = StudentLocationDataManager()
 
     
     // IBOutlets
@@ -167,6 +168,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func getStudentLocations() -> [StudentInfo] {
         let allStudentLocations = coreDataHandler.fetchAllStudentLocations()
         return allStudentLocations
+    }
+    
+    func getStudentLocations2() -> [StudentInfo] {
+        
+        let locationsTuple = studentLocationDataManager.getStudentLocations()
+        
+        if let error = locationsTuple.1 {
+            print(error)
+            // send error
+        }
+        
+        guard let data = locationsTuple.0 else {
+            // send error
+            fatalError("No Data of any kind.")
+        }
+    
+        return data
     }
 
     
