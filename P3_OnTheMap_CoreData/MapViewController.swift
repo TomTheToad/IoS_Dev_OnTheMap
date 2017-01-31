@@ -27,7 +27,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     // Fields
-    let coreDataHandler = CoreDataHandler()
+    // let coreDataHandler = CoreDataHandler()
     let studentLocationDataManager = StudentLocationDataManager()
 
     
@@ -46,7 +46,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         mapView.delegate = self
         
-        let locations = getStudentLocations()
+        let locations = getStudentLocations2()
         
         // make map
         makeMap(locations)
@@ -128,7 +128,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Update button action: perform method series for annotation update.
     func updateMap() {
-        let locations = getStudentLocations()
+        let locations = getStudentLocations2()
         makeMap(locations)
         // loadView()
         
@@ -145,8 +145,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         activityIndicator.startAnimating()
         
-        let parseAPI = ParseAPI()
-        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
+//        let parseAPI = ParseAPI()
+//        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
+        let thisError = studentLocationDataManager.updateSavedStudentLocations()
+        
+        if let error = thisError {
+            
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            
+            let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+            
+            alert.addAction(action)
+            present(alert, animated: false)
+        }
     }
 
     
@@ -165,10 +176,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     // Retrieve student locations saved in CoreData
-    func getStudentLocations() -> [StudentInfo] {
-        let allStudentLocations = coreDataHandler.fetchAllStudentLocations()
-        return allStudentLocations
-    }
+//    func getStudentLocations() -> [StudentInfo] {
+//        let allStudentLocations = coreDataHandler.fetchAllStudentLocations()
+//        return allStudentLocations
+//    }
     
     func getStudentLocations2() -> [StudentInfo] {
         

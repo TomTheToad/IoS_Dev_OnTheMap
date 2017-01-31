@@ -37,8 +37,23 @@ class StudentLocationDataManager {
         return (returnResults, thisError)
     }
     
+    // seeds core data
+    func updateSavedStudentLocations() -> Error? {
+        var thisError: Error?
+        
+        do {
+            let returnResults = try getParseStudentLocations()
+            try coreDataHandler.saveStudentLocations(returnResults)
+            thisError = nil
+        } catch {
+            thisError = OnTheMapCustomErrors.CoreDataErrors.CompoundError(desciption: "Broken Data Pipe")
+        }
+        return thisError
+    }
     
     
+    
+    // update name
     func getStudentLocationsFetchedResultsController() -> (NSFetchedResultsController<NSFetchRequestResult>, Error?) {
         var thisError: Error?
         

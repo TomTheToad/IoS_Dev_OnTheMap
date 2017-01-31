@@ -35,7 +35,7 @@ class CoreDataHandler {
     /* User Information Methods */
     // Save users Information to Core Data
     // Takes user's login and user information formatted as StudentInfo
-    func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) {
+    func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) throws {
         
         let userRecord = fetchUserInfoData(userLogin)
             
@@ -46,7 +46,11 @@ class CoreDataHandler {
             userRecord.mediaURL = studentInfo.mediaURL
             userRecord.studentID = studentInfo.studentID
 
-        coreDataStack.saveMainContext()
+        do {
+            try coreDataStack.saveMainContext()
+        } catch {
+            throw OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToMainObjectContext
+        }
     }
     
     
@@ -112,7 +116,7 @@ class CoreDataHandler {
     /* Student Location Methods */
     // Saves an array of student location information
     // takes an array of StudentInfo dictionaries
-    func saveStudentLocations(_ studentInfoDict: [StudentInfo]) {
+    func saveStudentLocations(_ studentInfoDict: [StudentInfo]) throws {
         // todo: determine if more efficient to wipe all records or update existing ones
         
         for studentInfo in studentInfoDict {
@@ -153,7 +157,12 @@ class CoreDataHandler {
             
         }
         
-        coreDataStack.saveMainContext()
+        do {
+            try coreDataStack.saveMainContext()
+        } catch {
+            throw OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToCoreData
+        }
+
     }
     
     

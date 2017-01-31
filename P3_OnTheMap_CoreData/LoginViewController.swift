@@ -99,10 +99,17 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     fileprivate func udacityLoginCompletionHandler(isSuccess: Bool, isNetworkError: Bool)->Void {
         // Condition success: login seems to be processed correctly and data is returned
         if isSuccess == true {
-            let parse = ParseAPI()
-            parse.updateSavedStudentInfo(loginCompletionHandler)
+            // let parse = ParseAPI2()
+            // parse.updateSavedStudentInfo(loginCompletionHandler)
+            let studentLocationDataManager = StudentLocationDataManager()
+            let anyErrorReturned = studentLocationDataManager.updateSavedStudentLocations()
+            if let thisError = anyErrorReturned {
+                // todo: what to do with this warning?
+                print("WARNING: Preload data failed: \(thisError)")
+            }
             DispatchQueue.main.async(execute: { ()-> Void in
                 self.sendMessage("Loading Data", isError: false)
+                self.completeLogin()
             })
         // Condition failure: either login incorrect of network error
         } else {

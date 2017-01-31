@@ -97,7 +97,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         
         print("MESSAGE: Checking for previous user entry")
         
-        let coreDataHandler = CoreDataHandler()
+        let coreDataHandler = CoreDataHandler2()
         
         let user = coreDataHandler.fetchLastUserData()
         

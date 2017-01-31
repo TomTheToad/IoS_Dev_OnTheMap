@@ -79,7 +79,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     // Retrieve user data for submission purposes
     func getUserData() -> UdacityUserInfo {
-        let coreDataHandler = CoreDataHandler()
+        let coreDataHandler = CoreDataHandler2()
         let userRecord = coreDataHandler.fetchLastUserData()
         return userRecord
     }

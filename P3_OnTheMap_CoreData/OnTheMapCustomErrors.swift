@@ -12,6 +12,7 @@ public class OnTheMapCustomErrors {
     enum CoreDataErrors: Error {
         case UnableToSaveToCoreData
         case UnableToSaveToMainObjectContext
+        case CompoundError(desciption: String)
     }
     
     

@@ -198,6 +198,54 @@ class ParseAPI2 {
         }
     }
     
+    // imported from Parse version 1
+    // Get and Save student location from Udacity Parse Clone to Core Data
+//    fileprivate func setParseData(_ completionHandler: @escaping ((Bool)->Void)) {
+//        var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+//        request.addValue("=-updatedAt", forHTTPHeaderField: "order")
+//        request.addValue("100", forHTTPHeaderField: "limit")
+//        request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
+//        request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
+//        
+//        let config = URLSessionConfiguration.ephemeral
+//        let session = URLSession(configuration: config)
+//        
+//        let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
+//            
+//            if error != nil { // Handle error...
+//                return
+//            }
+//            
+//            var parsedData: NSDictionary?
+//            do {
+//                parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
+//            } catch {
+//                print("WARNING: Unable to parse data \(data!)")
+//            }
+//            
+//            guard let results = parsedData!["results"] as? [NSDictionary] else {
+//                print("WARNING: Unable to parse results from \(parsedData)")
+//                return
+//            }
+//            
+//            
+//            print("### Begin Results ###")
+//            print(results)
+//            print("### End Results ###")
+//            
+//            let studentInfo = StudentInfoMethods()
+//            let studentInfoDict = studentInfo.buildStudentDictionary(results)
+//            
+//            let coreDataHandler = CoreDataHandler()
+//            try coreDataHandler.saveStudentLocations(studentInfoDict)
+//            
+//            completionHandler(true)
+//            
+//        })
+//        task.resume()
+//    }
+
+    
     
     /*** Helper Methods ***/
     // Returns preformatted parse request

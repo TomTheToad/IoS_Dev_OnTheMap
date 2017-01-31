@@ -16,7 +16,6 @@
 		C75FC6131CED051400893F45 /* P3_OnTheMap_CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C75FC6111CED051400893F45 /* P3_OnTheMap_CoreData.xcdatamodeld */; };
 		C75FC6151CED051400893F45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75FC6141CED051400893F45 /* Assets.xcassets */; };
 		C75FC6181CED051400893F45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C75FC6161CED051400893F45 /* LaunchScreen.storyboard */; };
-		C75FC62F1CED06A300893F45 /* ParseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FC6271CED06A300893F45 /* ParseAPI.swift */; };
 		C75FC6311CED06A300893F45 /* StudentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FC6291CED06A300893F45 /* StudentInfo.swift */; };
 		C75FC6321CED06A300893F45 /* StudentInfoMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FC62A1CED06A300893F45 /* StudentInfoMethods.swift */; };
 		C75FC6341CED06A300893F45 /* UdacityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FC62C1CED06A300893F45 /* UdacityAPI.swift */; };
@@ -49,7 +48,6 @@
 		C75FC6141CED051400893F45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C75FC6171CED051400893F45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C75FC6191CED051400893F45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C75FC6271CED06A300893F45 /* ParseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseAPI.swift; sourceTree = "<group>"; };
 		C75FC6291CED06A300893F45 /* StudentInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInfo.swift; sourceTree = "<group>"; };
 		C75FC62A1CED06A300893F45 /* StudentInfoMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInfoMethods.swift; sourceTree = "<group>"; };
 		C75FC62C1CED06A300893F45 /* UdacityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityAPI.swift; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 			isa = PBXGroup;
 			children = (
 				C75FC62C1CED06A300893F45 /* UdacityAPI.swift */,
-				C75FC6271CED06A300893F45 /* ParseAPI.swift */,
 				C70420F41E2C08A900456D9F /* ParseAPI2.swift */,
 				C75FC6361CED06E000893F45 /* Helpers */,
 			);
@@ -295,7 +292,6 @@
 				C70420F51E2C08A900456D9F /* ParseAPI2.swift in Sources */,
 				C75FC6321CED06A300893F45 /* StudentInfoMethods.swift in Sources */,
 				C75FC6341CED06A300893F45 /* UdacityAPI.swift in Sources */,
-				C75FC62F1CED06A300893F45 /* ParseAPI.swift in Sources */,
 				C7E125ED1CF761110002E7AC /* TableViewController.swift in Sources */,
 				C707085D1CF603BC00FC6333 /* StudentLocation+CoreDataProperties.swift in Sources */,
 				C79B48531E36D19600C5E8B9 /* CoreDataHandler2.swift in Sources */,

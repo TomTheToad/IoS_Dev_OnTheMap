@@ -173,9 +173,12 @@ class UdacityAPI: UIViewController {
                     userInfo.lastName = userLastName
                     userInfo.studentID = userKey
                     
-                    let coreDataHandler = CoreDataHandler()
-                    
-                    coreDataHandler.saveUserInfoData(userLogin, studentInfo: userInfo)
+                    let coreDataHandler = CoreDataHandler2()
+                    do {
+                        try coreDataHandler.saveUserInfoData(userLogin, studentInfo: userInfo)
+                    } catch {
+                        // todo: oops
+                    }
                     
                 } else {
                     print("WARNING: Unable to save user data")
