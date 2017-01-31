@@ -18,12 +18,6 @@ class StudentLocationDataManager {
     fileprivate var parseAPI2 = ParseAPI2()
     fileprivate var coreDataHandler = CoreDataHandler2()
     fileprivate var studentInfoMethods = StudentInfoMethods()
-    
-    // Class error enum
-//    enum SLDMError: Error {
-//        case parseError
-//        case coreDataError
-//    }
 
     
     /*** Public Methods ***/
