@@ -19,20 +19,20 @@ class StudentLocationDataManager {
     fileprivate var coreDataHandler = CoreDataHandler2()
     fileprivate var studentInfoMethods = StudentInfoMethods()
 
-    
+    // Use core data to return results
+    // Use specific errors to control return
     /*** Public Methods ***/
     func getStudentLocations() -> ([StudentInfo]?, Error?) {
-        var returnResults: [StudentInfo]?
         var thisError: Error?
         
         do {
-            returnResults = try getParseStudentLocations()
+            try setParseStudentLocations()
             thisError = nil
-            try coreDataHandler.saveStudentLocations(returnResults!)
         } catch {
-            returnResults = coreDataHandler.fetchAllStudentLocations()
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
         }
+        
+        let returnResults = coreDataHandler.fetchAllStudentLocations()
         
         return (returnResults, thisError)
     }
@@ -42,11 +42,10 @@ class StudentLocationDataManager {
         var thisError: Error?
         
         do {
-            let returnResults = try getParseStudentLocations()
-            try coreDataHandler.saveStudentLocations(returnResults)
+            try setParseStudentLocations()
             thisError = nil
         } catch {
-            thisError = OnTheMapCustomErrors.CoreDataErrors.CompoundError(desciption: "Broken Data Pipe")
+            thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
         }
         return thisError
     }
@@ -58,9 +57,8 @@ class StudentLocationDataManager {
         var thisError: Error?
         
         do {
-            let results = try getParseStudentLocations()
+            try setParseStudentLocations()
             thisError = nil
-            try coreDataHandler.saveStudentLocations(results)
         } catch {
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
         }
@@ -72,33 +70,45 @@ class StudentLocationDataManager {
     
     
     /*** Parse Methods ***/
-    func getParseStudentLocations() throws -> [StudentInfo] {
+    private func setParseStudentLocations() throws -> Void {
         var parseError: Error?
-        var studentDict: [StudentInfo]?
         
+        // todo: Error: not escaping the closure!
         parseAPI2.GetParseData(completionHandler: { (dict, error) in
             guard let studentLocations = dict else {
                 if let error = error {
                     parseError = error
                     print(error.localizedDescription)
-
                 }
                 return
             }
-            print("Parse2API result = \(studentLocations)")
             
-            studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
+            let thisStudentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
             
+            print("studentDict within closure nil? = \(thisStudentDict.isEmpty)")
+            
+            if let error = parseError {
+                print(error)
+            }
+            
+            do{
+                try self.coreDataHandler.saveStudentLocations(thisStudentDict)
+            } catch {
+                if parseError == nil {
+                    parseError = OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToCoreData
+                }
+            }
         })
-        if let error = parseError {
-            throw error
-        }
-        
-        guard let returnDictionary = studentDict else {
-            throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseData
-        }
-        
-        return returnDictionary
     }
     
+//    private func parseResultsHandler(studentInfo: [StudentInfo]) -> Void {
+//        parseStudentLocations = studentInfo
+//        
+//        do {
+//            try coreDataHandler.saveStudentLocations(studentInfo)
+//        } catch {
+//            print("Unable to save to core data")
+//        }
+//    }
+
 }

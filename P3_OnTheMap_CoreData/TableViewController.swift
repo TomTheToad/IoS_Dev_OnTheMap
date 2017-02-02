@@ -40,16 +40,6 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         // setStudentLocationResultsController()
-        
-        // ParseAPI2 testing start
-        let appData = StudentLocationDataManager()
-        let thisData = try? appData.getParseStudentLocations()
-        
-        if let data = thisData {
-            print("Data From Parse2: \(data)")
-        }
-        
-        // ParseAPI2 testing finish
 
     }
 
