@@ -23,19 +23,16 @@ class StudentInfoMethods {
             // firstName
             if let first = dict["firstName"] {
                 thisStudent.firstName = String(describing: first)
-                print("First Name: \(first)")
             }
             
             // lastName
             if let last = dict["lastName"] {
                 thisStudent.lastName = String(describing: last)
-                print("Last Name: \(last)")
             }
             
             // mediaURL
             if let url = dict["mediaURL"] {
                 thisStudent.mediaURL = String(describing: url)
-                print("MediaURL: \(url)")
             }
             
             // latitude
@@ -51,13 +48,11 @@ class StudentInfoMethods {
             // studentID
             if let studentID = dict["uniqueKey"] {
                 thisStudent.studentID = String(describing: studentID)
-                print("Unique Key: \(studentID)")
             }
         
             // objectID
             if let parseID = dict["objectId"] {
                 thisStudent.parseID = String(describing: parseID)
-                print("ParseID: \(parseID)")
             }
 
         return thisStudent

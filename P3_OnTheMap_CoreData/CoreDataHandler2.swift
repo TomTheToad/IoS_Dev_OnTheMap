@@ -37,8 +37,12 @@ class CoreDataHandler2 {
     // Save users Information to Core Data
     // Takes user's login and user information formatted as StudentInfo
     func saveUserInfoData(_ userLogin: String, studentInfo: StudentInfo) throws {
-        
-        let userRecord = fetchUserInfoData(userLogin)
+        var userRecord: UdacityUserInfo
+        do {
+            userRecord = try fetchUserInfoData(userLogin)
+        } catch {
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "User Record Missing")
+        }
         
         userRecord.firstName = studentInfo.firstName
         userRecord.lastName = studentInfo.lastName
@@ -76,7 +80,7 @@ class CoreDataHandler2 {
     // Fetch a specific users information
     // takes userLogin as String
     // Returns UdacityUserInfo
-    func fetchUserInfoData(_ userLogin: String) -> UdacityUserInfo {
+    func fetchUserInfoData(_ userLogin: String) throws -> UdacityUserInfo {
         
         // todo: syntax change for Swift3. May have to rework type
         var userRecord = AnyObject?(self)
@@ -109,6 +113,7 @@ class CoreDataHandler2 {
             
         } catch {
             print("MESSAGE: Unable to retrieve student user information")
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Student user information missing")
         }
         return userRecord as! UdacityUserInfo
     }
