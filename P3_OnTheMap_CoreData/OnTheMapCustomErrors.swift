@@ -23,6 +23,7 @@ public class OnTheMapCustomErrors {
         case MissingUserData
         case InternalApplicationError_Session
         case UnableToPostToParse
+        case PossibleNetworkError
         case UnknownError
     }
     

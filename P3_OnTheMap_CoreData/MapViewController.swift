@@ -142,22 +142,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Reload student location data using parse
     @IBAction func reloadMapButton(_ sender: AnyObject) {
-        
         activityIndicator.startAnimating()
-        
-//        let parseAPI = ParseAPI()
-//        parseAPI.updateSavedStudentInfo(updateCompletionHandler)
-        let thisError = studentLocationDataManager.updateSavedStudentLocations()
-        
-        if let error = thisError {
-            
-            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-            
-            let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-            
-            alert.addAction(action)
-            present(alert, animated: false)
+        do {
+            try studentLocationDataManager.updateLocalStudentLocations()
+        } catch {
+            // todo: handle error
         }
+        
+        updateMap()
     }
 
     
@@ -187,11 +179,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         if let error = locationsTuple.1 {
             print(error)
-            // send error
+            // todo send error
         }
         
         guard let data = locationsTuple.0 else {
-            // send error
+            // todo send error
             fatalError("No Data of any kind.")
         }
     

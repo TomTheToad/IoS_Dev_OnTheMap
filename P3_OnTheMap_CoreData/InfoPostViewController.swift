@@ -83,7 +83,6 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     @IBAction func autoLocateButton(_ sender: AnyObject) {
         guard let location = userLocation else {
             // todo: create an alert
-            print("Unable to determine location.")
             return
         }
         
@@ -94,8 +93,6 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     
     // Checks for previous entry by current user, calls alert function if found.
     func checkForPreviousUserEntry() {
-        
-        print("MESSAGE: Checking for previous user entry")
         
         let coreDataHandler = CoreDataHandler2()
         

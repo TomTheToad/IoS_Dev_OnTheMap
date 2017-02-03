@@ -30,26 +30,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         
         tableView.delegate = self
-        /// NOT GETTING SET ///
-        let studentDataTuple = studentLocationDataManager.getStudentLocationsFetchedResultsController()
         
-        if studentDataTuple.1 != nil {
-            fetchedResultsController = studentDataTuple.0
-        } else {
-            print("WARNING ERROR: \(studentDataTuple.1)")
-        }
-        
-        // setStudentLocationResultsController()
-        
-        // ParseAPI2 testing start
-        let appData = StudentLocationDataManager()
-        let thisData = try? appData.getParseStudentLocations()
-        
-        if let data = thisData {
-            print("Data From Parse2: \(data)")
-        }
-        
-        // ParseAPI2 testing finish
+        setStudentLocationResultsController()
 
     }
 

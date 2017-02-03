@@ -153,6 +153,8 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         
         if let parseID = receivedParseID {
             studentInfo.parseID = parseID
+        } else {
+            studentInfo.parseID = nil
         }
         
         if let mediaURL = URL(string: linkToShareTextView.text!) {
@@ -167,6 +169,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     // post to parse
     func postToParse(studentInfo: StudentInfo) {
+        
         let mapLocation = receivedUserLocationName
         
         let parse = ParseAPI2()

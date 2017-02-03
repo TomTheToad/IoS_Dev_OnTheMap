@@ -102,10 +102,10 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
             // let parse = ParseAPI2()
             // parse.updateSavedStudentInfo(loginCompletionHandler)
             let studentLocationDataManager = StudentLocationDataManager()
-            let anyErrorReturned = studentLocationDataManager.updateSavedStudentLocations()
-            if let thisError = anyErrorReturned {
-                // todo: what to do with this warning?
-                print("WARNING: Preload data failed: \(thisError)")
+            do {
+                try studentLocationDataManager.updateLocalStudentLocations()
+            } catch {
+                self.sendMessage("Unable to contact server", isError: true)
             }
             DispatchQueue.main.async(execute: { ()-> Void in
                 self.sendMessage("Loading Data", isError: false)

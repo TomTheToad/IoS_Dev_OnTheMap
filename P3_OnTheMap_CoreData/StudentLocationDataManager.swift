@@ -20,50 +20,34 @@ class StudentLocationDataManager {
     fileprivate var studentInfoMethods = StudentInfoMethods()
 
     
-    /*** Public Methods ***/
+    // get locations
     func getStudentLocations() -> ([StudentInfo]?, Error?) {
-        var returnResults: [StudentInfo]?
         var thisError: Error?
-        
+
         do {
-            returnResults = try getParseStudentLocations()
-            thisError = nil
-            try coreDataHandler.saveStudentLocations(returnResults!)
+            try updateLocalStudentLocations()
         } catch {
-            returnResults = coreDataHandler.fetchAllStudentLocations()
-            thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
+            thisError = OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
         }
         
+        // make coreData function throw
+        let returnResults = coreDataHandler.fetchAllStudentLocations()
+
         return (returnResults, thisError)
     }
     
-    // seeds core data
-    func updateSavedStudentLocations() -> Error? {
-        var thisError: Error?
-        
-        do {
-            let returnResults = try getParseStudentLocations()
-            try coreDataHandler.saveStudentLocations(returnResults)
-            thisError = nil
-        } catch {
-            thisError = OnTheMapCustomErrors.CoreDataErrors.CompoundError(desciption: "Broken Data Pipe")
-        }
-        return thisError
-    }
     
-    
-    
-    // update name
+    // get fetched results controller
     func getStudentLocationsFetchedResultsController() -> (NSFetchedResultsController<NSFetchRequestResult>, Error?) {
         var thisError: Error?
         
+
         do {
-            let results = try getParseStudentLocations()
-            thisError = nil
-            try coreDataHandler.saveStudentLocations(results)
+            try updateLocalStudentLocations()
         } catch {
-            thisError = OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
+            thisError = OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
         }
+        
         
         let returnResults = coreDataHandler.fetchAllStudentLocationsResultsController()
         
@@ -71,34 +55,34 @@ class StudentLocationDataManager {
     }
     
     
-    /*** Parse Methods ***/
-    func getParseStudentLocations() throws -> [StudentInfo] {
-        var parseError: Error?
-        var studentDict: [StudentInfo]?
+    // update local
+    func updateLocalStudentLocations() throws -> Void {
         
-        parseAPI2.GetParseData(completionHandler: { (dict, error) in
+        let task = parseAPI2.GetParseData(completionHandler: { (dict, error) in
+            // removed error handling so task will throw an error in the event
             guard let studentLocations = dict else {
-                if let error = error {
-                    parseError = error
-                    print(error.localizedDescription)
-
+                if error != nil {
+                    print(OnTheMapCustomErrors.ParseAPI2Errors.NoDataReturned.localizedDescription)
                 }
                 return
             }
-            print("Parse2API result = \(studentLocations)")
             
-            studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
+            let studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
+                
+            do {
+                try self.coreDataHandler.saveStudentLocations(studentDict)
+            } catch {
+                print(OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToCoreData.localizedDescription)
+                return
+            }
             
         })
-        if let error = parseError {
-            throw error
+        task.resume()
+        while task.state != .completed {
+            if task.error != nil {
+                throw OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
+            }
         }
-        
-        guard let returnDictionary = studentDict else {
-            throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseData
-        }
-        
-        return returnDictionary
     }
-    
+
 }

@@ -42,7 +42,7 @@ class ParseAPI2 {
     // Get Parse Data.
     // Retrieves current parse student/ location information
     // Takes a completion handler as an argument
-    func GetParseData(completionHandler: @escaping ParseResult) {
+    func GetParseData(completionHandler: @escaping ParseResult) -> URLSessionDataTask {
         
         // Get a parse request
         var request = ReturnParseRequest()
@@ -54,7 +54,7 @@ class ParseAPI2 {
         request.addValue("100", forHTTPHeaderField: "limit")
         
         // Create task to handle session
-        guard let task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
+        let task = session!.dataTask(with: request, completionHandler: { (data, response, error) in
             
             // Check for data else return error if data = nil
             // todo: add error check for more specific errors
@@ -76,13 +76,9 @@ class ParseAPI2 {
                 }
             }
 
-        }) else {
-            OperationQueue.main.addOperation {
-                completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.InternalApplicationError_Session)
-            }
-            return
-        }
+        })
         task.resume()
+        return task
     }
     
     
@@ -123,7 +119,10 @@ class ParseAPI2 {
     // Should this be two methods? post and put?
     // todo: update to use typealias?
     // todo: include parseID, and mapString in studentinfo)
+    // NEEDS ERROR Handling!
     func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, completionHandler: @escaping ParsePost) -> Void {
+        
+        print("postStudentLocation ParseAPI2 reached!")
         
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
@@ -153,8 +152,12 @@ class ParseAPI2 {
             return
         }
         
-        guard let parseID = studentInfo.parseID else {
-            return
+        
+        let parseID: String
+        if let ID = studentInfo.parseID {
+            parseID = ID
+        } else {
+            parseID = ""
         }
         
         // Use Post or Put method?
@@ -165,6 +168,7 @@ class ParseAPI2 {
             httpMethod = "POST"
         }
         
+        
         var request = ReturnParseRequest(parseID: parseID)
         request.httpMethod = httpMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -174,6 +178,7 @@ class ParseAPI2 {
         // let components = NSURLComponents()
         
         guard let task = session?.dataTask(with: request) else {
+            print("session failure")
             OperationQueue.main.addOperation {
                 completionHandler(OnTheMapCustomErrors.ParseAPI2Errors.InternalApplicationError_Session)
             }
@@ -184,8 +189,12 @@ class ParseAPI2 {
         
         // todo: replace with QOS or priority?
         while task.state != .completed {
-            // do nothing: block transition to next view controller
-            // so alert can be presented if necessary.
+            if task.error != nil {
+                OperationQueue.main.addOperation {
+                    completionHandler(task.error)
+                }
+            }
+            
         }
         
         if task.error != nil {
@@ -196,57 +205,10 @@ class ParseAPI2 {
         OperationQueue.main.addOperation {
             completionHandler(nil)
         }
+        
     }
     
-    // imported from Parse version 1
-    // Get and Save student location from Udacity Parse Clone to Core Data
-//    fileprivate func setParseData(_ completionHandler: @escaping ((Bool)->Void)) {
-//        var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-//        request.addValue("=-updatedAt", forHTTPHeaderField: "order")
-//        request.addValue("100", forHTTPHeaderField: "limit")
-//        request.addValue("\(parseAppID)", forHTTPHeaderField: "X-Parse-Application-Id")
-//        request.addValue("\(RESTApiKey)", forHTTPHeaderField: "X-Parse-REST-API-Key")
-//        
-//        let config = URLSessionConfiguration.ephemeral
-//        let session = URLSession(configuration: config)
-//        
-//        let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-//            
-//            if error != nil { // Handle error...
-//                return
-//            }
-//            
-//            var parsedData: NSDictionary?
-//            do {
-//                parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-//            } catch {
-//                print("WARNING: Unable to parse data \(data!)")
-//            }
-//            
-//            guard let results = parsedData!["results"] as? [NSDictionary] else {
-//                print("WARNING: Unable to parse results from \(parsedData)")
-//                return
-//            }
-//            
-//            
-//            print("### Begin Results ###")
-//            print(results)
-//            print("### End Results ###")
-//            
-//            let studentInfo = StudentInfoMethods()
-//            let studentInfoDict = studentInfo.buildStudentDictionary(results)
-//            
-//            let coreDataHandler = CoreDataHandler()
-//            try coreDataHandler.saveStudentLocations(studentInfoDict)
-//            
-//            completionHandler(true)
-//            
-//        })
-//        task.resume()
-//    }
 
-    
-    
     /*** Helper Methods ***/
     // Returns preformatted parse request
     // Takes a studentID string if one exists for a post/ put request
