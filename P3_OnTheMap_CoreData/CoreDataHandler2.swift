@@ -57,7 +57,7 @@ class CoreDataHandler2 {
     
     // Get last added user, current user, information
     // Returns UdacityUserInfo
-    func fetchLastUserData() -> UdacityUserInfo {
+    func fetchLastUserData() throws -> UdacityUserInfo {
         
         var userRecord: UdacityUserInfo?
         
@@ -66,7 +66,7 @@ class CoreDataHandler2 {
         do {
             userRecord = try managedObjectContext.fetch(fetchRequest).last as? UdacityUserInfo
         } catch {
-            fatalError("Unable to locate user data")
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "User data not found")
         }
         
         return userRecord!

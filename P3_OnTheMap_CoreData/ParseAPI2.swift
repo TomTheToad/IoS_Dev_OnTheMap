@@ -124,6 +124,7 @@ class ParseAPI2 {
         
         print("postStudentLocation ParseAPI2 reached!")
         
+        // todo: Do these need to throw errors?
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
            return

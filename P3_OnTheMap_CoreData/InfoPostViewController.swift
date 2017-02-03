@@ -96,8 +96,11 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         
         let coreDataHandler = CoreDataHandler2()
         
-        let user = coreDataHandler.fetchLastUserData()
-        
+        guard let user = try? coreDataHandler.fetchLastUserData() else {
+            // do alert
+            return
+        }
+
         if let studentID = user.studentID {
             
             print("studentID: \(user.studentID!) found")

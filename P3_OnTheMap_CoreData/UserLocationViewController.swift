@@ -78,9 +78,14 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     
     // Retrieve user data for submission purposes
-    func getUserData() -> UdacityUserInfo {
+    func getUserData() throws -> UdacityUserInfo {
         let coreDataHandler = CoreDataHandler2()
-        let userRecord = coreDataHandler.fetchLastUserData()
+
+        guard let userRecord = try? coreDataHandler.fetchLastUserData() else {
+            // todo: alert error
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing User Data")
+        }
+        
         return userRecord
     }
 
@@ -95,7 +100,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         } else {
             activityIndicator.startAnimating()
             let studentInfo = prepareInfoForParse()
-            postToParse(studentInfo: studentInfo)
+            postToParse(studentInfo: studentInfo!)
         }
     }
     
@@ -121,7 +126,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
             (action: UIAlertAction) in
             
             let studentInfo = self.prepareInfoForParse()
-            self.postToParse(studentInfo: studentInfo)
+            self.postToParse(studentInfo: studentInfo!)
             
             // add an alert if successful?
             
@@ -140,8 +145,11 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     
     // Populate studentInfo
-    func prepareInfoForParse() -> StudentInfo {
-        let userRecord = getUserData()
+    func prepareInfoForParse() -> StudentInfo? {
+        guard let userRecord = try? getUserData() else{
+            // alert
+            return nil
+        }
         var studentInfo = StudentInfo()
         
         studentInfo.firstName = userRecord.firstName
