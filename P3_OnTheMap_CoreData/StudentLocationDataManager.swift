@@ -22,6 +22,7 @@ class StudentLocationDataManager {
     
     // get locations
     func getStudentLocations() -> ([StudentInfo]?, Error?) {
+        var returnResults: [StudentInfo]?
         var thisError: Error?
 
         do {
@@ -30,15 +31,19 @@ class StudentLocationDataManager {
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
         }
         
-        // make coreData function throw
-        let returnResults = coreDataHandler.fetchAllStudentLocations()
+        do {
+            returnResults = try coreDataHandler.fetchAllStudentLocations()
+        } catch {
+            thisError = OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing Data")
+        }
 
         return (returnResults, thisError)
     }
     
     
     // get fetched results controller
-    func getStudentLocationsFetchedResultsController() -> (NSFetchedResultsController<NSFetchRequestResult>, Error?) {
+    func getStudentLocationsFetchedResultsController() throws -> (NSFetchedResultsController<NSFetchRequestResult>, Error?) {
+        var returnResults: NSFetchedResultsController<NSFetchRequestResult>
         var thisError: Error?
         
 
@@ -48,8 +53,11 @@ class StudentLocationDataManager {
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
         }
         
-        
-        let returnResults = coreDataHandler.fetchAllStudentLocationsResultsController()
+        do {
+            returnResults = try coreDataHandler.fetchAllStudentLocationsResultsController()
+        } catch {
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing ResultsController")
+        }
         
         return (returnResults, thisError)
     }

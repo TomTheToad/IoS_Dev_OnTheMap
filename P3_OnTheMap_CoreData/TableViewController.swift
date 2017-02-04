@@ -38,14 +38,19 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Results controller for table data update
     fileprivate func setStudentLocationResultsController() {
-        let fetchedResultsTuple = studentLocationDataManager.getStudentLocationsFetchedResultsController()
         
-        if fetchedResultsTuple.1 != nil {
-            let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-            alert.addAction(action)
+        let fetchedResultsTuple = try? studentLocationDataManager.getStudentLocationsFetchedResultsController()
+        
+        if let tuple = fetchedResultsTuple {
+            if tuple.1 != nil {
+                let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+                alert.addAction(action)
+            } else {
+                fetchedResultsController = tuple.0
+            }
         } else {
-            fetchedResultsController = fetchedResultsTuple.0
+            // todo: create an alert!
         }
     }
     

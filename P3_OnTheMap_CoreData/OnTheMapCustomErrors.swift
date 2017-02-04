@@ -14,6 +14,7 @@ public class OnTheMapCustomErrors {
         case UnableToSaveToMainObjectContext
         case UnexpectedReturn(description: String)
         case CompoundError(desciption: String)
+        case DataConversionError
     }
     
     

@@ -253,7 +253,7 @@ class CoreDataHandler2 {
     
     // Fetch all student location records for table as a fetchedResultsController
     // Returns NSFetchResultsController (still uses NS prefix) of student locations.
-    func fetchAllStudentLocationsResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
+    func fetchAllStudentLocationsResultsController() throws -> NSFetchedResultsController<NSFetchRequestResult> {
         
         // let request = NSFetchRequest(entityName: "StudentLocation")
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
@@ -269,7 +269,7 @@ class CoreDataHandler2 {
         do {
             try fetchedResultsController.performFetch()
         } catch {
-            fatalError("Unable to fetch student location data")
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing Results Controller")
         }
         
         return fetchedResultsController
@@ -278,7 +278,7 @@ class CoreDataHandler2 {
     
     // Fetch all student location
     // Returns an array of StudentInfo
-    func fetchAllStudentLocations() -> [StudentInfo] {
+    func fetchAllStudentLocations() throws -> [StudentInfo] {
         
         var returnData = [StudentInfo]()
         
@@ -291,10 +291,10 @@ class CoreDataHandler2 {
             if let results = results {
                 returnData = convertStudentLocationArrayToStudentInfoArray(results)
             } else {
-                print("MESSAGE: Unable to convert returnedData to array of StudentLocation")
+                throw OnTheMapCustomErrors.CoreDataErrors.DataConversionError
             }
         } catch {
-            print("MESSAGE: Unable to retrieve student user information")
+            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing Data")
         }
         
         return returnData
@@ -304,7 +304,7 @@ class CoreDataHandler2 {
     // Helper function to convert student location to student information format
     // Takes and array of StudentLcation
     // Returns an array of StudentInfo
-    func convertStudentLocationArrayToStudentInfoArray(_ studentLocationArray: [StudentLocation]) -> [StudentInfo] {
+    private func convertStudentLocationArrayToStudentInfoArray(_ studentLocationArray: [StudentLocation]) -> [StudentInfo] {
         var returnData = [StudentInfo]()
         
         for studentLocation in studentLocationArray {
