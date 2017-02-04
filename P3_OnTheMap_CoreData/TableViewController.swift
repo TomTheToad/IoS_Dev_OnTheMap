@@ -50,7 +50,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 fetchedResultsController = tuple.0
             }
         } else {
-            // todo: create an alert!
+            let alert = OKAlertGenerator(alertMessage: "No Data. Please check your net connection.")
+            present(alert.getAlertToPresent(), animated: false)
         }
     }
     
@@ -75,29 +76,12 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
         
-        let alert = UIAlertController(title: "User Status", message: "Logout Successful", preferredStyle: .alert)
+        let alert = OKAlertGenerator(alertMessage: "Logout Successful")
+        alert.title = "Status"
+        alert.handler = {(action: UIAlertAction) in self.present(loginViewController!, animated: false, completion: nil)}
         
-        let action = UIAlertAction(title: "ok", style: .default, handler: { (action: UIAlertAction) in
-            self.present(loginViewController!, animated: false, completion: nil)
-        })
-        
-        alert.addAction(action)
-        present(alert, animated: false)
+        present(alert.getAlertToPresent(), animated: false)
     }
-    
-    
-    // Completion Handler to handle table updates
-//    func updateCompletionHandler(_ isSuccess:Bool) -> Void {
-//        DispatchQueue.main.async(execute: { ()-> Void in
-//            if isSuccess == true {
-//                self.updateTableData()
-//            } else {
-//                let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
-//                let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-//                alert.addAction(action)
-//            }
-//        })
-//    }
     
     
     // MARK: - Table view data source

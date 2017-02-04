@@ -63,14 +63,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let loginViewController = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
         
-        let alert = UIAlertController(title: "User Status", message: "Logout Successful", preferredStyle: .alert)
+        let alert = OKAlertGenerator(alertMessage: "Logout Successful")
+        alert.title = "Status"
+        alert.handler = {(action: UIAlertAction) in self.present(loginViewController!, animated: false, completion: nil)}
         
-        let action = UIAlertAction(title: "ok", style: .default, handler: { (action: UIAlertAction) in
-                self.present(loginViewController!, animated: false, completion: nil)
-            })
-            
-        alert.addAction(action)
-        present(alert, animated: false)
+        present(alert.getAlertToPresent(), animated: false)
     }
     
     
@@ -146,7 +143,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         do {
             try studentLocationDataManager.updateLocalStudentLocations()
         } catch {
-            // todo: handle error
+            sendAlert(message: "Oops! Data Failed to Load. Please Check your net connection.")
         }
         
         updateMap()
@@ -160,18 +157,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if isSuccess == true {
                 self.updateMap()
             } else {
-                let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
-                let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-                alert.addAction(action)
+                self.sendAlert(message: "Oops! Data Failed to Load. Please Check your net connection.")
             }
         })
     }
     
-    // Retrieve student locations saved in CoreData
-//    func getStudentLocations() -> [StudentInfo] {
-//        let allStudentLocations = coreDataHandler.fetchAllStudentLocations()
-//        return allStudentLocations
-//    }
     
     func getStudentLocations2() -> [StudentInfo] {
         
@@ -179,13 +169,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         if let error = locationsTuple.1 {
             print(error)
-            // todo send error
+            sendAlert(message: "Oops! Data Failed to Load. Please Check your net connection.")
         }
         
-        guard let data = locationsTuple.0 else {
-            // todo send error
-            fatalError("No Data of any kind.")
-        }
+        // If no error is present data must be present
+        let data = locationsTuple.0!
     
         return data
     }
@@ -222,5 +210,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 app.open((String: URL(string: toOpen)!), options: [:], completionHandler: nil)
             }
         }
+    }
+    
+    
+    fileprivate func sendAlert(message: String) {
+        activityIndicator.stopAnimating()
+        let alert = OKAlertGenerator(alertMessage: message)
+        present(alert.getAlertToPresent(), animated: false, completion: nil)
     }
 }

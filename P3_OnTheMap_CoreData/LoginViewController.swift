@@ -167,13 +167,8 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     fileprivate func sendAlert(_ message: String) {
         
         activityIndicator.stopAnimating()
-        
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
-        alert.addAction(alertAction)
-        
-        present(alert, animated: false, completion: nil)
+        let alert = OKAlertGenerator(alertMessage: message)
+        present(alert.getAlertToPresent(), animated: false, completion: nil)
     }
     
     

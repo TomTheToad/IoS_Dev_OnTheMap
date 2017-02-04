@@ -82,7 +82,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
     // Auto locate button action
     @IBAction func autoLocateButton(_ sender: AnyObject) {
         guard let location = userLocation else {
-            // todo: create an alert
+            sendAlert(message: "Oops. Something went wrong. Please try again later")
             return
         }
         
@@ -97,7 +97,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         let coreDataHandler = CoreDataHandler2()
         
         guard let user = try? coreDataHandler.fetchLastUserData() else {
-            // do alert
+            sendAlert(message: "Application Error! Please restart the application")
             return
         }
 
@@ -208,13 +208,7 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
                 }
                 
             } else {
-                self.activityIndicator.stopAnimating()
-                let msg = "Could not locate entry. Please try again"
-                let alert = UIAlertController(title: "Missing location", message: msg, preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-                alert.addAction(alertAction)
-                
-                self.present(alert, animated: false)
+                self.sendAlert(message: "Could not locate entry. Please try again")
         
             }
         })
@@ -257,6 +251,12 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         locationRequestTextField.resignFirstResponder()
         findInputedLocation(locationRequestTextField.text!)
         return true
+    }
+    
+    fileprivate func sendAlert(message: String) {
+        activityIndicator.stopAnimating()
+        let alert = OKAlertGenerator(alertMessage: message)
+        present(alert.getAlertToPresent(), animated: false, completion: nil)
     }
 
 }

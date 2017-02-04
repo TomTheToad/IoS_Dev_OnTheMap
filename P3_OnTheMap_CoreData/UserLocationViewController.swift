@@ -128,10 +128,11 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
             let studentInfo = self.prepareInfoForParse()
             self.postToParse(studentInfo: studentInfo!)
             
-            // add an alert if successful?
-            
             DispatchQueue.main.async(execute: { (void) in
-                self.presentMap()
+            let alert = OKAlertGenerator(alertMessage: "Location Sent!")
+            alert.title = "Status"
+            alert.handler = { (UIAlertAction) in self.presentMap() }
+            self.present(alert.getAlertToPresent(), animated: false)
             })
         })
         
@@ -147,7 +148,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     // Populate studentInfo
     func prepareInfoForParse() -> StudentInfo? {
         guard let userRecord = try? getUserData() else{
-            // alert
+            sendAlert(message: "Oops! Something went wrong. Please restart the application")
             return nil
         }
         var studentInfo = StudentInfo()
@@ -199,7 +200,7 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         activityIndicator.stopAnimating()
         
         if error != nil {
-            self.sendAlert("Oops, Something went wrong with your post. Please try again later")
+            self.sendAlert(message: "Oops, Something went wrong with your post. Please try again later")
             print("ERROR sent by parse: \(error!)")
         }
         
@@ -209,16 +210,11 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     // User alerts
     // Call alert Handler formatted for ok, nondestructive message
-    fileprivate func sendAlert(_ message: String) {
+    fileprivate func sendAlert(message: String) {
         
         activityIndicator.stopAnimating()
-        
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
-        alert.addAction(alertAction)
-        
-        present(alert, animated: false, completion: nil)
+        let alert = OKAlertGenerator(alertMessage: message)
+        present(alert.getAlertToPresent(), animated: false, completion: nil)
     }
     
     
