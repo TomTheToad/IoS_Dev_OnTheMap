@@ -39,20 +39,15 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // Results controller for table data update
     fileprivate func setStudentLocationResultsController() {
         
-        let fetchedResultsTuple = try? studentLocationDataManager.getStudentLocationsFetchedResultsController()
+        let fetchedResultsTuple = studentLocationDataManager.getStudentLocationsFetchedResultsController()
         
-        if let tuple = fetchedResultsTuple {
-            if tuple.1 != nil {
-                let alert = UIAlertController(title: "Alert", message: "This action requires an internet connection.", preferredStyle: .alert)
-                let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-                alert.addAction(action)
-            } else {
-                fetchedResultsController = tuple.0
-            }
-        } else {
+        if fetchedResultsTuple.1 != nil {
             let alert = OKAlertGenerator(alertMessage: "No Data. Please check your net connection.")
             present(alert.getAlertToPresent(), animated: false)
         }
+        
+        fetchedResultsController = fetchedResultsTuple.0
+
     }
     
     
@@ -85,11 +80,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     // MARK: - Table view data source
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
 
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchedResultsController!.sections?[section].numberOfObjects ?? 0
     }

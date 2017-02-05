@@ -82,7 +82,6 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
         let coreDataHandler = CoreDataHandler2()
 
         guard let userRecord = try? coreDataHandler.fetchLastUserData() else {
-            // todo: alert error
             throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing User Data")
         }
         
@@ -92,25 +91,19 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     // SubmitButton action: post/ put location to parseAPI
     @IBAction func submitButton(_ sender: AnyObject) {
+
         
-        let isLinkToShareEmtpy = checkForEmptyLink()
-        
-        if isLinkToShareEmtpy == true {
+        if linkToShareTextView.text == "" {
             AlertLinkToShareEmpty()
         } else {
             activityIndicator.startAnimating()
             let studentInfo = prepareInfoForParse()
-            postToParse(studentInfo: studentInfo!)
-        }
-    }
-    
-    
-    // Check for empty linkToShare textfield
-    func checkForEmptyLink() -> Bool {
-        if linkToShareTextView.text == "" {
-            return true
-        } else {
-            return false
+            do {
+                try postToParse(studentInfo: studentInfo!)
+                sendAlert(message: "Location Sent!")
+            } catch {
+                sendAlert(message: "Post Failed!")
+            }
         }
     }
     
@@ -126,14 +119,17 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
             (action: UIAlertAction) in
             
             let studentInfo = self.prepareInfoForParse()
-            self.postToParse(studentInfo: studentInfo!)
-            
-            DispatchQueue.main.async(execute: { (void) in
-            let alert = OKAlertGenerator(alertMessage: "Location Sent!")
-            alert.title = "Status"
-            alert.handler = { (UIAlertAction) in self.presentMap() }
-            self.present(alert.getAlertToPresent(), animated: false)
-            })
+            do {
+                try self.postToParse(studentInfo: studentInfo!)
+                DispatchQueue.main.async(execute: { (void) in
+                    self.sendAlert(message: "Location Sent!")
+                })
+            } catch {
+                DispatchQueue.main.async(execute: { (void) in
+                    self.sendAlert(message: "Oops. Failed to Send. Please try again later")
+                })
+                
+            }
         })
         
         let actionCancel = UIAlertAction(title: "Enter a link", style: .default, handler: nil)
@@ -177,43 +173,30 @@ class UserLocationViewController: UIViewController, MKMapViewDelegate, UITextFie
     
     
     // post to parse
-    func postToParse(studentInfo: StudentInfo) {
+    func postToParse(studentInfo: StudentInfo) throws -> Void {
         
         let mapLocation = receivedUserLocationName
         
         let parse = ParseAPI2()
         
-        guard let usePutMethod = receivedOverwritePreviousLocation else {
-            // no overwrite direction
-            return
+        if receivedOverwritePreviousLocation != true {
+            receivedOverwritePreviousLocation = false
         }
         
-        if usePutMethod == true {
-            parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: true, completionHandler: parseCompletionHandler)
-        } else {
-            parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: false, completionHandler: parseCompletionHandler)
+        do {
+            try parse.postStudentLocation(studentInfo: studentInfo, mapString: mapLocation!, updateExistingEntry: receivedOverwritePreviousLocation!)
+        } catch {
+            throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToPostToParse
         }
-    }
-    
-    
-    func parseCompletionHandler(error: Error?) -> Void {
-        activityIndicator.stopAnimating()
-        
-        if error != nil {
-            self.sendAlert(message: "Oops, Something went wrong with your post. Please try again later")
-            print("ERROR sent by parse: \(error!)")
-        }
-        
-        presentMap()
     }
     
     
     // User alerts
-    // Call alert Handler formatted for ok, nondestructive message
     fileprivate func sendAlert(message: String) {
-        
         activityIndicator.stopAnimating()
         let alert = OKAlertGenerator(alertMessage: message)
+        alert.title = "Status"
+        alert.handler = { (UIAlertAction) in self.presentMap() }
         present(alert.getAlertToPresent(), animated: false, completion: nil)
     }
     

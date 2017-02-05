@@ -177,6 +177,8 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
                     self.locationRequestTextField.text = "\(firstLocation)"
                     isSuccess = true
                     print("name found: \(isSuccess)")
+                } else {
+                    self.sendAlert(message: "Oops. Something went wrong. Please check your connection and try again.")
                 }
             }
         })
@@ -193,16 +195,11 @@ class InfoPostViewController: UIViewController, CLLocationManagerDelegate, UITex
         geoCode.geocodeAddressString(location, completionHandler: {
             (placemarks, error) -> Void in
             
-            // var firstLocation: CLPlacemark?
-            
             if let placemarks = placemarks {
                 if let firstLocation = placemarks.first {
                     self.userLocation = firstLocation.location
                     self.userLocationName = firstLocation.locality
                     self.locationRequestTextField.text = "\(firstLocation.locality)"
-                    
-                    // isSuccess = true
-                    
                     self.activityIndicator.stopAnimating()
                     self.presentUserLocationVC(userLocation: firstLocation.location!, userLocationName: firstLocation.locality!)
                 }

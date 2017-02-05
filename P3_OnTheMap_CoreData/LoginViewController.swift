@@ -95,12 +95,9 @@ class LoginViewController: UIViewController, SFSafariViewControllerDelegate, UIT
     // Udacity completion handler
     // Displays Login status (complete or failed) 
     // Dependent upon Udacity authorization result
-    // Takes a loginCompletionHandler
     fileprivate func udacityLoginCompletionHandler(isSuccess: Bool, isNetworkError: Bool)->Void {
         // Condition success: login seems to be processed correctly and data is returned
         if isSuccess == true {
-            // let parse = ParseAPI2()
-            // parse.updateSavedStudentInfo(loginCompletionHandler)
             let studentLocationDataManager = StudentLocationDataManager()
             do {
                 try studentLocationDataManager.updateLocalStudentLocations()

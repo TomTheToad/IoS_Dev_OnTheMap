@@ -3,24 +3,27 @@
 //  OnTheMap
 //
 //  Class to handle/ Coordinate data requests to ParseAPI and CoreDataHandler.
+//  This was part of an attempt to allow each class to handle a very specific job
 //
 //  Created by VICTOR ASSELTA on 1/16/17.
 //  Copyright © 2017 TomTheToad. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
-// todo: rename to more relevant name StudentLocationManager?
-class StudentLocationDataManager {
+// Class designed to specifically to direct/ manage data
+class StudentLocationDataManager: UIViewController {
     
     // Fields
     fileprivate var parseAPI2 = ParseAPI2()
     fileprivate var coreDataHandler = CoreDataHandler2()
     fileprivate var studentInfoMethods = StudentInfoMethods()
-
     
-    // get locations
+    
+    // Calls for an update, retrieves the data, and returns it
+    // Takes no arguments
+    // Returns a tuple with StudentInfo and any Errors.
     func getStudentLocations() -> ([StudentInfo]?, Error?) {
         var returnResults: [StudentInfo]?
         var thisError: Error?
@@ -33,6 +36,9 @@ class StudentLocationDataManager {
         
         do {
             returnResults = try coreDataHandler.fetchAllStudentLocations()
+            if (returnResults?.isEmpty)! {
+                thisError = OnTheMapCustomErrors.CoreDataErrors.CompoundError(desciption: "Unknown")
+            }
         } catch {
             thisError = OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing Data")
         }
@@ -41,56 +47,64 @@ class StudentLocationDataManager {
     }
     
     
-    // get fetched results controller
-    func getStudentLocationsFetchedResultsController() throws -> (NSFetchedResultsController<NSFetchRequestResult>, Error?) {
-        var returnResults: NSFetchedResultsController<NSFetchRequestResult>
+    // Calls for an update, retrieves the data, and returns it
+    // Takes no arguments
+    // Returns an NSFetechedResultsController for a TableView and any errors
+    func getStudentLocationsFetchedResultsController() -> (NSFetchedResultsController<NSFetchRequestResult>?, Error?) {
+        var resultsController: NSFetchedResultsController<NSFetchRequestResult>?
         var thisError: Error?
         
 
         do {
             try updateLocalStudentLocations()
+            
         } catch {
             thisError = OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
+            print(thisError)
         }
         
         do {
-            returnResults = try coreDataHandler.fetchAllStudentLocationsResultsController()
+            resultsController = try coreDataHandler.fetchAllStudentLocationsResultsController()
+            if resultsController?.fetchedObjects?.count == 0 {
+                thisError = OnTheMapCustomErrors.CoreDataErrors.CompoundError(desciption: "Unknown Error")
+            }
         } catch {
-            throw OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing ResultsController")
+            thisError = OnTheMapCustomErrors.CoreDataErrors.UnexpectedReturn(description: "Missing ResultsController")
         }
         
-        return (returnResults, thisError)
+        return (resultsController, thisError)
     }
     
     
-    // update local
+    // Updates local core data storage
     func updateLocalStudentLocations() throws -> Void {
         
         let task = parseAPI2.GetParseData(completionHandler: { (dict, error) in
-            // removed error handling so task will throw an error in the event
-            guard let studentLocations = dict else {
-                if error != nil {
-                    print(OnTheMapCustomErrors.ParseAPI2Errors.NoDataReturned.localizedDescription)
-                }
-                return
+            
+            if error != nil {
+                // This will be caught in nil check from calling method
+                // todo: more specific error handling
+                print("WARNING: \(OnTheMapCustomErrors.ParseAPI2Errors.UnknownError.localizedDescription)")
             }
             
-            let studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
-                
-            do {
-                try self.coreDataHandler.saveStudentLocations(studentDict)
-            } catch {
-                print(OnTheMapCustomErrors.CoreDataErrors.UnableToSaveToCoreData.localizedDescription)
-                return
+            if let studentLocations = dict {
+                let studentDict = self.studentInfoMethods.buildStudentDictionary(studentLocations)
+                do {
+                    try self.coreDataHandler.saveStudentLocations(studentDict)
+                } catch {
+                    // This will be caught in nil check from calling function
+                }
             }
             
         })
+        
         task.resume()
+        
         while task.state != .completed {
             if task.error != nil {
-                throw OnTheMapCustomErrors.ParseAPI2Errors.UnknownError
+                throw OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError
             }
         }
-    }
 
+    }
 }

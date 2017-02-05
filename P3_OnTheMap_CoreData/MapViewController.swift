@@ -6,8 +6,6 @@
 //  Copyright © 2016 TomTheToad. All rights reserved.
 //
 
-// todo: list
-// 1) handle errors
 
 /*
  
@@ -25,11 +23,9 @@ import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
-    
     // Fields
     // let coreDataHandler = CoreDataHandler()
     let studentLocationDataManager = StudentLocationDataManager()
-
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -140,12 +136,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // Reload student location data using parse
     @IBAction func reloadMapButton(_ sender: AnyObject) {
         activityIndicator.startAnimating()
-        do {
-            try studentLocationDataManager.updateLocalStudentLocations()
-        } catch {
-            sendAlert(message: "Oops! Data Failed to Load. Please Check your net connection.")
-        }
-        
         updateMap()
     }
 
@@ -206,7 +196,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
-//                app.openURL(URL(string: toOpen)!)
                 app.open((String: URL(string: toOpen)!), options: [:], completionHandler: nil)
             }
         }

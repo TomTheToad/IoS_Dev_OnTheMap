@@ -82,13 +82,8 @@ class CoreDataHandler2 {
     // Returns UdacityUserInfo
     func fetchUserInfoData(_ userLogin: String) throws -> UdacityUserInfo {
         
-        // todo: syntax change for Swift3. May have to rework type
         var userRecord = AnyObject?(self)
-        
-        // Updated to Swift3 syntax
-        //  let fetchRequest = NSFetchRequest(entityName: "UdacityUserInfo")
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "UdacityUserInfo")
-        
         let predicate = NSPredicate(format: "userLogin == %@ ", userLogin)
         fetchRequest.predicate = predicate
         
@@ -180,7 +175,6 @@ class CoreDataHandler2 {
         var userParseID: String?
         
         // Updated to Swift3 syntax
-        // let fetchRequest = FetchRequest(entityName: "StudentLocation")
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
         
         let predicate = NSPredicate(format: "studentID == %@ ", studentID)
@@ -216,15 +210,12 @@ class CoreDataHandler2 {
         var userRecord = AnyObject?(self)
         
         // Updated to Swift3 syntax
-        // let fetchRequest = FetchRequest(entityName: "StudentLocation")
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StudentLocation")
-        
         
         if let ID = student.studentID {
             let predicate = NSPredicate(format: "studentID == %@ ", ID)
             fetchRequest.predicate = predicate
         }
-        
         
         do {
             let results = try managedObjectContext.fetch(fetchRequest) as? [StudentLocation]

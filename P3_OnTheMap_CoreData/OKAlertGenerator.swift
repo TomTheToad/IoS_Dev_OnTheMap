@@ -1,5 +1,5 @@
 //
-//  AlertGenerator.swift
+//  OKAlertGenerator.swift
 //  OnTheMap
 //
 //  Created by VICTOR ASSELTA on 2/4/17.
@@ -8,6 +8,8 @@
 
 import UIKit
 
+// Class created to streamline the configuration of basic alerts.
+// More complex alerts were left as is.
 class OKAlertGenerator {
     
     // fields
@@ -17,10 +19,13 @@ class OKAlertGenerator {
     var handler: ((UIAlertAction) -> Void)? = nil
     
     
+    // class init
+    // Takes an alert message
     init(alertMessage: String) {
         message = alertMessage
     }
     
+    // Returns an alert configured with given fields
     func getAlertToPresent() -> UIAlertController {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

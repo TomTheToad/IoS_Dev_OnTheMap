@@ -20,12 +20,10 @@ class ParseAPI2 {
     
     // Type Aliases
     typealias ParseResult = ([NSDictionary]?, Error?) -> Void
-    typealias ParsePost = (Error?) -> Void
-    
+    typealias ParseResultWithError = ([NSDictionary]?, Error?) throws -> Void
     
     // Computed Field
     fileprivate var session: URLSession?
-    
     
     // Intializer
     init() {
@@ -56,8 +54,15 @@ class ParseAPI2 {
         // Create task to handle session
         let task = session!.dataTask(with: request, completionHandler: { (data, response, error) in
             
-            // Check for data else return error if data = nil
-            // todo: add error check for more specific errors
+            let responseCheck = URLResponseCheck()
+            if let thisResponse = response {
+                let returnTuple = responseCheck.checkReponse(thisResponse)
+                if returnTuple.0 != true {
+                    completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.PossibleNetworkError)
+                    print(returnTuple.1)
+                }
+            }
+            
             guard let data = data else {
                 OperationQueue.main.addOperation {
                     completionHandler(nil, error)
@@ -69,10 +74,10 @@ class ParseAPI2 {
                 let results = try self.ConvertJSONToStudentInfoDictionary(data: data)
                     OperationQueue.main.addOperation {
                         completionHandler(results, nil)
-                    }
+                }
             } catch {
                 OperationQueue.main.addOperation {
-                    completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseResultsFromData)
+                        completionHandler(nil, OnTheMapCustomErrors.ParseAPI2Errors.UnableToParseResultsFromData)
                 }
             }
 
@@ -117,42 +122,38 @@ class ParseAPI2 {
     // post
     // replace previous postStudentLocationMethod
     // Should this be two methods? post and put?
-    // todo: update to use typealias?
-    // todo: include parseID, and mapString in studentinfo)
-    // NEEDS ERROR Handling!
-    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool, completionHandler: @escaping ParsePost) -> Void {
-        
-        print("postStudentLocation ParseAPI2 reached!")
+    func postStudentLocation(studentInfo: StudentInfo, mapString: String, updateExistingEntry: Bool) throws -> Void {
         
         // todo: Do these need to throw errors?
         // uniqueKey
         guard let uniqueKey = studentInfo.studentID else {
-           return
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
         }
         
         // firstName
         guard let firstName = studentInfo.firstName else {
-            return
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
         }
         
         // lastName
         guard let lastName = studentInfo.lastName else {
-            return
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
         }
+        
         // mediaURL
         guard let mediaURL = studentInfo.mediaURL else {
-            return
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
         }
         
         // latitude
         guard let latitude = studentInfo.latitude else {
-            return
-        }
-        // longitude
-        guard let longitude = studentInfo.longitude else {
-            return
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
         }
         
+        // longitude
+        guard let longitude = studentInfo.longitude else {
+           throw OnTheMapCustomErrors.ParseAPI2Errors.MissingUserData
+        }
         
         let parseID: String
         if let ID = studentInfo.parseID {
@@ -169,7 +170,6 @@ class ParseAPI2 {
             httpMethod = "POST"
         }
         
-        
         var request = ReturnParseRequest(parseID: parseID)
         request.httpMethod = httpMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -178,35 +178,17 @@ class ParseAPI2 {
         // todo: clean up body with components build
         // let components = NSURLComponents()
         
-        guard let task = session?.dataTask(with: request) else {
-            print("session failure")
-            OperationQueue.main.addOperation {
-                completionHandler(OnTheMapCustomErrors.ParseAPI2Errors.InternalApplicationError_Session)
-            }
-            return
-        }
+        let task = session!.dataTask(with: request)
+
         // task.priority = .
         task.resume()
         
         // todo: replace with QOS or priority?
         while task.state != .completed {
             if task.error != nil {
-                OperationQueue.main.addOperation {
-                    completionHandler(task.error)
-                }
-            }
-            
-        }
-        
-        if task.error != nil {
-            OperationQueue.main.addOperation {
-            completionHandler(task.error)
+                throw OnTheMapCustomErrors.ParseAPI2Errors.UnableToPostToParse
             }
         }
-        OperationQueue.main.addOperation {
-            completionHandler(nil)
-        }
-        
     }
     
 
