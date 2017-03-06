@@ -79,7 +79,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 print("Lat: \(dictionary.latitude)")
                 print("Long: \(dictionary.longitude)")
                 
-                // added a check for <"null"> in a corrupted api return
+                // added a check for a corrupted api return
+                // found "<null>" value
                 guard let latDouble = Double(dictionary.latitude!) else {
                     print("WARNING: Corrupted value in API return")
                     return
