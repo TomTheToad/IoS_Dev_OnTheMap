@@ -76,8 +76,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         for dictionary in locations {
             if dictionary.latitude != nil && dictionary.longitude != nil {
-                let lat = CLLocationDegrees(Double(dictionary.latitude!)!)
-                let long = CLLocationDegrees(Double(dictionary.longitude!)!)
+                print("Lat: \(dictionary.latitude)")
+                print("Long: \(dictionary.longitude)")
+                
+                // added a check for <"null"> in a corrupted api return
+                guard let latDouble = Double(dictionary.latitude!) else {
+                    print("WARNING: Corrupted value in API return")
+                    return
+                }
+                guard let longDouble = Double(dictionary.longitude!) else {
+                    print("WARNING: Corrupted value in API return")
+                    return
+                }
+                
+                let lat = CLLocationDegrees(latDouble)
+                let long = CLLocationDegrees(longDouble)
                 
                 // The lat and long are used to create a CLLocationCoordinates2D instance.
                 let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
